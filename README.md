@@ -4,8 +4,10 @@
 ## Commit convention    
 
 ```
-1. Type(File or function): Subject 
-2. Type: Subject
+1. Type(File or function): Subject
+ex) feat(LoginService): 사용자의 로그인 검증 기능 구현
+2. Type: Subject  // 파일이 여러개 일 때
+ex) feat: 로그인 기능 구현
 ```
 
 |    Type    | 설명                                             |
@@ -19,6 +21,8 @@
 |    test    | 테스트 코드 추가                                      |
 |   chore    | 빌드 업무 수정, 패키지 매니저 수정 (pom.xml 등)               |
 |   remove   | 파일 삭제                                          |
+
+### commit은 최소한의 기능 단위로 해주세요!
 
 ## Git Flow
 
