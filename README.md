@@ -24,7 +24,7 @@
 
 ![image](https://github.com/Familing/familing-backend/assets/64734115/90aae5a5-1a90-4649-97a3-089f67a3cd37)
 
-master -> main 입니다.
+### 저희 프로젝트는 master가 아니라 main 입니다.
 
 main 브랜치에 merge가 되면 자동으로 배포가 됩니다.
 
