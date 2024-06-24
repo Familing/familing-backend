@@ -92,3 +92,37 @@ git checkout -b feature/2-login
 ![image](https://github.com/Familing/familing-backend/assets/64734115/af9cf33d-4ba4-43ed-8adb-2dce12e31160)
 
 참고 : https://velog.io/@tiger/API-RESTful-API
+
+## 패키지 구조
+
+```
+com
+ ㄴ pinu
+    ㄴ familing
+        ㄴ domain
+        |   ㄴ chat
+        |   | ㄴ controller
+        |   | ㄴ dto
+        |   | ㄴ entity
+        |   | ㄴ exception
+        |   | ㄴ repository
+        |   | ㄴ service
+        |   ㄴ user
+        |   | ㄴ controller
+        |   | ㄴ dto
+        |   | ㄴ entity
+        |   | ㄴ exception
+        |   | ㄴ repository
+        |   | ㄴ service
+        | ...
+        ㄴ global
+            ㄴ auth
+            ㄴ common
+            ㄴ config
+            ㄴ error
+            ㄴ infra
+            ㄴ util
+```
+### 최상위 레벨에서는 domain과 global로 패키징한다.
+### domain 패키지에서는 도메인을 기준으로 하위 패키지를 구성한다.
+### global 패키지에서는 프로젝트 전방위적으로 사용할 수 있는 클래스들로 구성한다.
