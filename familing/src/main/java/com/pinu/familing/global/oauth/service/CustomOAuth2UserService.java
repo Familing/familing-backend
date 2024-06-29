@@ -45,12 +45,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             userRepository.save(User.builder()
                     .username(username)
                     .nickname("user")
-                    .role("ROLE_USER")
+                    .role("ROLE_PENDING_USER")
                     .build());
-            UserDto userDTO = new UserDto(username, "user", "ROLE_USER");
+            UserDto userDTO = new UserDto(username, "user", "ROLE_PENDING_USER");
             return new CustomOAuth2User(userDTO);
         }
-        else {
+        else { // 기존 유저
             return new CustomOAuth2User(new UserDto(existUser.getUsername(), existUser.getNickname(), existUser.getRole()));
         }
 
