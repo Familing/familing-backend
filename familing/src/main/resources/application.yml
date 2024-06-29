@@ -12,6 +12,33 @@ spring:
     hibernate:
       ddl-auto: none
 
+  h2:
+    console:
+      enabled: true  # H2 콘솔 활성화
+      path: /h2-console  # H2 콘솔 경로 설정
+
+  jwt:
+    secret: "vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbbb"
+
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-name: "kakao"
+            client-id: "457176480b65c5c9ffe60bcd2202d3a3"
+#            client-secret: "457176480b65c5c9ffe60bcd2202d3a3"
+            redirect-uri: "http://localhost:8080/login/oauth2/code/kakao"
+            authorization-grant-type: "authorization_code"
+#            scope:
+#              - "name"
+        provider:
+          kakao:
+            authorization-uri: "https://kauth.kakao.com/oauth/authorize"
+            token-uri: "https://kauth.kakao.com/oauth/token"
+            user-info-uri: "https://kapi.kakao.com/v2/user/me"
+            user-name-attribute: "id"
+
 ---
 spring:
   config:
