@@ -13,33 +13,24 @@ import java.util.Objects;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-//    @ExceptionHandler(CustomException.class)
-//    public String handleCustomException(CustomException ex) {
-//
-//        // 예외 유형에 따라 리다이렉션 처리
-//        if (ex.getExceptionCode() == ExceptionCode.POST_NOT_FOUND) {
-//            return "redirect:/posts?notExist";
-//        } else if(ex.getExceptionCode() == ExceptionCode.POST_AUTHORITY_FORBIDDEN){
-//            return "redirect:/posts?noPermission";
-//        }
-//        else {
-//            return "redirect:/";
-//        }
-//    }
 
+    @ExceptionHandler(CustomException.class)
+    public ApiUtils.ApiResult<?> handleCustomException(CustomException e) {
+
+        return ApiUtils.error(e.getMessage(), e.getExceptionCode().getHttpStatus());
+    }
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> unknownServerError(Exception e){
+    public ApiUtils.ApiResult<?> unknownServerError(Exception e){
         String message = extractDesiredMessage(e.getMessage());
 
-        ApiUtils.ApiFail apiResult = ApiUtils.fail(message, HttpStatus.INTERNAL_SERVER_ERROR);
-        return new ResponseEntity<>(apiResult, HttpStatus.INTERNAL_SERVER_ERROR);
+        return ApiUtils.error(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        BindingResult result = ex.getBindingResult();
-        String errorMessage = Objects.requireNonNull(result.getFieldError()).getDefaultMessage();
-        return ResponseEntity.badRequest().body(ApiUtils.fail(errorMessage, HttpStatus.BAD_REQUEST));
+    public ApiUtils.ApiResult<?> handleValidationExceptions(MethodArgumentNotValidException e) {
+        BindingResult result = e.getBindingResult();
+        String errorMessage = result.getFieldError().getDefaultMessage();
+        return ApiUtils.error(errorMessage, HttpStatus.BAD_REQUEST);
     }
 
     // 메시지에서 원하는 부분만 노출 되도록 처리
