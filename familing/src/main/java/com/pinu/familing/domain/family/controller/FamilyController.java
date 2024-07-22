@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -27,7 +28,7 @@ public class FamilyController {
      *
      */
     @PostMapping("/family")
-    public ResponseEntity<?> createFamily(@AuthenticationPrincipal CustomOAuth2User customOAuth2User, FamilyName familyName) {
+    public ResponseEntity<?> createFamily(@AuthenticationPrincipal CustomOAuth2User customOAuth2User, @RequestBody FamilyName familyName) {
         String code = familyService.registerNewFamily(customOAuth2User.getName(), familyName.name());
         familyService.addFamilyToUser(customOAuth2User.getName(),code);
         return ResponseEntity.ok("가족 생성과 추가 성공");
@@ -40,7 +41,7 @@ public class FamilyController {
      * 유저 정보 넣기
      */
     @PutMapping("/family")
-    public ResponseEntity<?> registerFamily(@AuthenticationPrincipal CustomOAuth2User customOAuth2User, FamilyCode familyCode) {
+    public ResponseEntity<?> registerFamily(@AuthenticationPrincipal CustomOAuth2User customOAuth2User,@RequestBody FamilyCode familyCode) {
         familyService.addFamilyToUser(customOAuth2User.getName(),familyCode.code());
         return ResponseEntity.ok("successfully registered family");
     }
