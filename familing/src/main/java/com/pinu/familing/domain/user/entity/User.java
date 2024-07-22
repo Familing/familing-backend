@@ -60,11 +60,4 @@ public class User extends BaseEntity {
         }
         this.family = family;
     }
-
-    public boolean existsFamily() {
-        if (this.family != null) {
-            return true;
-        }
-        return true;
-    }
 }
