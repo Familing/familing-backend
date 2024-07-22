@@ -4,7 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="32d36446-7575-4607-9ea8-464b35441d09" name="Changes" comment="" />
+    <list default="true" id="32d36446-7575-4607-9ea8-464b35441d09" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/familing/src/main/java/com/pinu/familing/domain/family/dto/FamilyName.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/familing/src/main/java/com/pinu/familing/domain/family/handler/FamilyCodeHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/familing/src/main/java/com/pinu/familing/domain/family/controller/FamilyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/familing/src/main/java/com/pinu/familing/domain/family/controller/FamilyController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/familing/src/main/java/com/pinu/familing/domain/family/entity/Family.java" beforeDir="false" afterPath="$PROJECT_DIR$/familing/src/main/java/com/pinu/familing/domain/family/entity/Family.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/familing/src/main/java/com/pinu/familing/domain/family/service/FamilyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/familing/src/main/java/com/pinu/familing/domain/family/service/FamilyService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/familing/src/main/java/com/pinu/familing/domain/user/dto/UserDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/familing/src/main/java/com/pinu/familing/domain/user/dto/UserDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/familing/src/main/java/com/pinu/familing/domain/user/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/familing/src/main/java/com/pinu/familing/domain/user/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/familing/src/main/java/com/pinu/familing/domain/user/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/familing/src/main/java/com/pinu/familing/domain/user/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/familing/src/main/java/com/pinu/familing/global/error/ExceptionCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/familing/src/main/java/com/pinu/familing/global/error/ExceptionCode.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -27,13 +40,31 @@
       </state>
     </system>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JUnit5 Test Class" />
+        <option value="Record" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 2
-}]]></component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="2isSqI3Gu08nhEgDFkrUSKJZ4hf" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -47,9 +78,14 @@
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.FamilingApplication.executor": "Run",
-    "git-widget-placeholder": "develop",
+    "WebServerToolWindowFactoryState": "false",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "git-widget-placeholder": "feat/3-family",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/sam1616/Desktop/Project/해커톤/familing-backend",
     "node.js.detected.package.eslint": "true",
@@ -63,7 +99,116 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.pinu.familing.domain.user.service" />
+      <recent name="com.pinu.familing.domain.family.service" />
+      <recent name="com.pinu.familing.domain.family.controller" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.pinu.familing.domain.family.repositiry" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Gradle.FamilyServiceTest.addFamilyToUser">
+    <configuration name="FamilyServiceTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/familing" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.pinu.familing.domain.family.service.FamilyServiceTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="FamilyServiceTest.addFamilyToUser" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/familing" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.pinu.familing.domain.family.service.FamilyServiceTest.addFamilyToUser&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="FamilyServiceTest.createCodeTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/familing" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.pinu.familing.domain.family.service.FamilyServiceTest.createCodeTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="FamilyServiceTest.createFamilyTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/familing" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.pinu.familing.domain.family.service.FamilyServiceTest.createFamilyTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
     <configuration name="FamilingApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="familing.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.pinu.familing.FamilingApplication" />
@@ -71,6 +216,14 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.FamilyServiceTest.addFamilyToUser" />
+        <item itemvalue="Gradle.FamilyServiceTest.createFamilyTest" />
+        <item itemvalue="Gradle.FamilyServiceTest.createCodeTest" />
+        <item itemvalue="Gradle.FamilyServiceTest" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -89,10 +242,27 @@
       <option name="presentableId" value="Default" />
       <updated>1720277980603</updated>
       <workItem from="1720277981624" duration="1496000" />
+      <workItem from="1721613711222" duration="5087000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/familing/src/main/java/com/pinu/familing/global/oauth/dto/CustomOAuth2User.java</url>
+          <line>28</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/familing/src/main/java/com/pinu/familing/domain/family/service/FamilyService.java</url>
+          <line>46</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
