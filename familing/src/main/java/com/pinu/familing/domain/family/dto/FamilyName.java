@@ -1,2 +1,4 @@
-package com.pinu.familing.domain.family.dto;public record FamilyName() {
+package com.pinu.familing.domain.family.dto;
+
+public record FamilyName(String name) {
 }
