@@ -48,6 +48,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .role("ROLE_PENDING_USER")
                     .build());
             UserDto userDTO = new UserDto(username, "user", "ROLE_PENDING_USER");
+            System.out.println("userDTO = " + userDTO);
             return new CustomOAuth2User(userDTO);
         }
         else { // 기존 유저

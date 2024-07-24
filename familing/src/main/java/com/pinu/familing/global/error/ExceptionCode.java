@@ -12,8 +12,13 @@ public enum ExceptionCode {
     USER_FORBIDDEN(HttpStatus.FORBIDDEN, "권한이 없습니다."),
 
     // 잘못된 접근
-    BAD_APPROACH(HttpStatus.BAD_REQUEST, "잘못된 접근입니다.");
+    BAD_APPROACH(HttpStatus.BAD_REQUEST, "잘못된 접근입니다."),
 
+    //가족 코드 생성중
+    FAILED_CODE_GENERATION(HttpStatus.BAD_REQUEST, "잘못된 접근입니다."),
+    ALREADY_HAVE_FAMILY(HttpStatus.BAD_REQUEST, "가족이 있습니다"),
+    INVALID_CODE(HttpStatus.BAD_REQUEST,"코드가 유효하지않습니다.")
+    ;
 
 
     private final HttpStatus httpStatus;
