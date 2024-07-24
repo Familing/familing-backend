@@ -8,6 +8,7 @@ import com.pinu.familing.domain.user.entity.User;
 import com.pinu.familing.domain.user.repository.UserRepository;
 import com.pinu.familing.global.error.CustomException;
 import com.pinu.familing.global.error.ExceptionCode;
+import lombok.RequiredArgsConstructor;
 import org.aspectj.apache.bcel.classfile.Code;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,15 +17,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 @Service
+@RequiredArgsConstructor
 public class FamilyService {
 
     private final UserRepository userRepository;
     private final FamilyRepository familyRepository;
 
-    public FamilyService(UserRepository userRepository, FamilyRepository familyRepository) {
-        this.userRepository = userRepository;
-        this.familyRepository = familyRepository;
-    }
 
     //가족 만들기
     @Transactional
