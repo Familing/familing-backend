@@ -1,4 +1,4 @@
-package com.pinu.familing.domain.chat;
+package com.pinu.familing.domain.chat.config;
 
 import com.google.common.net.HttpHeaders;
 import com.pinu.familing.domain.chat.service.ChatService;
