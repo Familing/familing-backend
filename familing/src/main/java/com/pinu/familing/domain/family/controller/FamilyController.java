@@ -5,6 +5,9 @@ import com.pinu.familing.domain.family.dto.FamilyName;
 import com.pinu.familing.domain.family.service.FamilyService;
 import com.pinu.familing.domain.user.service.UserService;
 import com.pinu.familing.global.oauth.dto.CustomOAuth2User;
+import com.pinu.familing.global.util.ApiUtils;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,12 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class FamilyController {
 
     private final FamilyService familyService;
-    public FamilyController(FamilyService familyService) {
-        this.familyService = familyService;
-    }
 
     /**
      * <가족 생성 로직>
@@ -28,10 +29,10 @@ public class FamilyController {
      *
      */
     @PostMapping("/family")
-    public ResponseEntity<?> createFamily(@AuthenticationPrincipal CustomOAuth2User customOAuth2User, @RequestBody FamilyName familyName) {
+    public ApiUtils.ApiResult<String> createFamily(@AuthenticationPrincipal CustomOAuth2User customOAuth2User, @RequestBody FamilyName familyName) {
         String code = familyService.registerNewFamily(customOAuth2User.getName(), familyName.name());
         familyService.addFamilyToUser(customOAuth2User.getName(),code);
-        return ResponseEntity.ok("가족 생성과 추가 성공");
+        return ApiUtils.success(HttpStatus.OK,"가족 생성과 추가 성공");
     }
 
     /**
@@ -40,10 +41,10 @@ public class FamilyController {
      * 유효한 가족 코드 확인
      * 유저 정보 넣기
      */
-    @PutMapping("/family")
-    public ResponseEntity<?> registerFamily(@AuthenticationPrincipal CustomOAuth2User customOAuth2User,@RequestBody FamilyCode familyCode) {
+    @PostMapping("/family/user")
+    public ApiUtils.ApiResult<String> registerFamily(@AuthenticationPrincipal CustomOAuth2User customOAuth2User,@RequestBody FamilyCode familyCode) {
         familyService.addFamilyToUser(customOAuth2User.getName(),familyCode.code());
-        return ResponseEntity.ok("successfully registered family");
+        return ApiUtils.success(HttpStatus.OK,"가족 추가 성공");
     }
 
 
