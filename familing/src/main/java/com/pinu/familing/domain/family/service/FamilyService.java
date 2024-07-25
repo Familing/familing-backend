@@ -27,16 +27,13 @@ public class FamilyService {
     @Transactional
     public String registerNewFamily(String username,String familyName){
         String validCode = validFamilyCode(FamilyCodeHandler.createCode(username));
-
         Family family = new Family(familyName,validCode);
         Family savefamily = familyRepository.save(family);
-
+        System.out.println(username);
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
-
         // 가족 등록할 때 가족 채팅방 가동 생성
         chatService.makeChatRoom(user, validCode);
-
         return savefamily.getCode();
     }
 

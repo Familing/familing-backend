@@ -29,7 +29,8 @@ public class ChatRoom extends BaseEntity {
     private List<User> users = new ArrayList<>();
 
     public void addUser(User user) {
-        users.add(user);
+        System.out.println(user.getId());
+        this.users.add(user);
         user.registerChatRoom(this);
     }
 

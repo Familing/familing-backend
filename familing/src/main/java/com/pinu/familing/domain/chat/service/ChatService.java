@@ -14,12 +14,15 @@ import com.pinu.familing.global.error.CustomException;
 import com.pinu.familing.global.util.ConstantUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 
 import static com.pinu.familing.global.error.ExceptionCode.USER_NOT_FOUND;
 
@@ -36,17 +39,15 @@ public class ChatService {
 
     @Transactional
     public boolean makeChatRoom(User user, String validCode) {
-
         // ChatRoom 객체를 Builder 패턴을 사용하여 생성
         ChatRoom chatRoom = ChatRoom.builder()
                 .validCode(validCode)
+                .users(new ArrayList<>())
                 .build();
-
         // ChatRoom 객체에 User 추가
-        chatRoom.addUser(user);
-
         chatRoomRepository.save(chatRoom);
-
+        chatRoom.addUser(user);
+        chatRoomRepository.save(chatRoom);
         return true;
     }
 

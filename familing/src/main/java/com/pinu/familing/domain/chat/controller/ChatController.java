@@ -39,7 +39,7 @@ public class ChatController {
         return ResponseEntity.ok(chattingList);
     }
 
-
+    // ws.send("/pub/message", {}, JSON.stringify("메시지"); 로들어오는 요청을 처리한다.
     @MessageMapping("/message")
     public void sendMessage(@Valid Message message, CustomOAuth2User principal) {
         chatService.sendMessage(message, principal.getName());
