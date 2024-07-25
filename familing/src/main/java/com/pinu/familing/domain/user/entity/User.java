@@ -3,14 +3,13 @@ package com.pinu.familing.domain.user.entity;
 import com.pinu.familing.domain.BaseEntity;
 import com.pinu.familing.domain.family.entity.Family;
 import com.pinu.familing.domain.user.Gender;
-import com.pinu.familing.domain.chat.ChatRoom;
+import com.pinu.familing.domain.chat.entity.ChatRoom;
 import com.pinu.familing.global.error.CustomException;
 import com.pinu.familing.global.error.ExceptionCode;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @Entity
 @Getter
