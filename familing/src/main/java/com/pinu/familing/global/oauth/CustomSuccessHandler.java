@@ -41,8 +41,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String token = jwtUtil.createJwt(username, role, 60*60*60L);
 
         response.addCookie(createCookie("Authorization", token));
-
         // 로그인 성공 후 Redirect 주소
+
         if ("ROLE_PENDING_USER".equals(role)) { // Oauth만 인증되고 추가적인 요청 필요
             response.sendRedirect("http://localhost:8080/user");
         } else if ("ROLE_USER".equals(role)) { // 회원가입 완료

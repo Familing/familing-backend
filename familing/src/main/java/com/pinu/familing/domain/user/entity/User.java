@@ -3,18 +3,20 @@ package com.pinu.familing.domain.user.entity;
 import com.pinu.familing.domain.BaseEntity;
 import com.pinu.familing.domain.family.entity.Family;
 import com.pinu.familing.domain.user.Gender;
+import com.pinu.familing.domain.chat.ChatRoom;
 import com.pinu.familing.global.error.CustomException;
 import com.pinu.familing.global.error.ExceptionCode;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @Table(name = "user_tb")
-public class User extends BaseEntity {
+public class User extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +34,10 @@ public class User extends BaseEntity {
     private Family family;
 
     private int age;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chat_room_id")
+    private ChatRoom chatRoom;
 
     private String role;
 
@@ -59,5 +65,9 @@ public class User extends BaseEntity {
             throw new CustomException(ExceptionCode.ALREADY_HAVE_FAMILY);
         }
         this.family = family;
+    }
+
+    public void registerChatRoom(ChatRoom chatRoom) {
+        this.chatRoom = chatRoom;
     }
 }
