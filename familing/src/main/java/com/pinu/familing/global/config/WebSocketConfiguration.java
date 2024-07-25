@@ -1,5 +1,7 @@
-package com.pinu.familing.domain.chat;
+package com.pinu.familing.global.config;
 
+import com.pinu.familing.domain.chat.HttpHandshakeInterceptor;
+import com.pinu.familing.domain.chat.StompHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
