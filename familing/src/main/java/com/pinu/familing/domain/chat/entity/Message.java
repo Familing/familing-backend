@@ -1,4 +1,4 @@
-package com.pinu.familing.domain.chat;
+package com.pinu.familing.domain.chat.entity;
 
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
