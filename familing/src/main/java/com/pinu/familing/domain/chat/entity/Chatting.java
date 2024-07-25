@@ -1,4 +1,4 @@
-package com.pinu.familing.domain.chat;
+package com.pinu.familing.domain.chat.entity;
 
 import jakarta.persistence.Id;
 import lombok.*;
