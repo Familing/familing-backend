@@ -1,6 +1,7 @@
 package com.pinu.familing.domain.chat;
 
 import com.google.common.net.HttpHeaders;
+import com.pinu.familing.domain.chat.service.ChatService;
 import com.pinu.familing.global.error.CustomException;
 import com.pinu.familing.global.jwt.JWTUtil;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +13,6 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
-
-import java.util.Objects;
 
 import static com.pinu.familing.global.error.ExceptionCode.TOKEN_EXPIRED;
 import static com.pinu.familing.global.error.ExceptionCode.TOKEN_NOT_FOUND;

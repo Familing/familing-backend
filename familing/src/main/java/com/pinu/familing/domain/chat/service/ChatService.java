@@ -2,7 +2,7 @@ package com.pinu.familing.domain.chat.service;
 
 
 import com.pinu.familing.domain.chat.entity.Message;
-import com.pinu.familing.domain.chat.MessageSender;
+import com.pinu.familing.domain.chat.messaging.MessageSender;
 import com.pinu.familing.domain.chat.repository.MongoChatRepository;
 import com.pinu.familing.domain.chat.dto.ChatResponseDto;
 import com.pinu.familing.domain.chat.dto.ChattingHistoryResponseDto;
