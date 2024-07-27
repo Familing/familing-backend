@@ -18,9 +18,9 @@ public class Chatting {
 
     @Id
     private String id;
-    private Long chatRoomNo;
-    private Long senderNo;
-    private String senderName;
+    private Long chatRoomId;
+    private Long senderId;
+    private String senderUsername;
     private String contentType;
     private String content;
     private LocalDateTime sendDate;

@@ -1,9 +1,10 @@
 package com.pinu.familing.domain.chat.entity;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.antlr.v4.runtime.misc.NotNull;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -37,12 +38,26 @@ public class Message implements Serializable {
 
     private long sendTime;
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public void setSendTimeAndSender(LocalDateTime sendTime, Long senderId, String senderUsername, String senderNickname) {
         this.senderUsername = senderUsername;
         this.sendTime = sendTime.atZone(ZoneId.of("Asia/Seoul")).toInstant().toEpochMilli();
         this.senderId = senderId;
         this.senderNickname = senderNickname;
+    }
+
+    public Chatting convertEntity() {
+        return Chatting.builder()
+                .senderUsername(senderUsername)
+                .senderId(senderId)
+                .chatRoomId(chatRoomId)
+                .contentType(contentType)
+                .content(content)
+                .sendDate(Instant.ofEpochMilli(sendTime).atZone(ZoneId.of("Asia/Seoul")).toLocalDateTime())
+                .build();
     }
 
 }

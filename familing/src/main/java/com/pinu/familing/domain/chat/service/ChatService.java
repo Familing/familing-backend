@@ -1,6 +1,7 @@
 package com.pinu.familing.domain.chat.service;
 
 
+import com.pinu.familing.domain.chat.entity.Chatting;
 import com.pinu.familing.domain.chat.entity.Message;
 import com.pinu.familing.domain.chat.messaging.MessageSender;
 import com.pinu.familing.domain.chat.repository.MongoChatRepository;
@@ -56,7 +57,7 @@ public class ChatService {
     public ChattingHistoryResponseDto getChattingList(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
-        List<ChatResponseDto> chattingList = mongoChatRepository.findByChatRoomNo(user.getChatRoom().getId())
+        List<ChatResponseDto> chattingList = mongoChatRepository.findByChatRoomId(user.getChatRoom().getId())
                 .stream()
                 .map(chat -> new ChatResponseDto(chat, user.getId()))
                 .collect(Collectors.toList());
@@ -75,6 +76,13 @@ public class ChatService {
 
         // message 객체에 보낸시간, 보낸사람 memberNo, 닉네임을 셋팅해준다.
         message.setSendTimeAndSender(LocalDateTime.now(), user.getId(), user.getUsername(), user.getNickname());
+
+        Chatting chatting = message.convertEntity();
+        // 채팅 내용을 저장한다.
+        Chatting savedChat = mongoChatRepository.save(chatting);
+        // 저장된 고유 ID를 반환한다.
+        message.setId(savedChat.getId());
+
         // 메시지를 전송한다.
         sender.send(ConstantUtil.KAFKA_CHAT_TOPIC, message);
     }
