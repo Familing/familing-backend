@@ -5,24 +5,24 @@ import java.time.ZoneId;
 
 public record ChatResponseDto(
         String id,
-        Long chatRoomNo,
-        Long senderNo,
-        String senderName,
+        Long chatRoomId,
+        Long senderId,
+        String senderUsername,
         String contentType,
         String content,
         long sendDate,
         boolean isMine
 ) {
-    public ChatResponseDto(Chatting chatting, Long userNo) {
+    public ChatResponseDto(Chatting chatting, Long userId) {
         this(
                 chatting.getId(),
-                chatting.getChatRoomNo(),
-                chatting.getSenderNo(),
-                chatting.getSenderName(),
+                chatting.getChatRoomId(),
+                chatting.getSenderId(),
+                chatting.getSenderUsername(),
                 chatting.getContentType(),
                 chatting.getContent(),
                 chatting.getSendDate().atZone(ZoneId.of("Asia/Seoul")).toInstant().toEpochMilli(),
-                chatting.getSenderNo().equals(userNo)
+                chatting.getSenderId().equals(userId)
         );
     }
 
