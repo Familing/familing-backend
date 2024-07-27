@@ -55,7 +55,7 @@
         }
     }
 
-    function showMessage( ) {
+    function showMessage(message) {
         const messageElement = document.createElement('div');
         messageElement.innerHTML = `<strong>${message.senderNickname}</strong>: ${message.content}`;
         document.getElementById('messages').appendChild(messageElement);
