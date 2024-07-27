@@ -26,8 +26,9 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // 웹 소켓 엔드 포인트 등록, 클라이언트는 이 경로를 사용해서 WebSocket 연결 설정을 한다.
-        registry.addEndpoint("/stomp/chat") // STOMP 엔드포인트 설정
+        registry.addEndpoint("/ws") // STOMP 엔드포인트 설정
                 .setAllowedOriginPatterns("*") // 모든 Origin 허용 -> 배포시에는 보안을 위해 Origin을 정확히 지정
+                .addInterceptors(httpHandshakeInterceptor) // 웹소켓 연결 시 jwt 토큰 인증
                 .withSockJS(); // SockJS 사용가능 설정
     }
 
@@ -35,7 +36,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         // 메시지 구독을 할 수 있게 하는 prefix
-        registry.enableSimpleBroker("/sub"); // /sub/{chatNo}로 주제 구독 가능
+        registry.enableSimpleBroker("/sub"); // /sub/{chatRoomId}로 주제 구독 가능
         // 클라이언트가 메시지를 보낼때 사용할 prefix
         registry.setApplicationDestinationPrefixes("/pub"); // /pub/message로 메시지 전송 컨트롤러 라우팅 가능
     }

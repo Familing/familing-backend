@@ -64,8 +64,8 @@ public class HttpHandshakeInterceptor implements HandshakeInterceptor {
         try {
             String username = jwtUtil.getUsername(accessToken);
 
-            attributes.put("userName", username);
-
+            attributes.put("username", username);
+            attributes.put("Authorization", accessToken);
             return true;
         } catch (Exception e) {
             log.error(ERROR_MESSAGE);
