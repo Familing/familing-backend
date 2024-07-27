@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -41,8 +42,9 @@ public class ChatController {
 
     // ws.send("/pub/message", {}, JSON.stringify("메시지"); 로들어오는 요청을 처리한다.
     @MessageMapping("/message")
-    public void sendMessage(@Valid Message message, CustomOAuth2User principal) {
-        chatService.sendMessage(message, principal.getName());
+    public void sendMessage(@Valid Message message, StompHeaderAccessor accessor) {
+        String username = (String) accessor.getSessionAttributes().get("username");
+        chatService.sendMessage(message, username);
     }
 
 

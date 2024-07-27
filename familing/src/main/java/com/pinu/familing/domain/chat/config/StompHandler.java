@@ -42,16 +42,12 @@ public class StompHandler implements ChannelInterceptor {
 
     private String getAccessToken(StompHeaderAccessor accessor) {
         // 쿠키에서 JWT 토큰을 추출한다.
-        String cookieHeader = accessor.getFirstNativeHeader(HttpHeaders.COOKIE);
-        if (cookieHeader != null) {
-            for (String cookie : cookieHeader.split(";")) {
-                String[] cookieParts = cookie.trim().split("=");
-                if (cookieParts.length == 2 && "Authorization".equals(cookieParts[0])) {
-                    return cookieParts[1];
-                }
-            }
+        String token = (String) accessor.getSessionAttributes().get("Authorization");
+        if (token == null) {
+            throw new CustomException(TOKEN_NOT_FOUND);
         }
-        throw new CustomException(TOKEN_NOT_FOUND);
+        return token;
+
     }
 
 
