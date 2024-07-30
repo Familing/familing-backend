@@ -21,6 +21,7 @@ import java.security.Principal;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1")
 public class ChatController {
 
     private final ChatService chatService;
