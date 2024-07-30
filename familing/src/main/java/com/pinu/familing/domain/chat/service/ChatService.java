@@ -62,7 +62,6 @@ public class ChatService {
                 .stream()
                 .map(chat -> new ChatResponseDto(chat, user.getId()))
                 .collect(Collectors.toList());
-
         return ChattingHistoryResponseDto.builder()
                 .chatList(chattingList)
                 .nickName(user.getNickname())

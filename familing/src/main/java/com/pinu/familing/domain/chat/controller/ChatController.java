@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -26,13 +27,14 @@ public class ChatController {
 
     // 자기 단톡방 채팅내역 조회
     @GetMapping("/chatroom/message")
-    public ResponseEntity<ChattingHistoryResponseDto> chattingList(CustomOAuth2User principal) {
+    public ResponseEntity<ChattingHistoryResponseDto> chattingList(@AuthenticationPrincipal CustomOAuth2User principal) {
         ChattingHistoryResponseDto chattingList = chatService.getChattingList(principal.getName());
         return ResponseEntity.ok(chattingList);
     }
 
+    // 자신의 채팅방 정보 조회
     @GetMapping("/chatroom/user")
-    public ApiUtils.ApiResult<?> chatRoomInfo(Principal principal) {
+    public ApiUtils.ApiResult<?> chatRoomInfo(@AuthenticationPrincipal CustomOAuth2User principal) {
         return ApiUtils.success(chatService.getChatRoomInfo(principal.getName()));
     }
 
