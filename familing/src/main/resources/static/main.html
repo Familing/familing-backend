@@ -17,11 +17,8 @@
 <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 <script>
     let stompClient = null;
-
+    console.log("hello1")
     function connect() {
-        const socket = new SockJS('/ws');
-        stompClient = Stomp.over(socket);
-
         fetch('/chatroom/user', {
             method: 'GET',
             headers: {
@@ -30,13 +27,19 @@
         })
             .then(response => response.json())
             .then(data => {
-                if (data.success && data.response.chatRoomId) {
+                console.log("hello2")
+                if (data.success) {
                     // chatRoomId 가져오기
-                    const chatRoomId = data.response.chatRoomId;
+                    const chatRoomId = data.result.chatRoomId;
+                    console.log(chatRoomId)
+                    // WebSocket 연결 설정
+                    const socket = new SockJS('/ws');
+                    stompClient = Stomp.over(socket);
 
                     // 연결 시도
                     stompClient.connect({}, function (frame) {
                         console.log('Connected: ' + frame);
+                        console.log(chatRoomId)
                         // 구독 성공 로그
                         stompClient.subscribe(`/sub/${chatRoomId}`, function (message) {
                             console.log('Received: ', message.body);
@@ -46,7 +49,7 @@
                         console.error('Connection error: ' + error);
                     });
                 } else {
-                    console.error('Failed to get chatRoomId:', data);
+                    console.error('Failed to get chatRoomId or invalid response:', data);
                 }
             })
             .catch(error => {

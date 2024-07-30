@@ -14,6 +14,8 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 
 @Slf4j
 @RestController
@@ -23,14 +25,14 @@ public class ChatController {
     private final ChatService chatService;
 
     // 자기 단톡방 채팅내역 조회
-    @GetMapping("/chatroom")
+    @GetMapping("/chatroom/message")
     public ResponseEntity<ChattingHistoryResponseDto> chattingList(CustomOAuth2User principal) {
         ChattingHistoryResponseDto chattingList = chatService.getChattingList(principal.getName());
         return ResponseEntity.ok(chattingList);
     }
 
     @GetMapping("/chatroom/user")
-    public ApiUtils.ApiResult<?> chatRoomInfo(CustomOAuth2User principal) {
+    public ApiUtils.ApiResult<?> chatRoomInfo(Principal principal) {
         return ApiUtils.success(chatService.getChatRoomInfo(principal.getName()));
     }
 
