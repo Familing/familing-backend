@@ -1,5 +1,6 @@
 package com.pinu.familing.domain.chat.entity;
 
+import com.pinu.familing.domain.user.entity.User;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -42,11 +43,12 @@ public class Message implements Serializable {
         this.id = id;
     }
 
-    public void setSendTimeAndSender(LocalDateTime sendTime, Long senderId, String senderUsername, String senderNickname) {
-        this.senderUsername = senderUsername;
+    public void setSendTimeAndSenderAndRoomId(LocalDateTime sendTime, User user) {
+        this.senderUsername = user.getUsername();
         this.sendTime = sendTime.atZone(ZoneId.of("Asia/Seoul")).toInstant().toEpochMilli();
-        this.senderId = senderId;
-        this.senderNickname = senderNickname;
+        this.senderId = user.getId();
+        this.senderNickname = user.getNickname();
+        this.chatRoomId = user.getChatRoom().getId();
     }
 
     public Chatting convertEntity() {
