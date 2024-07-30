@@ -19,7 +19,7 @@
     let stompClient = null;
     console.log("hello1")
     function connect() {
-        fetch('/chatroom/user', {
+        fetch('/api/v1/chatroom/user', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -27,7 +27,6 @@
         })
             .then(response => response.json())
             .then(data => {
-                console.log("hello2")
                 if (data.success) {
                     // chatRoomId 가져오기
                     const chatRoomId = data.result.chatRoomId;
