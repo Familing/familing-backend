@@ -1,6 +1,7 @@
 package com.pinu.familing.domain.chat.service;
 
 
+import com.pinu.familing.domain.chat.dto.ChatRoomInfoDto;
 import com.pinu.familing.domain.chat.entity.Chatting;
 import com.pinu.familing.domain.chat.entity.Message;
 import com.pinu.familing.domain.chat.messaging.MessageSender;
@@ -75,7 +76,7 @@ public class ChatService {
                 .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
 
         // message 객체에 보낸시간, 보낸사람 memberNo, 닉네임을 셋팅해준다.
-        message.setSendTimeAndSender(LocalDateTime.now(), user.getId(), user.getUsername(), user.getNickname());
+        message.setSendTimeAndSenderAndRoomId(LocalDateTime.now(), user);
 
         Chatting chatting = message.convertEntity();
         // 채팅 내용을 저장한다.
@@ -85,6 +86,15 @@ public class ChatService {
 
         // 메시지를 전송한다.
         sender.send(ConstantUtil.KAFKA_CHAT_TOPIC, message);
+    }
+
+    public ChatRoomInfoDto getChatRoomInfo(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+
+        return ChatRoomInfoDto.builder()
+                .chatRoomId(user.getChatRoom().getId())
+                .build();
     }
 
 //    @Transactional
