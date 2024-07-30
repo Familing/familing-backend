@@ -32,7 +32,7 @@ public class FamilyController {
     public ApiUtils.ApiResult<String> createFamily(@AuthenticationPrincipal CustomOAuth2User customOAuth2User, @RequestBody FamilyName familyName) {
         String code = familyService.registerNewFamily(customOAuth2User.getName(), familyName.name());
         familyService.addFamilyToUser(customOAuth2User.getName(),code);
-        return ApiUtils.success(HttpStatus.OK,"가족 생성과 추가 성공");
+        return ApiUtils.success("가족 생성과 추가 성공");
     }
 
     /**
@@ -44,7 +44,7 @@ public class FamilyController {
     @PostMapping("/family/user")
     public ApiUtils.ApiResult<String> registerFamily(@AuthenticationPrincipal CustomOAuth2User customOAuth2User,@RequestBody FamilyCode familyCode) {
         familyService.addFamilyToUser(customOAuth2User.getName(),familyCode.code());
-        return ApiUtils.success(HttpStatus.OK,"가족 추가 성공");
+        return ApiUtils.success("가족 추가 성공");
     }
 
 

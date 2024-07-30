@@ -7,8 +7,12 @@ import org.springframework.http.HttpStatus;
 
 public class ApiUtils {
 
-    public static <T> ApiResult<T> success(HttpStatus httpStatus, T result) {
-        return new ApiResult<>(true, httpStatus.value(), httpStatus.getReasonPhrase(), result);
+    public static <T> ApiResult<T> success(T result) {
+        return new ApiResult<>(true, HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), result);
+    }
+
+    public static <T> ApiResult<T> create(T result) {
+        return new ApiResult<>(true, HttpStatus.CREATED.value(), HttpStatus.CREATED.getReasonPhrase(), result);
     }
 
     public static ApiResult<?> error(String message, HttpStatus httpStatus) {
