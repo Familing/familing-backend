@@ -2,9 +2,7 @@ package com.pinu.familing.domain.user.service;
 
 import com.pinu.familing.domain.family.entity.Family;
 import com.pinu.familing.domain.family.repositiry.FamilyRepository;
-import com.pinu.familing.domain.user.dto.ImageUrl;
-import com.pinu.familing.domain.user.dto.Nickname;
-import com.pinu.familing.domain.user.dto.Realname;
+import com.pinu.familing.domain.user.dto.UserRequest;
 import com.pinu.familing.domain.user.dto.UserResponse;
 import com.pinu.familing.domain.user.entity.User;
 import com.pinu.familing.domain.user.repository.UserRepository;
@@ -42,21 +40,8 @@ public class UserService {
     }
 
     @Transactional
-    public void changeNickname(CustomOAuth2User customOAuth2User, Nickname nickname) {
+    public void changeUser(CustomOAuth2User customOAuth2User, UserRequest userRequest) {
         User user = userRepository.findByUsername(customOAuth2User.getName());
-        user.updateNickname(nickname);
+        user.updateValue(userRequest);
     }
-
-    @Transactional
-    public void changeRealname(CustomOAuth2User customOAuth2User, Realname realname) {
-        User user = userRepository.findByUsername(customOAuth2User.getName());
-        user.updateRealname(realname);
-    }
-
-    @Transactional
-    public void changeImageUrl(CustomOAuth2User customOAuth2User, ImageUrl imageUrl) {
-        User user = userRepository.findByUsername(customOAuth2User.getName());
-        user.updateImageUrl(imageUrl);
-    }
-
 }

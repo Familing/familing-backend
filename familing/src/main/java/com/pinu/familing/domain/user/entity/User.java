@@ -3,9 +3,7 @@ package com.pinu.familing.domain.user.entity;
 import com.pinu.familing.domain.BaseEntity;
 import com.pinu.familing.domain.family.entity.Family;
 import com.pinu.familing.domain.user.Gender;
-import com.pinu.familing.domain.user.dto.ImageUrl;
-import com.pinu.familing.domain.user.dto.Nickname;
-import com.pinu.familing.domain.user.dto.Realname;
+import com.pinu.familing.domain.user.dto.UserRequest;
 import com.pinu.familing.global.error.CustomException;
 import com.pinu.familing.global.error.ExceptionCode;
 import jakarta.persistence.*;
@@ -61,15 +59,17 @@ public class User extends BaseEntity {
         this.family = family;
     }
 
-    public void updateNickname(Nickname nickname) {
-        this.nickname = nickname.nickname();
-    }
+    public void updateValue(UserRequest userRequest) {
+        if (userRequest.existNickname()) {
+            this.nickname = userRequest.nickname();
+        }
 
-    public void updateRealname(Realname realname) {
-        this.realname = realname.realname();
-    }
+        if (userRequest.existRealname()) {
+            this.realname = userRequest.realname();
+        }
 
-    public void updateImageUrl(ImageUrl imageUrl) {
-        this.imageUrl = imageUrl.imageUrl();
+        if (userRequest.existImageUrl()) {
+            this.imageUrl = userRequest.imageUrl();
+        }
     }
 }
