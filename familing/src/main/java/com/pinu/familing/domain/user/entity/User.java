@@ -21,8 +21,12 @@ public class User extends BaseEntity {
     private Long id;
     // 유저 아이디로 사용한다.
     private String username;
-    // 유저 닉네임
+    // 유저 닉네임 <- 가족에서 사용할 이름
     private String nickname;
+    // 유저의 실제 이흠
+    private String realName;
+    //프로필
+    private String imageUrl;
 
     @Enumerated(value = EnumType.STRING)
     private Gender gender;
@@ -36,23 +40,17 @@ public class User extends BaseEntity {
     private String role;
 
     @Builder
-    private User(String username, String nickname, String role, int age, Gender gender, Family family) {
+    private User(String username, String nickname, String realName,String imageUrl,String role, int age, Gender gender, Family family) {
         this.username = username;
         this.nickname = nickname;
+        this.realName = realName;
+        this.imageUrl = imageUrl;
         this.role = role;
         this.age = age;
         this.gender = gender;
         this.family = family;
     }
 
-    @Builder
-    private User(String username, String nickname, String role, int age, Gender gender) {
-        this.username = username;
-        this.nickname = nickname;
-        this.role = role;
-        this.age = age;
-        this.gender = gender;
-    }
 
     public void registerFamily(Family family) {
         if (this.family != null) {

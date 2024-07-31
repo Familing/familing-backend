@@ -44,7 +44,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         if (existUser == null) { // 새로운 유저 생성
             userRepository.save(User.builder()
                     .username(username)
-                    .nickname("user")
+                    .nickname(oAuth2Response.getOAuthName())
+                    .realName(oAuth2Response.getOAuthName())
                     .role("ROLE_PENDING_USER")
                     .build());
             UserDto userDTO = new UserDto(username, "user", "ROLE_PENDING_USER");
