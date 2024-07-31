@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
+import static com.pinu.familing.global.error.ExceptionCode.CHATROOM_ALREADY_EXISTS;
 import static com.pinu.familing.global.error.ExceptionCode.USER_NOT_FOUND;
 
 @Slf4j
@@ -42,6 +43,10 @@ public class ChatService {
 
     @Transactional
     public boolean makeChatRoom(User user, String validCode) {
+        if (chatRoomRepository.findByValidCode(validCode).isPresent()) {
+            throw new CustomException(CHATROOM_ALREADY_EXISTS);
+        }
+
         // ChatRoom 객체를 Builder 패턴을 사용하여 생성
         ChatRoom chatRoom = ChatRoom.builder()
                 .validCode(validCode)

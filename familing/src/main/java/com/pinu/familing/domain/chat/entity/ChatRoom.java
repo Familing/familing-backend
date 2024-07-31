@@ -25,6 +25,7 @@ public class ChatRoom extends BaseEntity {
     private Long id;
 
     @NotNull(message = "채팅방 생성시 가족코드는 필수입니다.")
+    @Column(unique = true)
     private String validCode;
 
     @OneToMany(mappedBy = "chatRoom")

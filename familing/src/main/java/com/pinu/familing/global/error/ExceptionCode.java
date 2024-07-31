@@ -16,6 +16,7 @@ public enum ExceptionCode {
 
     // 잘못된 접근
     BAD_APPROACH(HttpStatus.BAD_REQUEST, "잘못된 접근입니다."),
+    CHATROOM_ALREADY_EXISTS(HttpStatus.CONFLICT, "채팅방 생성시 중복된 코드를 사용할 수 없습니다."),
 
     //가족 코드 생성중
     FAILED_CODE_GENERATION(HttpStatus.BAD_REQUEST, "잘못된 접근입니다."),
