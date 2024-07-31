@@ -28,6 +28,7 @@ public class ChatRoom extends BaseEntity {
     @Column(unique = true)
     private String validCode;
 
+    @Builder.Default
     @OneToMany(mappedBy = "chatRoom")
     private List<User> users = new ArrayList<>();
 
