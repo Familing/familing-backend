@@ -1,7 +1,7 @@
 spring:
   profiles:
     default: local
-    active: mongo
+
 
   datasource:
     url: jdbc:h2:mem:~/familing
@@ -39,14 +39,12 @@ spring:
             token-uri: "https://kauth.kakao.com/oauth/token"
             user-info-uri: "https://kapi.kakao.com/v2/user/me"
             user-name-attribute: "id"
-
 mongodb:
   client: mongodb://root:1234@127.0.0.1:27017/familing
   name: familing
 
 kafka:
   server: localhost:9092
-
 ---
 
 spring:
@@ -67,6 +65,7 @@ spring:
     console:
       enabled: true
 
+
 ---
 
 spring:
@@ -86,10 +85,11 @@ spring:
     init:
       mode: never # init sql 실행 안 함, 직접 데이터 초기화
 
-  data:
-    mongodb:
-      uri: mongodb://root:1234@127.0.0.1:27017/testdb
-      database: testdb
+
+
+mongodb:
+  client: mongodb://root:1234@127.0.0.1:27017/testdb
+  name: testdb
 
 kafka:
   bootstrap-servers: localhost:9092
