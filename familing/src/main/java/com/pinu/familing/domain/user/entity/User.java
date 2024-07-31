@@ -43,7 +43,7 @@ public class User extends BaseEntity {
     private String role;
 
     @Builder
-    private User(String username, String nickname, String realname,String imageUrl,String role, int age, Gender gender, Family family) {
+    private User(String username, String nickname, String realname, String imageUrl, String role, int age, Gender gender, Family family) {
         this.username = username;
         this.nickname = nickname;
         this.realname = realname;

@@ -29,20 +29,20 @@ public class UserController {
     @PostMapping("/user/nickname")
     public ApiUtils.ApiResult<?> changeNickname(@AuthenticationPrincipal CustomOAuth2User customOAuth2User, @RequestBody Nickname nickname) {
         userService.changeNickname(customOAuth2User, nickname);
-        return ApiUtils.success(HttpStatus.OK,"Successful nickname changed");
+        return ApiUtils.success(HttpStatus.OK, "Successful nickname changed");
     }
 
     //진짜 이름 변경
     @PostMapping("/user/realname")
     public ApiUtils.ApiResult<?> changeRealname(@AuthenticationPrincipal CustomOAuth2User customOAuth2User, @RequestBody Realname realname) {
         userService.changeRealname(customOAuth2User, realname);
-        return ApiUtils.success(HttpStatus.OK,"Successful realname changed");
+        return ApiUtils.success(HttpStatus.OK, "Successful realname changed");
     }
 
     //프로필 변경
     @PostMapping("/user/imageurl")
     public ApiUtils.ApiResult<?> changeImageUrl(@AuthenticationPrincipal CustomOAuth2User customOAuth2User, @RequestBody ImageUrl imageUrl) {
         userService.changeImageUrl(customOAuth2User, imageUrl);
-        return ApiUtils.success(HttpStatus.OK,"Successful image url changed");
+        return ApiUtils.success(HttpStatus.OK, "Successful image url changed");
     }
 }

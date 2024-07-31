@@ -1,7 +1,6 @@
 package com.pinu.familing.domain.subscription.controller;
 
 import com.pinu.familing.domain.subscription.dto.SubscriptionResponse;
-import com.pinu.familing.domain.subscription.repository.SubscriptionRepository;
 import com.pinu.familing.domain.subscription.service.SubscriptionService;
 import com.pinu.familing.global.util.ApiUtils;
 import lombok.RequiredArgsConstructor;

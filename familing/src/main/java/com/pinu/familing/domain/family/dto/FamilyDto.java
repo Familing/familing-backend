@@ -7,7 +7,7 @@ import com.pinu.familing.domain.family.entity.Family;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record FamilyDto(Long id,
                         String familyName,
-                        String code){
+                        String code) {
 
     public FamilyDto(Family family) {
         this(family.getId(), family.getFamilyName(), family.getCode());

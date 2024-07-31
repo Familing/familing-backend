@@ -27,11 +27,11 @@ spring:
           kakao:
             client-name: "kakao"
             client-id: "457176480b65c5c9ffe60bcd2202d3a3"
-#            client-secret: "457176480b65c5c9ffe60bcd2202d3a3"
+            #            client-secret: "457176480b65c5c9ffe60bcd2202d3a3"
             redirect-uri: "http://localhost:8080/login/oauth2/code/kakao"
             authorization-grant-type: "authorization_code"
-#            scope:
-#              - "name"
+        #            scope:
+        #              - "name"
         provider:
           kakao:
             authorization-uri: "https://kauth.kakao.com/oauth/authorize"

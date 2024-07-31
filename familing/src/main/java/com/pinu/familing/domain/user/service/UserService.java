@@ -35,7 +35,7 @@ public class UserService {
         User user = userRepository.findByUsername(customOAuth2User.getName());
 
         Family family = familyRepository.findByCode(code)
-                .orElseThrow(()-> new CustomException(ExceptionCode.INVALID_CODE));
+                .orElseThrow(() -> new CustomException(ExceptionCode.INVALID_CODE));
 
         //내부에 예외 처리 부분 넣어놨습니다.
         user.registerFamily(family);
