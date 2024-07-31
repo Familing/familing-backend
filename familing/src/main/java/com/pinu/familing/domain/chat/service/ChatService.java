@@ -48,7 +48,6 @@ public class ChatService {
                 .users(new ArrayList<>())
                 .build();
         // ChatRoom 객체에 User 추가
-        chatRoomRepository.save(chatRoom);
         chatRoom.addUser(user);
         chatRoomRepository.save(chatRoom);
         return true;
@@ -90,7 +89,6 @@ public class ChatService {
     public ChatRoomInfoDto getChatRoomInfo(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
-        System.out.println(user.getChatRoom().getId());
         return ChatRoomInfoDto.builder()
                 .chatRoomId(user.getChatRoom().getId())
                 .build();
