@@ -1,20 +1,15 @@
 package com.pinu.familing.domain.family.service;
 
-import com.pinu.familing.domain.family.dto.FamilyCode;
+import com.pinu.familing.domain.family.dto.FamilyDto;
 import com.pinu.familing.domain.family.entity.Family;
 import com.pinu.familing.domain.family.handler.FamilyCodeHandler;
 import com.pinu.familing.domain.family.repositiry.FamilyRepository;
-import com.pinu.familing.domain.user.entity.User;
 import com.pinu.familing.domain.user.repository.UserRepository;
 import com.pinu.familing.global.error.CustomException;
 import com.pinu.familing.global.error.ExceptionCode;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.apache.bcel.classfile.Code;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 @Service
 @RequiredArgsConstructor
@@ -26,27 +21,18 @@ public class FamilyService {
 
     //가족 만들기
     @Transactional
-    public String registerNewFamily(String userName,String familyName){
-        String validCode = validFamilyCode(FamilyCodeHandler.createCode(userName));
+    public FamilyDto registerNewFamily(String userName, String familyName) {
+        //코드 발급 시점을 여기가 아니라 밖에서 해도 될 것 같기는 한데..
+        String code = FamilyCodeHandler.createCode(userName);
+        String validCode = checkValid(code);
 
-        Family family = new Family(familyName,validCode);
+        Family family = new Family(familyName, validCode);
         Family savefamily = familyRepository.save(family);
 
-        return savefamily.getCode();
+        return new FamilyDto(savefamily);
     }
 
-    @Transactional
-    public void addFamilyToUser(String userName, String code) {
-        User user = userRepository.findByUsername(userName);
-
-        Family family = familyRepository.findByCode(code)
-                .orElseThrow(()-> new CustomException(ExceptionCode.INVALID_CODE));
-
-        //내부에 예외 처리 부분 넣어놨습니다.
-        user.registerFamily(family);
-    }
-
-    private String validFamilyCode(String code) {
+    private String checkValid(String code) {
         if (familyRepository.existsByCode(code)) {
             throw new CustomException(ExceptionCode.INVALID_CODE);
         }

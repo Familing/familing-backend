@@ -17,7 +17,10 @@ public enum ExceptionCode {
     //가족 코드 생성중
     FAILED_CODE_GENERATION(HttpStatus.BAD_REQUEST, "잘못된 접근입니다."),
     ALREADY_HAVE_FAMILY(HttpStatus.BAD_REQUEST, "가족이 있습니다"),
-    INVALID_CODE(HttpStatus.BAD_REQUEST,"코드가 유효하지않습니다.")
+    INVALID_CODE(HttpStatus.BAD_REQUEST, "코드가 유효하지않습니다."),
+
+    //구독 관련
+    ERROR_SUBSCRIPTION_LIST(HttpStatus.BAD_REQUEST, "구독 목록 조회중 에러가 발생했습니다."),
     ;
 
 
