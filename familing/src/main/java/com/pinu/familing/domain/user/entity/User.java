@@ -3,6 +3,7 @@ package com.pinu.familing.domain.user.entity;
 import com.pinu.familing.domain.BaseEntity;
 import com.pinu.familing.domain.family.entity.Family;
 import com.pinu.familing.domain.user.Gender;
+import com.pinu.familing.domain.chat.entity.ChatRoom;
 import com.pinu.familing.domain.user.dto.ImageUrl;
 import com.pinu.familing.domain.user.dto.Nickname;
 import com.pinu.familing.domain.user.dto.Realname;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Table(name = "user_tb")
-public class User extends BaseEntity {
+public class User extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +41,10 @@ public class User extends BaseEntity {
 
     private int age;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chat_room_id")
+    private ChatRoom chatRoom;
+
     private String role;
 
     @Builder
@@ -61,6 +66,8 @@ public class User extends BaseEntity {
         this.family = family;
     }
 
+    public void registerChatRoom(ChatRoom chatRoom) {
+        this.chatRoom = chatRoom;
     public void updateNickname(Nickname nickname) {
         this.nickname = nickname.nickname();
     }
