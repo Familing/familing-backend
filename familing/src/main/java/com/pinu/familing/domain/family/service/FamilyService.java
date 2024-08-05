@@ -1,10 +1,11 @@
 package com.pinu.familing.domain.family.service;
 
+
 import com.pinu.familing.domain.chat.service.ChatService;
+import com.pinu.familing.domain.family.dto.FamilyDto;
 import com.pinu.familing.domain.family.entity.Family;
 import com.pinu.familing.domain.family.handler.FamilyCodeHandler;
 import com.pinu.familing.domain.family.repositiry.FamilyRepository;
-import com.pinu.familing.domain.user.entity.User;
 import com.pinu.familing.domain.user.repository.UserRepository;
 import com.pinu.familing.global.error.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -47,10 +48,9 @@ public class FamilyService {
 
         //내부에 예외 처리 부분 넣어놨습니다.
         user.registerFamily(family);
-
     }
 
-    private String validFamilyCode(String code) {
+    private String checkValid(String code) {
         if (familyRepository.existsByCode(code)) {
             throw new CustomException(INVALID_CODE);
         }

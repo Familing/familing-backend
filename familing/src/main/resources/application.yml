@@ -4,7 +4,7 @@ spring:
 
 
   datasource:
-    url: jdbc:h2:mem:~/familing
+    url: jdbc:h2:mem:~/familing;MODE=MYSQL;     #Mysql 방언 사용으로 h2 모드 변경
     driver-class-name: org.h2.Driver
     username: sa
     password:
@@ -58,6 +58,7 @@ spring:
     show-sql: true
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect # MySql 방언으로 변경
         format_sql: true
     defer-datasource-initialization: true # (2.5~) Hibernate 초기화 이후 data.sql을 실행시켜 줌 (false로 할 경우 Hibernate 초기화 이전에 실행되어 오류 발생)
 
@@ -93,3 +94,4 @@ mongodb:
 
 kafka:
   bootstrap-servers: localhost:9092
+
