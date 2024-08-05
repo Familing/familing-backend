@@ -38,6 +38,7 @@ public class UserController {
         return ApiUtils.success("Successful realname changed");
     }
 
+
     //프로필 이미지 변경
     @PatchMapping("/user/imageurl")
     public ApiUtils.ApiResult<?> changeImageUrl(@AuthenticationPrincipal CustomOAuth2User customOAuth2User, @RequestBody ImageUrl imageUrl) {
