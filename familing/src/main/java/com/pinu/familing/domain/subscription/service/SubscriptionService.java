@@ -21,13 +21,8 @@ public class SubscriptionService {
     public List<SubscriptionResponse> sendSubscriptions() {
         List<Subscription> subscriptions = subscriptionRepository.findAll();
 
-        //저장된 구독목록의 개수가 3이하일 경우 에러발생 (이부분 필요없나요?
-        if (subscriptions.size() < 3) {
-            throw new CustomException(ExceptionCode.ERROR_SUBSCRIPTION_LIST);
-        }
-
         return subscriptions.stream()
-                .map(subscription -> new SubscriptionResponse(subscription))
+                .map(SubscriptionResponse::new)
                 .collect(Collectors.toList());
 
     }

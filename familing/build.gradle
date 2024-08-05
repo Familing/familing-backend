@@ -47,6 +47,18 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
 	implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
+
+	// 웹소켓
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	//카프카
+	implementation 'org.springframework.kafka:spring-kafka:3.0.10'
+	//mongodb
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	//ImmutableMap
+	implementation 'com.google.guava:guava:32.0.0-android'
+	//validation
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
 }
 
 tasks.named('test') {

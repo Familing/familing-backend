@@ -2,6 +2,7 @@ spring:
   profiles:
     default: local
 
+
   datasource:
     url: jdbc:h2:mem:~/familing;MODE=MYSQL;     #Mysql 방언 사용으로 h2 모드 변경
     driver-class-name: org.h2.Driver
@@ -38,8 +39,14 @@ spring:
             token-uri: "https://kauth.kakao.com/oauth/token"
             user-info-uri: "https://kapi.kakao.com/v2/user/me"
             user-name-attribute: "id"
+mongodb:
+  client: mongodb://root:1234@127.0.0.1:27017/familing
+  name: familing
 
+kafka:
+  server: localhost:9092
 ---
+
 spring:
   config:
     activate:
@@ -53,11 +60,12 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect # MySql 방언으로 변경
         format_sql: true
-    defer-datasource-initialization: true # (2.5~) Hibernate 초기화 이후 data.sql을 실행시켜 줘 (false로 할 경우 Hibernate 초기화 이전에 실행 되어서 ddl 실행 이전에 실행 돼 오류 발생)
+    defer-datasource-initialization: true # (2.5~) Hibernate 초기화 이후 data.sql을 실행시켜 줌 (false로 할 경우 Hibernate 초기화 이전에 실행되어 오류 발생)
 
   h2:
     console:
       enabled: true
+
 
 ---
 
@@ -74,6 +82,16 @@ spring:
       hibernate:
         format_sql: true
 
-#  sql:
-#    init:
-#      mode: never # init sql 실행 x 우리가 만들어서 한다. ㅜ 왜요...ㅜㅜㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ 이 방식이 성능에는 별로인가요? 데이터 베이스 문제 생기면 다 동작안되니까..?
+  sql:
+    init:
+      mode: never # init sql 실행 안 함, 직접 데이터 초기화
+
+
+
+mongodb:
+  client: mongodb://root:1234@127.0.0.1:27017/testdb
+  name: testdb
+
+kafka:
+  bootstrap-servers: localhost:9092
+

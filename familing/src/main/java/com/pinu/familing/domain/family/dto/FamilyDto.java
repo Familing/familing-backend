@@ -9,7 +9,7 @@ public record FamilyDto(Long id,
                         String familyName,
                         String code) {
 
-    public FamilyDto(Family family) {
-        this(family.getId(), family.getFamilyName(), family.getCode());
+    public static FamilyDto fromEntity(Family family) {
+        return new FamilyDto(family.getId(), family.getFamilyName(), family.getCode());
     }
 }
