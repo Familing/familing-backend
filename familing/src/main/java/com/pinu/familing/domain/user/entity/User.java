@@ -68,6 +68,7 @@ public class User extends BaseEntity{
 
     public void registerChatRoom(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
+    }
     public void updateNickname(Nickname nickname) {
         this.nickname = nickname.nickname();
     }
@@ -76,7 +77,7 @@ public class User extends BaseEntity{
         this.realname = realname.realname();
     }
 
-    public void updateImageUrl(ImageUrl imageUrl) {
-        this.imageUrl = imageUrl.imageUrl();
+    public void updateImageUrl(ImageUrl imageUrl){
+            this.imageUrl = imageUrl.imageUrl();
     }
 }

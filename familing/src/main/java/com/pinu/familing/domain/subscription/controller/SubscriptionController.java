@@ -21,6 +21,6 @@ public class SubscriptionController {
     @GetMapping
     public ApiUtils.ApiResult<?> showSubscriptions() {
         List<SubscriptionResponse> subscriptionServices = subscriptionService.sendSubscriptions();
-        return ApiUtils.success(HttpStatus.OK, subscriptionServices);
+        return ApiUtils.success(subscriptionServices);
     }
 }

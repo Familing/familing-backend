@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.pinu.familing.global.error.ExceptionCode.USER_NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -24,15 +26,17 @@ public class UserService {
 
 
     public UserResponse giveUserInformation(CustomOAuth2User customOAuth2User) {
-        User user = userRepository.findByUsername(customOAuth2User.getName());
-        return new UserResponse(user);
+        User user = userRepository.findByUsername(customOAuth2User.getName())
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+        return UserResponse.fromEntity(user);
     }
 
 
     @Transactional
     public void addFamilyToUser(CustomOAuth2User customOAuth2User, String code) {
         //유저 찾기
-        User user = userRepository.findByUsername(customOAuth2User.getName());
+        User user = userRepository.findByUsername(customOAuth2User.getName())
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
 
         Family family = familyRepository.findByCode(code)
                 .orElseThrow(() -> new CustomException(ExceptionCode.INVALID_CODE));
@@ -43,19 +47,22 @@ public class UserService {
 
     @Transactional
     public void changeNickname(CustomOAuth2User customOAuth2User, Nickname nickname) {
-        User user = userRepository.findByUsername(customOAuth2User.getName());
+        User user = userRepository.findByUsername(customOAuth2User.getName())
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
         user.updateNickname(nickname);
     }
 
     @Transactional
     public void changeRealname(CustomOAuth2User customOAuth2User, Realname realname) {
-        User user = userRepository.findByUsername(customOAuth2User.getName());
+        User user = userRepository.findByUsername(customOAuth2User.getName())
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
         user.updateRealname(realname);
     }
 
     @Transactional
     public void changeImageUrl(CustomOAuth2User customOAuth2User, ImageUrl imageUrl) {
-        User user = userRepository.findByUsername(customOAuth2User.getName());
+        User user = userRepository.findByUsername(customOAuth2User.getName())
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
         user.updateImageUrl(imageUrl);
     }
 

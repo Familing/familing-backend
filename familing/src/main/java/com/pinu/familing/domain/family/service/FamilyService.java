@@ -6,6 +6,7 @@ import com.pinu.familing.domain.family.dto.FamilyDto;
 import com.pinu.familing.domain.family.entity.Family;
 import com.pinu.familing.domain.family.handler.FamilyCodeHandler;
 import com.pinu.familing.domain.family.repositiry.FamilyRepository;
+import com.pinu.familing.domain.user.entity.User;
 import com.pinu.familing.domain.user.repository.UserRepository;
 import com.pinu.familing.global.error.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class FamilyService {
 
     //가족 만들기
     @Transactional
-    public String registerNewFamily(String username,String familyName){
+    public FamilyDto registerNewFamily(String username,String familyName){
         String validCode = validFamilyCode(FamilyCodeHandler.createCode(username));
         Family family = new Family(familyName,validCode);
         Family savefamily = familyRepository.save(family);
@@ -35,7 +36,7 @@ public class FamilyService {
                 .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
         // 가족 등록할 때 가족 채팅방 가동 생성
         chatService.makeChatRoom(user, validCode);
-        return savefamily.getCode();
+        return FamilyDto.fromEntity(savefamily);
     }
 
     @Transactional
@@ -50,7 +51,7 @@ public class FamilyService {
         user.registerFamily(family);
     }
 
-    private String checkValid(String code) {
+    private String validFamilyCode(String code) {
         if (familyRepository.existsByCode(code)) {
             throw new CustomException(INVALID_CODE);
         }

@@ -11,8 +11,9 @@ public record UserResponse(String username,
                            String realname,
                            String imageUrl) {
 
-    public UserResponse(User user) {
-        this(
+    // User 엔티티를 UserResponse로 변환하는 static 함수
+    public static UserResponse fromEntity(User user) {
+        return new UserResponse(
                 user.getUsername(),
                 user.getNickname(),
                 user.getRealname(),
