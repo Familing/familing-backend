@@ -1,7 +1,7 @@
 package com.pinu.familing.domain.user.service;
 
 import com.pinu.familing.domain.family.entity.Family;
-import com.pinu.familing.domain.family.repositiry.FamilyRepository;
+import com.pinu.familing.domain.family.repository.FamilyRepository;
 import com.pinu.familing.domain.user.dto.ImageUrl;
 import com.pinu.familing.domain.user.dto.Nickname;
 import com.pinu.familing.domain.user.dto.Realname;

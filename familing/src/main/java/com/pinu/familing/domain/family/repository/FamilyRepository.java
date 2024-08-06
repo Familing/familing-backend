@@ -1,4 +1,4 @@
-package com.pinu.familing.domain.family.repositiry;
+package com.pinu.familing.domain.family.repository;
 
 import com.pinu.familing.domain.family.entity.Family;
 import org.springframework.data.jpa.repository.JpaRepository;
