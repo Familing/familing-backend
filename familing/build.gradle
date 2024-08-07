@@ -19,6 +19,15 @@ configurations {
 	}
 }
 
+//명시적으로 리소스 디렉토리 위치 설정
+sourceSets {
+	main {
+		resources {
+			srcDirs = ['src/main/resources']
+		}
+	}
+}
+
 repositories {
 	mavenCentral()
 }
@@ -29,6 +38,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.google.firebase:firebase-admin:8.1.0'
 	implementation 'com.squareup.okhttp:okhttp:2.7.5'
+	implementation 'com.google.api-client:google-api-client:2.2.0'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
