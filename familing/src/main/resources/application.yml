@@ -86,6 +86,10 @@ spring:
     init:
       mode: never # init sql 실행 안 함, 직접 데이터 초기화
 
+#server:
+#  port: 8000
+#  ssl:
+#    enabled: true //이후 프론트가 https 서버 사용시 필요)
 
 
 mongodb:
