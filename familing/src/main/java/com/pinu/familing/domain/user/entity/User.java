@@ -23,7 +23,9 @@ public class User extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     // 유저 아이디로 사용한다.
+    @Column(unique = true)
     private String username;
     // 유저 닉네임 <- 가족에서 사용할 이름
     private String nickname;
