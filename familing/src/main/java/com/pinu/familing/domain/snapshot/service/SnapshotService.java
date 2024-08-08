@@ -30,6 +30,9 @@ public class SnapshotService {
     //스냅샷에 이미지 등록하기
     public void registerSnapshotImage(LocalDate day, String name, SnapshotImageRequest snapshotImageRequest) {
         User user = getUser(name);
+        if (user.getFamily() == null) {
+            throw new CustomException(ExceptionCode.FAMILY_NOT_FOUND);
+        }
         Snapshot snapshot = snapshotRepository.findByFamilyAndDate(user.getFamily(), day)
                 .orElseThrow(() -> new CustomException(ExceptionCode.SNAPSHOT_NOT_FOUND));
 
@@ -44,6 +47,9 @@ public class SnapshotService {
     //패밀리스냅샷만들기
     public void createSnapshotGroup(LocalDate day, String name) {
         User user = getUser(name);
+        if (user.getFamily() == null) {
+            throw new CustomException(ExceptionCode.FAMILY_NOT_FOUND);
+        }
         //이미 존재하는 경우에 대해서는 동작하지 않음
         if (snapshotRepository.existsByFamilyAndDate(user.getFamily(),day)){
             return;
@@ -57,7 +63,9 @@ public class SnapshotService {
 
     public SnapshotResponse offerSnapshot(LocalDate day, String name) {
         User user = getUser(name);
-
+        if (user.getFamily() == null) {
+            throw new CustomException(ExceptionCode.FAMILY_NOT_FOUND);
+        }
         Snapshot snapshot =  snapshotRepository.findByFamilyAndDate(user.getFamily(), day)
                 .orElseThrow(() -> new CustomException(ExceptionCode.SNAPSHOT_NOT_FOUND));
 
@@ -68,6 +76,8 @@ public class SnapshotService {
     private User getUser(String name) {
         return userRepository.findByUsername(name)
                 .orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
+
+
 
     }
 
