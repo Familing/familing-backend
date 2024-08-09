@@ -43,4 +43,15 @@ public class SnapshotImage extends BaseEntity {
     public void updateImage(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    @Override
+    public String toString() {
+        return "SnapshotImage { " +
+                "id=" + id +
+                ", snapshot=" + snapshot +
+                ", user=" + user +
+                ", date=" + date +
+                ", imageUrl='" + imageUrl + '\'' +
+                '}';
+    }
 }
