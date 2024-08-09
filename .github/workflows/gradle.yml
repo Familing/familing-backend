@@ -36,7 +36,10 @@ jobs:
       
       # gradlew 빌드
       - name: Build with Gradle
-        run: ./familing/gradlew clean build --exclude-task test
+        uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
+        with:
+          arguments: build
+          build-root-directory: ./familing
 
       # 압축파일 형태로 전달
       - name: Make zip file
