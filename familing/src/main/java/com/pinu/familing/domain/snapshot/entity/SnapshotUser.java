@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -24,14 +26,21 @@ public class SnapshotUser extends BaseEntity {
     @JoinColumn(name = "user_id",nullable = false)
     private User user;
 
+    private LocalDate date;
+
     @Column(nullable = false)
     private String imageUrl;
 
 
     @Builder
-    public SnapshotUser(Snapshot snapshot, User user, String imageUrl) {
+    public SnapshotUser(Snapshot snapshot, User user, LocalDate date) {
         this.snapshot = snapshot;
         this.user = user;
+        this.imageUrl = "EMPTY";
+        this.date = date;
+    }
+
+    public void updateImage(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 }
