@@ -6,6 +6,7 @@ import com.pinu.familing.domain.snapshot.entity.Snapshot;
 import com.pinu.familing.domain.snapshot.entity.SnapshotImage;
 import com.pinu.familing.domain.snapshot.repository.SnapshotRepository;
 import com.pinu.familing.domain.snapshot.repository.SnapshotImageRepository;
+import com.pinu.familing.domain.snapshot.scheduler.SnapshotScheduler;
 import com.pinu.familing.domain.user.entity.User;
 import com.pinu.familing.domain.user.repository.UserRepository;
 import com.pinu.familing.global.error.CustomException;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -27,6 +29,7 @@ public class SnapshotService {
     private final SnapshotRepository snapshotRepository;
     private final UserRepository userRepository;
     private final TitleService titleService;
+    private final SnapshotScheduler snapshotScheduler;
 
 
     //스냅샷에 이미지 등록하기
@@ -70,6 +73,15 @@ public class SnapshotService {
 
         return new SnapshotResponse(snapshot);
     }
+
+    @Transactional
+    public void scheduleSnapshotAlarm(String name, String time) {
+        LocalTime targetTime = LocalTime.parse(time);
+        User user = getUserWithFamily(name);
+        user.getFamily().registerSnapshotAlarmTime(targetTime);
+        snapshotScheduler.scheduleSnapshotAlarm(time);
+    }
+
 
     //유저 값 가져오기
     private User getUserWithFamily(String name) {
