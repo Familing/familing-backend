@@ -1,7 +1,7 @@
 package com.pinu.familing.domain.snapshot.dto;
 
 import com.pinu.familing.domain.snapshot.entity.Snapshot;
-import com.pinu.familing.domain.snapshot.entity.SnapshotUser;
+import com.pinu.familing.domain.snapshot.entity.SnapshotPhoto;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,8 +15,8 @@ public record SnapshotResponse(String Title,
                                    String nickname,
                                    String image) {
 
-        public IndividualSnapshotPhoto(SnapshotUser snapshotUser) {
-            this(snapshotUser.getUser().getUsername(), snapshotUser.getUser().getNickname(), snapshotUser.getImageUrl());
+        public IndividualSnapshotPhoto(SnapshotPhoto snapshotPhoto) {
+            this(snapshotPhoto.getUser().getUsername(), snapshotPhoto.getUser().getNickname(), snapshotPhoto.getImageUrl());
         }
     }
 
@@ -24,7 +24,7 @@ public record SnapshotResponse(String Title,
         this(
                 snapshot.getSnapshotTitle().getTitle(),
                 snapshot.getDate(),
-                snapshot.getSnapshotUsers().stream()
+                snapshot.getSnapshotPhotos().stream()
                         .map(IndividualSnapshotPhoto::new)
                         .collect(Collectors.toList())
         );

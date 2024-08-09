@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @NoArgsConstructor
-public class SnapshotUser extends BaseEntity {
+public class SnapshotPhoto extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +33,7 @@ public class SnapshotUser extends BaseEntity {
 
 
     @Builder
-    public SnapshotUser(Snapshot snapshot, User user, LocalDate date) {
+    public SnapshotPhoto(Snapshot snapshot, User user, LocalDate date) {
         this.snapshot = snapshot;
         this.user = user;
         this.imageUrl = "EMPTY";

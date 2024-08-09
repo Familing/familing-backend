@@ -32,7 +32,7 @@ public class Snapshot extends BaseEntity {
     private LocalDate date;
 
     @OneToMany(orphanRemoval = true, mappedBy = "snapshot", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<SnapshotUser> snapshotUsers = new ArrayList<>();
+    private List<SnapshotPhoto> snapshotPhotos = new ArrayList<>();
 
     // 특정 생성자에만 @Builder 적용
     @Builder
@@ -40,6 +40,6 @@ public class Snapshot extends BaseEntity {
         this.family = family;
         this.snapshotTitle = snapshotTitle;
         this.date = date;
-        this.snapshotUsers = new ArrayList<>();
+        this.snapshotPhotos = new ArrayList<>();
     }
 }
