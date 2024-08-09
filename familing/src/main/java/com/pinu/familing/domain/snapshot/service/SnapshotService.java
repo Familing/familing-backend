@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,6 +30,7 @@ public class SnapshotService {
 
 
     //스냅샷에 이미지 등록하기
+    @Transactional
     public void registerSnapshotImage(LocalDate day, String name, SnapshotImageRequest snapshotImageRequest) {
         User user = getUserWithFamily(name);
 
