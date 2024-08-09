@@ -10,8 +10,7 @@ permissions:
   contents: read
   
 env:
-  S3_BUCKET_NAME: 내 S3 버켓 이름
-  PROJECT_NAME: 내 프로젝트 이름
+  S3_BUCKET_NAME: familing-bucket
 
 jobs:
   build:
@@ -41,7 +40,7 @@ jobs:
 
       # 압축파일 형태로 전달
       - name: Make zip file
-        run: zip -r ./만들고 싶은 파일 이름.zip .
+        run: zip -r ./familing.zip .
         shell: bash
         
 
@@ -54,16 +53,16 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
         
       - name: Upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./만들고 싶은 파일 이름.zip s3://$S3_BUCKET_NAME/$PROJECT_NAME/만들고 싶은 파일 이름.zip
+        run: aws s3 cp --region ap-northeast-2 ./familing.zip s3://$S3_BUCKET_NAME/familing.zip
 
       # Deploy
       # applicatio-name => aws code deploy application 이름
       - name: Deploy
         run: |
           aws deploy create-deployment \
-          --application-name 어플리케이션 이름 \
+          --application-name familing \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
           --deployment-group-name Code Deploy 그룹 이름 \
           --file-exists-behavior OVERWRITE \
-          --s3-location bucket=S3 버켓 이름,bundleType=zip,key=concert-calendar/ConcertCalendar.zip \
+          --s3-location bucket=familing-bucket,bundleType=zip,key=concert-calendar/ConcertCalendar.zip \
           --region ap-northeast-2 \
