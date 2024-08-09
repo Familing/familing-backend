@@ -4,8 +4,8 @@ import com.pinu.familing.domain.snapshot.dto.SnapshotImageRequest;
 import com.pinu.familing.domain.snapshot.dto.SnapshotResponse;
 import com.pinu.familing.domain.snapshot.entity.Snapshot;
 import com.pinu.familing.domain.snapshot.entity.SnapshotImage;
-import com.pinu.familing.domain.snapshot.repository.SnapshotRepository;
 import com.pinu.familing.domain.snapshot.repository.SnapshotImageRepository;
+import com.pinu.familing.domain.snapshot.repository.SnapshotRepository;
 import com.pinu.familing.domain.snapshot.scheduler.SnapshotScheduler;
 import com.pinu.familing.domain.user.entity.User;
 import com.pinu.familing.domain.user.repository.UserRepository;
@@ -79,9 +79,12 @@ public class SnapshotService {
         LocalTime targetTime = LocalTime.parse(time);
         User user = getUserWithFamily(name);
         user.getFamily().registerSnapshotAlarmTime(targetTime);
-        snapshotScheduler.scheduleSnapshotAlarm(time);
     }
 
+    public LocalTime getSnapshotAlarmTime(String name) {
+        User user = getUserWithFamily(name);
+        return user.getFamily().getSnapshotAlarmTime();
+    }
 
     //유저 값 가져오기
     private User getUserWithFamily(String name) {
@@ -95,9 +98,5 @@ public class SnapshotService {
     }
 
 
-    public LocalTime getSnapshotAlarmTime(String name) {
-        User user = getUserWithFamily(name);
-        return user.getFamily().getSnapshotAlarmTime();
-    }
 }
 

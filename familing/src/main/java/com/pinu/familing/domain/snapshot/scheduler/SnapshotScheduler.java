@@ -28,8 +28,9 @@ public class SnapshotScheduler {
         *: 일자 필드로, 매일 실행됩니다.
         *: 월 필드로, 매달 실행됩니다.
         ?: 요일 필드로, 요일은 특정하지 않습니다.
-     */// 매 분마다 실행
+     */
 
+    // 매 분마다 실행
     @Scheduled(cron = "0 * * * * ?")
     public void scheduleFamilyAlarms() {
         // 현재 시간을 분 단위로 자름
