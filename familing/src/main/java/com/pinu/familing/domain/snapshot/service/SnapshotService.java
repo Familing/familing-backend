@@ -3,9 +3,9 @@ package com.pinu.familing.domain.snapshot.service;
 import com.pinu.familing.domain.snapshot.dto.SnapshotImageRequest;
 import com.pinu.familing.domain.snapshot.dto.SnapshotResponse;
 import com.pinu.familing.domain.snapshot.entity.Snapshot;
-import com.pinu.familing.domain.snapshot.entity.SnapshotPhoto;
+import com.pinu.familing.domain.snapshot.entity.SnapshotImage;
 import com.pinu.familing.domain.snapshot.repository.SnapshotRepository;
-import com.pinu.familing.domain.snapshot.repository.SnapshotPhotoRepository;
+import com.pinu.familing.domain.snapshot.repository.SnapshotImageRepository;
 import com.pinu.familing.domain.user.entity.User;
 import com.pinu.familing.domain.user.repository.UserRepository;
 import com.pinu.familing.global.error.CustomException;
@@ -22,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SnapshotService {
 
-    private final SnapshotPhotoRepository snapshotPhotoRepository;
+    private final SnapshotImageRepository snapshotImageRepository;
     private final SnapshotRepository snapshotRepository;
     private final UserRepository userRepository;
     private final TitleService titleService;
@@ -32,10 +32,10 @@ public class SnapshotService {
     public void registerSnapshotImage(LocalDate day, String name, SnapshotImageRequest snapshotImageRequest) {
         User user = getUserWithFamily(name);
 
-        SnapshotPhoto snapshotPhoto = snapshotPhotoRepository.findByUserAndDate(user, day)
+        SnapshotImage snapshotImage = snapshotImageRepository.findByUserAndDate(user, day)
                 .orElseThrow(() -> new CustomException(ExceptionCode.SNAPSHOT_NOT_FOUND));
 
-        snapshotPhoto.updateImage(snapshotImageRequest.imageUrl());
+        snapshotImage.updateImage(snapshotImageRequest.imageUrl());
     }
 
     //스냅샷 전체 그룹 만들기 (개인별 스냅샷도 이때 함께 생성됨.)
@@ -48,8 +48,8 @@ public class SnapshotService {
         List<User> familyMembers = userRepository.findAllByFamily(user.getFamily());
 
         familyMembers.forEach((familyMember) -> {
-            SnapshotPhoto snapshotPhoto = new SnapshotPhoto(savedSnapshot, familyMember, day);
-            snapshotPhotoRepository.save(snapshotPhoto);
+            SnapshotImage snapshotImage = new SnapshotImage(savedSnapshot, familyMember, day);
+            snapshotImageRepository.save(snapshotImage);
         });
     }
 

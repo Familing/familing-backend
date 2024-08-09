@@ -48,11 +48,19 @@ public class SnapshotController {
 
 
     //스냅샷 이미지 등록
+    @PostMapping("/{day}")
+    public ApiUtils.ApiResult<?> createSnapshot(@PathVariable("day") LocalDate day,
+                                                       @AuthenticationPrincipal CustomOAuth2User customOAuth2User,
+                                                       @Valid @RequestBody SnapshotImageRequest snapshotImageRequest) {
+        snapshotService.createSnapshotGroup(day,customOAuth2User.getName());
+        return ApiUtils.success("Image has been registered successfully.");
+    }
+
+    //스냅샷 이미지 등록
     @PostMapping("/{day}/users")
     public ApiUtils.ApiResult<?> registerSnapshotImage(@PathVariable("day") LocalDate day,
                                                        @AuthenticationPrincipal CustomOAuth2User customOAuth2User,
                                                        @Valid @RequestBody SnapshotImageRequest snapshotImageRequest) {
-        snapshotService.createSnapshotGroup(day, customOAuth2User.getName());
         snapshotService.registerSnapshotImage(day, customOAuth2User.getName(), snapshotImageRequest);
         return ApiUtils.success("Image has been registered successfully.");
     }
