@@ -5,7 +5,7 @@ import com.pinu.familing.domain.chat.service.ChatService;
 import com.pinu.familing.domain.family.dto.FamilyDto;
 import com.pinu.familing.domain.family.entity.Family;
 import com.pinu.familing.domain.family.handler.FamilyCodeHandler;
-import com.pinu.familing.domain.family.repositiry.FamilyRepository;
+import com.pinu.familing.domain.family.repository.FamilyRepository;
 import com.pinu.familing.domain.user.entity.User;
 import com.pinu.familing.domain.user.repository.UserRepository;
 import com.pinu.familing.global.error.CustomException;
