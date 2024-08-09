@@ -40,7 +40,7 @@ public class SnapshotScheduler {
         List<Family> families = familyRepository.findAllBySnapshotAlarmTime(currentTime);
 
         for (Family family : families) {
-            System.out.println("알람로직");
+            System.out.println(family.getFamilyName() + ": 알람! ");
         }
     }
 
