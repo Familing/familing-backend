@@ -95,5 +95,9 @@ public class SnapshotService {
     }
 
 
+    public LocalTime getSnapshotAlarmTime(String name) {
+        User user = getUserWithFamily(name);
+        return user.getFamily().getSnapshotAlarmTime();
+    }
 }
 

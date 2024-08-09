@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.beans.PropertyEditorSupport;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
@@ -28,7 +29,7 @@ import java.time.format.DateTimeParseException;
 public class SnapshotController {
 
     private final SnapshotService snapshotService;
-    private final SnapshotScheduler snapshotScheduler;
+
 
     // 특정 날짜 스냅샷 조회
     @GetMapping("/{day}")
@@ -68,10 +69,18 @@ public class SnapshotController {
 
     // 스냅샷 알람 수정
     @PatchMapping("/alarm")
-    public ApiUtils.ApiResult<?> setSnapshotAlarm(@AuthenticationPrincipal CustomOAuth2User customOAuth2User,
-                                                  @RequestParam(name = "time") String time) {
-        snapshotScheduler.scheduleSnapshotAlarm(time);
+    public ApiUtils.ApiResult<?> setSnapshotAlarmTime(@AuthenticationPrincipal CustomOAuth2User customOAuth2User,
+                                                      @RequestParam(name = "time") String time) {
+       snapshotService.scheduleSnapshotAlarm(customOAuth2User.getName(),time);
         return ApiUtils.success("Snapshot alarm has been converted successfully.");
+    }
+
+
+    // 스냅샷 알람 조회
+    @GetMapping("/alarm")
+    public ApiUtils.ApiResult<?> getSnapshotAlarmTime(@AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
+        LocalTime time = snapshotService.getSnapshotAlarmTime(customOAuth2User.getName());
+        return ApiUtils.success(time);
     }
 
 
