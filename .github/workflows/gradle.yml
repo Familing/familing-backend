@@ -32,11 +32,11 @@ jobs:
  
       # gradlew에 권한 부여
       - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+        run: chmod +x ./familing/gradlew
       
       # gradlew 빌드
       - name: Build with Gradle
-        run: ./gradlew clean build --exclude-task test
+        run: ./familing/gradlew clean build --exclude-task test
 
       # 압축파일 형태로 전달
       - name: Make zip file
@@ -62,7 +62,7 @@ jobs:
           aws deploy create-deployment \
           --application-name familing \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
-          --deployment-group-name Code Deploy 그룹 이름 \
+          --deployment-group-name familing-deploy-group \
           --file-exists-behavior OVERWRITE \
           --s3-location bucket=familing-bucket,bundleType=zip,key=concert-calendar/ConcertCalendar.zip \
           --region ap-northeast-2 \
