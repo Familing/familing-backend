@@ -63,9 +63,11 @@ public class User extends BaseEntity{
 
     public void registerFamily(Family family) {
         if (this.family != null) {
+            //가족 구성원이 이미 있는 경우
             throw new CustomException(ExceptionCode.ALREADY_HAVE_FAMILY);
         }
         this.family = family;
+        family.addMember();
     }
 
     public void registerChatRoom(ChatRoom chatRoom) {
