@@ -14,6 +14,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -41,7 +43,6 @@ public class User extends BaseEntity{
     @JoinColumn(name = "family_id")
     private Family family;
 
-    private int age;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_room_id")
@@ -50,13 +51,12 @@ public class User extends BaseEntity{
     private String role;
 
     @Builder
-    private User(String username, String nickname, String realname, String imageUrl, String role, int age, Gender gender, Family family) {
+    private User(String username, String nickname, String realname, String imageUrl, String role, Gender gender, Family family) {
         this.username = username;
         this.nickname = nickname;
         this.realname = realname;
         this.imageUrl = imageUrl;
         this.role = role;
-        this.age = age;
         this.gender = gender;
         this.family = family;
     }
@@ -76,12 +76,23 @@ public class User extends BaseEntity{
     public void updateNickname(Nickname nickname) {
         this.nickname = nickname.nickname();
     }
-
     public void updateRealname(Realname realname) {
         this.realname = realname.realname();
     }
-
     public void updateImageUrl(ImageUrl imageUrl){
             this.imageUrl = imageUrl.imageUrl();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(username, user.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username);
     }
 }
