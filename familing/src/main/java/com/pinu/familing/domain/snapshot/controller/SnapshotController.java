@@ -1,20 +1,26 @@
 package com.pinu.familing.domain.snapshot.controller;
 
+import com.pinu.familing.domain.snapshot.dto.CustomPage;
 import com.pinu.familing.domain.snapshot.dto.SnapshotImageRequest;
 import com.pinu.familing.domain.snapshot.dto.SnapshotResponse;
+import com.pinu.familing.domain.snapshot.scheduler.SnapshotScheduler;
 import com.pinu.familing.domain.snapshot.service.SnapshotService;
-import com.pinu.familing.domain.snapshot.service.TitleService;
+import com.pinu.familing.global.error.CustomException;
+import com.pinu.familing.global.error.ExceptionCode;
 import com.pinu.familing.global.oauth.dto.CustomOAuth2User;
 import com.pinu.familing.global.util.ApiUtils;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import java.beans.PropertyEditorSupport;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.beans.PropertyEditorSupport;
 
 @RestController
 @RequestMapping("/api/v1/snapshots")
@@ -22,56 +28,43 @@ import java.beans.PropertyEditorSupport;
 public class SnapshotController {
 
     private final SnapshotService snapshotService;
-    private final TitleService titleService;
+    private final SnapshotScheduler snapshotScheduler;
 
-//    // 특정 날짜 주제 조회
-//    @GetMapping("/title/{day}")
-//    public ApiUtils.ApiResult<?> changeSnapshot(@PathVariable("day") LocalDateTime localDateTime) {
-//        TitleResponse titleResponse = snapshotService.provideTodayTitle(localDateTime);
-//        return ApiUtils.success(titleResponse);
-//    }
-//
     // 특정 날짜 스냅샷 조회
     @GetMapping("/{day}")
-    public ApiUtils.ApiResult<?> changeSnapshot(@PathVariable("day") LocalDate day,
-                                                @AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
-        SnapshotResponse snapshot = snapshotService.offerSnapshot(day, customOAuth2User.getName());
+    public ApiUtils.ApiResult<?> provideSnapshot(@PathVariable("day") LocalDate day,
+                                                 @AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
+        SnapshotResponse snapshot = snapshotService.provideSnapshot(day, customOAuth2User.getName());
         return ApiUtils.success(snapshot);
     }
-//
-//    //스냅샷 페이지네이션 조회
-//    @GetMapping
-//    public ApiUtils.ApiResult<?> changeSnapshot(@RequestParam(name = "day") LocalDateTime day, @AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
-//        snapshotService.provideTodayTitle();
-//    }
-//
-//
+
+    //스냅샷 페이지 조회
+    @GetMapping(value = "/{day}", params = "page")
+    public ApiUtils.ApiResult<?> changeSnapshot(@PathVariable("day") LocalDate day, Pageable pageable,
+                                                @AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
+        Page<SnapshotResponse> snapshotPage = snapshotService.provideSnapshotPage(day, pageable, customOAuth2User.getName());
+        return ApiUtils.success(new CustomPage(snapshotPage));
+    }
+
+
     //스냅샷 이미지 등록
-    @PostMapping("/{day}/photos")
+    @PostMapping("/{day}/users")
     public ApiUtils.ApiResult<?> registerSnapshotImage(@PathVariable("day") LocalDate day,
-                                                  @AuthenticationPrincipal CustomOAuth2User customOAuth2User,
-                                                  @RequestBody SnapshotImageRequest snapshotImageRequest) {
-        snapshotService.registerSnapshotImage(day, customOAuth2User.getName(), snapshotImageRequest);
-        return ApiUtils.success("Snapshot has been registered.");
-    }
-
-    //스냅샷 생성 등록
-    @PostMapping("/{day}")
-    public ApiUtils.ApiResult<?> createSnapshotGroup(@PathVariable("day") LocalDate day,
-                                                  @AuthenticationPrincipal CustomOAuth2User customOAuth2User){
+                                                       @AuthenticationPrincipal CustomOAuth2User customOAuth2User,
+                                                       @Valid @RequestBody SnapshotImageRequest snapshotImageRequest) {
         snapshotService.createSnapshotGroup(day, customOAuth2User.getName());
-        return ApiUtils.success("Snapshot has been registered.");
+        snapshotService.registerSnapshotImage(day, customOAuth2User.getName(), snapshotImageRequest);
+        return ApiUtils.success("Image has been registered successfully.");
     }
-//
-//    // 스냅샷 수정
-//    @PatchMapping("/photo")
-//    public ApiUtils.ApiResult<?> changeSnapshot(@AuthenticationPrincipal CustomOAuth2User customOAuth2User,
-//                                                @RequestBody SnapshotImageRequest snapshotImageRequest) {
-//        snapshotService.changeSnapshot(customOAuth2User.getName(), snapshotImageRequest);
-//        return ApiUtils.success("Snapshot has been registered.");
-//    }
-//
 
+
+    // 스냅샷 알람 수정
+    @PatchMapping("/alarm")
+    public ApiUtils.ApiResult<?> setSnapshotAlarm(@AuthenticationPrincipal CustomOAuth2User customOAuth2User,
+                                                  @RequestParam(name = "time") String time) {
+        snapshotScheduler.scheduleSnapshotAlarm(time);
+        return ApiUtils.success("Snapshot alarm has been converted successfully.");
+    }
 
 
     @InitBinder
@@ -87,7 +80,7 @@ public class SnapshotController {
                     setValue(date);
                 } catch (DateTimeParseException e) {
                     // Handle invalid date format
-                    throw new IllegalArgumentException("Invalid date format. Please use yyyyMMdd.", e);
+                    throw new CustomException(ExceptionCode.DAY_BAD_REQUEST);
                 }
             }
         });
