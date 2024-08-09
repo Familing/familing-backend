@@ -21,8 +21,16 @@ public class Family {
     @Column(nullable = false, unique = true)
     private String code;
 
+    private int membersNum;
+
     public Family(String familyName, String code) {
         this.familyName = familyName;
         this.code = code;
+        this.membersNum = 0;
     }
+
+    public void addMember() {
+        this.membersNum += 1;
+    }
+
 }
