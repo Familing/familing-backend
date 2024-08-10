@@ -25,4 +25,8 @@ public class SnapshotAlarmChange {
         this.family = family;
         this.timeToChange = timeToChange;
     }
+
+    public  void updateTime(LocalTime targetTime) {
+        this.timeToChange = targetTime;
+    }
 }

@@ -29,6 +29,7 @@ public class SnapshotAlarmService {
         Family family = getFamily(name);
         SnapshotAlarmChange snapshotAlarmChange = snapshotAlarmChangeRepository.findByFamily(family)
                 .orElse(new SnapshotAlarmChange(family, targetTime));
+        snapshotAlarmChange.updateTime(targetTime);
         snapshotAlarmChangeRepository.save(snapshotAlarmChange);
     }
 
