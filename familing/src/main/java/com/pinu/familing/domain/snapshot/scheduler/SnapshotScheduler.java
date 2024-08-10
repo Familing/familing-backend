@@ -2,6 +2,8 @@ package com.pinu.familing.domain.snapshot.scheduler;
 
 import com.pinu.familing.domain.family.entity.Family;
 import com.pinu.familing.domain.family.repository.FamilyRepository;
+import com.pinu.familing.domain.snapshot.service.SnapshotAlarmService;
+import com.pinu.familing.domain.snapshot.service.SnapshotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,6 +22,8 @@ public class SnapshotScheduler {
     private final TaskScheduler taskScheduler = new ConcurrentTaskScheduler(); // 스레드 풀 설정
     private ScheduledFuture<?> scheduledFuture; // `final` 제거
     private final FamilyRepository familyRepository;
+    private final SnapshotAlarmService snapshotAlarmService;
+    private final SnapshotService snapshotService;
 
     /*
         0: 초를 의미하며, 매 시간의 0초에 작업을 시작합니다.
@@ -28,11 +32,27 @@ public class SnapshotScheduler {
         *: 일자 필드로, 매일 실행됩니다.
         *: 월 필드로, 매달 실행됩니다.
         ?: 요일 필드로, 요일은 특정하지 않습니다.
+
+        @Scheduled(cron = "0 0 0 * * ?") //매일 정각
+        @Scheduled(cron = "0 0 1 * * ?") //매일 새벽 한시
      */
 
+
     // 매 분마다 실행
-    @Scheduled(cron = "0 * * * * ?")
-    public void scheduleFamilyAlarms() {
+    @Scheduled(cron = "0 17 1 * * ?")
+    public void createSnapshotAlarmChangeInBatches() {
+        snapshotAlarmService.changeAllAlarmChangeRequest();
+    }
+
+    @Scheduled(cron = "0 0 1 * * ?") //매일 새벽 한시
+    public void createSnapshotEntityInBatches() {
+        snapshotService.createAllSnapshotEntity();
+    }
+
+
+    // 매 분마다 실행
+    @Scheduled(cron = "0 17 1 * * ?")
+    public void sendSnapshotAlarm() {
         // 현재 시간을 분 단위로 자름
         LocalTime currentTime = LocalTime.now().truncatedTo(ChronoUnit.MINUTES);
 
@@ -45,6 +65,7 @@ public class SnapshotScheduler {
     }
 
 
+    //동적인 스케줄러 (이후)
     public void scheduleSnapshotAlarm(String timeString) {
         // 입력된 시간을 파싱
         LocalTime targetTime = LocalTime.parse(timeString);
