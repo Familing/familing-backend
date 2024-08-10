@@ -7,26 +7,26 @@ import org.springframework.http.HttpStatus;
 
 public class ApiUtils {
 
-    public static <T> ApiSuccess<T> success(T response) {
-        return new ApiSuccess<>(response);
+    public static <T> ApiResult<T> success(T result) {
+        return new ApiResult<>(true, HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), result);
     }
 
-    public static ApiFail fail(String message, HttpStatus httpStatus) {
-        return new ApiFail(message, httpStatus.value());
+    public static <T> ApiResult<T> create(T result) {
+        return new ApiResult<>(true, HttpStatus.CREATED.value(), HttpStatus.CREATED.getReasonPhrase(), result);
     }
 
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    public static class ApiSuccess<T> {
-        private final T data;
+    public static ApiResult<?> error(String message, HttpStatus httpStatus) {
+        return new ApiResult<>(false, httpStatus.value(), message, null);
     }
+
 
     @Getter
     @Setter
     @AllArgsConstructor
-    public static class ApiFail {
+    public static class ApiResult<T> {
+        private final boolean success;
+        private final int code;
         private final String message;
-        private final int errorCode;
+        private final T result;
     }
 }

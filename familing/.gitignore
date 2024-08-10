@@ -1,3 +1,6 @@
+## idea 폴더 추가
+.idea/
+
 HELP.md
 .gradle
 build/
@@ -35,3 +38,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# Ignore all .yml files
+*.yml
+
+# Exception to include specific yml files if needed
+# !specific-file.yml
