@@ -3,7 +3,7 @@ package com.pinu.familing.domain.snapshot.controller;
 import com.pinu.familing.domain.snapshot.dto.CustomPage;
 import com.pinu.familing.domain.snapshot.dto.SnapshotImageRequest;
 import com.pinu.familing.domain.snapshot.dto.SnapshotResponse;
-import com.pinu.familing.domain.snapshot.scheduler.SnapshotScheduler;
+import com.pinu.familing.domain.snapshot.service.SnapshotAlarmService;
 import com.pinu.familing.domain.snapshot.service.SnapshotService;
 import com.pinu.familing.global.error.CustomException;
 import com.pinu.familing.global.error.ExceptionCode;
@@ -29,6 +29,7 @@ import java.time.format.DateTimeParseException;
 public class SnapshotController {
 
     private final SnapshotService snapshotService;
+    private final SnapshotAlarmService snapshotAlarmService;
 
 
     // 특정 날짜 스냅샷 조회
@@ -47,16 +48,6 @@ public class SnapshotController {
         return ApiUtils.success(new CustomPage(snapshotPage));
     }
 
-
-    //스냅샷 생성
-    @PostMapping("/{day}")
-    public ApiUtils.ApiResult<?> createSnapshot(@PathVariable("day") LocalDate day,
-                                                       @AuthenticationPrincipal CustomOAuth2User customOAuth2User,
-                                                       @Valid @RequestBody SnapshotImageRequest snapshotImageRequest) {
-        snapshotService.createSnapshotGroup(day,customOAuth2User.getName());
-        return ApiUtils.success("Snapshot was created successfully.");
-    }
-
     //스냅샷 이미지 등록
     @PostMapping("/{day}/users")
     public ApiUtils.ApiResult<?> registerSnapshotImage(@PathVariable("day") LocalDate day,
@@ -67,11 +58,12 @@ public class SnapshotController {
     }
 
 
-    // 스냅샷 알람 수정
-    @PatchMapping("/alarm")
+    // 스냅샷 알람 변경 요청 저장하기
+    @PostMapping("/alarm")
     public ApiUtils.ApiResult<?> setSnapshotAlarmTime(@AuthenticationPrincipal CustomOAuth2User customOAuth2User,
                                                       @RequestParam(name = "time") String time) {
-       snapshotService.scheduleSnapshotAlarm(customOAuth2User.getName(),time);
+        LocalTime targetTime = LocalTime.parse(time);
+        snapshotAlarmService.registerAlarmChangeRequest(customOAuth2User.getName(), targetTime);
         return ApiUtils.success("Snapshot alarm has been converted successfully.");
     }
 
@@ -79,7 +71,7 @@ public class SnapshotController {
     // 스냅샷 알람 조회
     @GetMapping("/alarm")
     public ApiUtils.ApiResult<?> getSnapshotAlarmTime(@AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
-        LocalTime time = snapshotService.getSnapshotAlarmTime(customOAuth2User.getName());
+        LocalTime time = snapshotAlarmService.getSnapshotAlarmTime(customOAuth2User.getName());
         return ApiUtils.success(time);
     }
 
