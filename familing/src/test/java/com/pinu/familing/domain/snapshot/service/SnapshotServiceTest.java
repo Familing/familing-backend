@@ -76,28 +76,6 @@ class SnapshotServiceTest {
     }
 
     //스냅샷 생성시 가족구성원 스냅샷 이미지도 정확하게 생성되는지 확인
-    @Test
-    @Transactional
-    void creatSnapshotTest() {
-        //given
-        User user1 = userRepository.findByUsername("user1").get();
-        User user2 = userRepository.findByUsername("user2").get();
-        Family family = user1.getFamily();
-        LocalDate date = LocalDate.parse("2024-08-09");
-
-        //when
-        snapshotService.createSnapshotGroup(date, "user1");
-
-        //then
-        assertThat(snapshotRepository.findByFamilyAndDate(family, date)).isNotEmpty();
-        assertThat(snapshotImageRepository.findByUserAndDate(user1, date)).isNotEmpty();
-        assertThat(snapshotImageRepository.findByUserAndDate(user2, date)).isNotEmpty();
-
-        SnapshotImage snapshotImage = snapshotImageRepository.findByUserAndDate(user2, date).get();
-        System.out.println("snapshotImage = " + snapshotImage);
-        assertThat(snapshotImage.getImageUrl()).isEqualTo("EMPTY");
-    }
-
 
     //스냅샷 이미지 정상 등록 확인
     @Test

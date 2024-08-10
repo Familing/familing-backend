@@ -48,27 +48,34 @@ public class SnapshotService {
     //스냅샷 엔티티 전체 생성하기
     public void createAllSnapshotEntity() {
         LocalDate currentDate = LocalDate.now();
-        SnapshotTitle snapshotTitle = titleService.getTitle(currentDate);
-        familyRepository.findAll()
-                .forEach((family) -> createSnapshotEntity(family, snapshotTitle, currentDate));
+        List<Family> familyList = familyRepository.findAll();
+
+        familyList.forEach(family -> {
+            createSnapshotEntity(family, currentDate);
+            List<User> familyMembers = userRepository.findAllByFamily(family);
+            familyMembers.forEach(familyMember -> {
+                createSnapshotImageEntity(familyMember, currentDate);
+            });
+        });
+
     }
 
 
     //스냅샷 엔티티 생성하기 (개인별 스냅샷도 이때 함께 생성됨.)
-    private void createSnapshotEntity(Family family, SnapshotTitle title, LocalDate currentDate) {
-
+    private void createSnapshotEntity(Family family, LocalDate currentDate) {
+        SnapshotTitle title = titleService.getTitle(currentDate);
         System.out.println(family.getFamilyName() + " : 스냅샷 엔티티 생성하기");
+        snapshotRepository.save(new Snapshot(family, title, currentDate));
+    }
 
-        Snapshot savedSnapshot = snapshotRepository.save(
-                new Snapshot(family, title, currentDate));
+    private void createSnapshotImageEntity(User user, LocalDate currentDate) {
+        Snapshot snapshot = snapshotRepository.findByFamilyAndDate(user.getFamily(), currentDate)
+                .orElseThrow(() -> new CustomException(ExceptionCode.SNAPSHOT_NOT_FOUND));
 
-        List<User> familyMembers = userRepository.findAllByFamily(family);
+        SnapshotImage snapshotImage = new SnapshotImage(snapshot,user, currentDate);
+        snapshotImageRepository.save(snapshotImage);
+        System.out.println(user.getFamily().getFamilyName() + " : " + user.getNickname() + " 의 엔티티 생성");
 
-        familyMembers.forEach((familyMember) -> {
-            SnapshotImage snapshotImage = new SnapshotImage(savedSnapshot, familyMember, currentDate);
-            snapshotImageRepository.save(snapshotImage);
-            System.out.println(family.getFamilyName() + " : " + familyMember.getNickname() + " 의 엔티티 생성");
-        });
     }
 
     //스냅샷 페이지 조회
@@ -86,6 +93,23 @@ public class SnapshotService {
 
         return new SnapshotResponse(snapshot);
     }
+
+    //회원가입이나, 가족 등록시에 호출
+    public void createSnapshotDueToFamilyRegistration(String username) {
+        Family family = getFamily(username);
+        User user = getUser(username);
+        LocalDate currentDate = LocalDate.now();
+
+        //스냅샷 저장
+        if (!snapshotRepository.existsByFamilyAndDate(family, currentDate)) {
+            createSnapshotEntity(family, currentDate);
+        }
+
+        //스냅샷 이미지 생성
+        createSnapshotImageEntity(user, currentDate);
+
+    }
+
 
     //유저 값 가져오기
     private Family getFamily(String name) {
