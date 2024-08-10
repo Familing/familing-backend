@@ -24,6 +24,7 @@ services:
       KAFKA_ADVERTISED_HOST_NAME: localhost
       KAFKA_CREATE_TOPICS: "Topic:1:1"
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_HEAP_OPTS: "-Xmx400m -Xms400m"
     # 볼륨 설정
     volumes:
       - /var/run/docker.sock
