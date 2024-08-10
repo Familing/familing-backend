@@ -34,7 +34,7 @@ public class Family {
         this.snapshotAlarmTime =  LocalTime.of(12, 0);
     }
 
-    public void registerSnapshotAlarmTime(LocalTime time) {
+    public void changeSnapshotAlarmTime(LocalTime time) {
         this.snapshotAlarmTime = time;
     }
     public void addMember() {
