@@ -25,8 +25,8 @@ public class SnapshotAlarmService {
     /**
      * 알람 변경 신청을 등록하는 메서드
      */
-    public void registerAlarmChangeRequest(String name, LocalTime targetTime) {
-        Family family = getFamily(name);
+    public void registerAlarmChangeRequest(String username, LocalTime targetTime) {
+        Family family = getFamily(username);
         SnapshotAlarmChange snapshotAlarmChange = snapshotAlarmChangeRepository.findByFamily(family)
                 .orElse(new SnapshotAlarmChange(family, targetTime));
         snapshotAlarmChange.updateTime(targetTime);
@@ -36,8 +36,8 @@ public class SnapshotAlarmService {
     /**
      * 변경할 알람 시간을 제공
      */
-    public LocalTime getSnapshotAlarmTime(String name) {
-        Family family = getFamily(name);
+    public LocalTime getSnapshotAlarmTime(String username) {
+        Family family = getFamily(username);
         if (snapshotAlarmChangeRepository.existsByFamily(family)) {
             return snapshotAlarmChangeRepository.findByFamily(family).get().getTimeToChange();
         }
@@ -66,8 +66,8 @@ public class SnapshotAlarmService {
     /**
      * 유저네임을 기준으로 가족 제공
      */
-    private Family getFamily(String name) {
-        User user = userRepository.findByUsername(name)
+    private Family getFamily(String username) {
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
         if (user.getFamily() == null) {
             throw new CustomException(ExceptionCode.FAMILY_NOT_FOUND);

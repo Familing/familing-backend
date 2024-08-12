@@ -35,8 +35,8 @@ public class SnapshotService {
 
     //스냅샷에 이미지 등록하기
     @Transactional
-    public void registerSnapshotImage(LocalDate day, String name, SnapshotImageRequest snapshotImageRequest) {
-        User user = getUser(name);
+    public void registerSnapshotImage(LocalDate day, String username, SnapshotImageRequest snapshotImageRequest) {
+        User user = getUser(username);
 
         SnapshotImage snapshotImage = snapshotImageRepository.findByUserAndDate(user,day)
                 .orElseThrow(() -> new CustomException(ExceptionCode.SNAPSHOT_NOT_FOUND));
@@ -79,15 +79,15 @@ public class SnapshotService {
     }
 
     //스냅샷 페이지 조회
-    public Page<SnapshotResponse> provideSnapshotPage(LocalDate day, Pageable pageable, String name) {
-        Family family = getFamily(name);
+    public Page<SnapshotResponse> provideSnapshotPage(LocalDate day, Pageable pageable, String username) {
+        Family family = getFamily(username);
         return snapshotRepository.findAllByFamilyAndDateBefore(family, day, pageable)
                 .map(SnapshotResponse::new);
     }
 
     //특정 날짜 스냅샷 조회
-    public SnapshotResponse provideSnapshot(LocalDate day, String name) {
-        Family family = getFamily(name);
+    public SnapshotResponse provideSnapshot(LocalDate day, String username) {
+        Family family = getFamily(username);
         Snapshot snapshot = snapshotRepository.findByFamilyAndDate(family, day)
                 .orElseThrow(() -> new CustomException(ExceptionCode.SNAPSHOT_NOT_FOUND));
 
@@ -112,8 +112,8 @@ public class SnapshotService {
 
 
     //유저 값 가져오기
-    private Family getFamily(String name) {
-        User user = userRepository.findByUsername(name)
+    private Family getFamily(String username) {
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
         if (user.getFamily() == null) {
             throw new CustomException(ExceptionCode.FAMILY_NOT_FOUND);
@@ -122,8 +122,8 @@ public class SnapshotService {
         return user.getFamily();
     }
 
-    private User getUser(String name) {
-        User user = userRepository.findByUsername(name)
+    private User getUser(String username) {
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
         if (user.getFamily() == null) {
             throw new CustomException(ExceptionCode.FAMILY_NOT_FOUND);
