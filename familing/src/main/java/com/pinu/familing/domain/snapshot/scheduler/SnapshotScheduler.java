@@ -44,20 +44,16 @@ public class SnapshotScheduler {
         snapshotAlarmService.changeAllAlarmChangeRequest();
     }
 
-    @Scheduled(cron = "0 55 1 * * ?") //매일 새벽 한시
-    public void createSnapshotEntityInBatches() {
-        snapshotService.createAllSnapshotEntity();
-    }
-
-
     // 매 분마다 실행
     @Scheduled(cron = "0 * * * * ?")
     public void sendSnapshotAlarm() {
         // 현재 시간을 분 단위로 자름
         LocalTime currentTime = LocalTime.now().truncatedTo(ChronoUnit.MINUTES);
-
+        LocalDate currentDate = LocalDate.now();
         // 모든 가족을 가져옴
         List<Family> families = familyRepository.findAllBySnapshotAlarmTime(currentTime);
+
+        families.forEach((family) -> snapshotService.createFamilySnapshotEntity(family, currentDate));
 
         for (Family family : families) {
             System.out.println(family.getFamilyName() + ": 알람! ");

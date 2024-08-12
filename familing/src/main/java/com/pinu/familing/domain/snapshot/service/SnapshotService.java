@@ -46,25 +46,19 @@ public class SnapshotService {
 
 
     //스냅샷 엔티티 전체 생성하기
-    public void createAllSnapshotEntity() {
-        LocalDate currentDate = LocalDate.now();
-        List<Family> familyList = familyRepository.findAll();
+    @Transactional
+    public void createFamilySnapshotEntity(Family family, LocalDate currentDate) {
+        createSnapshotEntity(family, currentDate);
 
-        familyList.forEach(family -> {
-            createSnapshotEntity(family, currentDate);
-            List<User> familyMembers = userRepository.findAllByFamily(family);
+        List<User> familyMembers = userRepository.findAllByFamily(family);
             familyMembers.forEach(familyMember -> {
-                createSnapshotImageEntity(familyMember, currentDate);
-            });
-        });
-
+                createSnapshotImageEntity(familyMember, currentDate);});
     }
 
 
     //스냅샷 엔티티 생성하기 (개인별 스냅샷도 이때 함께 생성됨.)
     private void createSnapshotEntity(Family family, LocalDate currentDate) {
         SnapshotTitle title = titleService.getTitle(currentDate);
-        System.out.println(family.getFamilyName() + " : 스냅샷 엔티티 생성하기");
         snapshotRepository.save(new Snapshot(family, title, currentDate));
     }
 
@@ -74,8 +68,6 @@ public class SnapshotService {
 
         SnapshotImage snapshotImage = new SnapshotImage(snapshot,user, currentDate);
         snapshotImageRepository.save(snapshotImage);
-        System.out.println(user.getFamily().getFamilyName() + " : " + user.getNickname() + " 의 엔티티 생성");
-
     }
 
     //스냅샷 페이지 조회
@@ -102,7 +94,7 @@ public class SnapshotService {
 
         //스냅샷 저장
         if (!snapshotRepository.existsByFamilyAndDate(family, currentDate)) {
-            createSnapshotEntity(family, currentDate);
+            createSnapshotEntity(family,currentDate);
         }
 
         //스냅샷 이미지 생성
