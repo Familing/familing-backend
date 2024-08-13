@@ -55,4 +55,9 @@ public class FamilyController {
         return ApiUtils.success("Successful addition of family");
     }
 
+    @GetMapping("/family")
+    public ApiUtils.ApiResult<?> getMyFamily(@AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
+        return ApiUtils.success(familyService.getMyFamily(customOAuth2User.getName()));
+    }
+
 }
