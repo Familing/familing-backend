@@ -28,6 +28,12 @@ public enum ExceptionCode {
 
     //구독 관련
     ERROR_SUBSCRIPTION_LIST(HttpStatus.BAD_REQUEST, "구독 목록 조회중 에러가 발생했습니다."),
+
+    //스냅샷 관련
+    SNAPSHOT_TITLE_NOT_FOUND(HttpStatus.NOT_FOUND, "주제가 존재하지 않습니다."),
+    SNAPSHOT_NOT_FOUND(HttpStatus.NOT_FOUND, "스냅샷이 생성되지 않았습니다."),
+    DAY_BAD_REQUEST(HttpStatus.BAD_REQUEST, "DAY 형식이 잘못되었습니다."),
+
     ;
 
 

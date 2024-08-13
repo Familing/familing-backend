@@ -5,20 +5,13 @@ import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
-import org.aspectj.lang.annotation.After;
-import org.checkerframework.checker.units.qual.A;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class ChatRoomTest {
 
@@ -85,8 +78,8 @@ public class ChatRoomTest {
                 .validCode("validCode123")
                 .users(new ArrayList<>())
                 .build();
-        User user1 = createUser( "user1");
-        User user2 = createUser( "user2");
+        User user1 = createUser("user1");
+        User user2 = createUser("user2");
 
         // when
         chatRoom.addUser(user1);
