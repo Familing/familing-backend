@@ -49,6 +49,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         } else {
             //Role이 없으면 다시 로그인 창으로
             response.sendRedirect("http://13.124.211.43/oauth2/authorization/kakao");
+
         }
     }
 
