@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ExceptionCode {
     // 사용자 관련 에러
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 사용자를 찾을 수 없습니다."),
+    FAMILY_NOT_FOUND(HttpStatus.NOT_FOUND, "가족 그룹이 존재하지 않습니다."),
     USER_FORBIDDEN(HttpStatus.FORBIDDEN, "권한이 없습니다."),
     USER_NOT_AUTHENTICATED(HttpStatus.UNAUTHORIZED, "사용자가 인증되지 않았습니다."),
     TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "JWT 토큰이 쿠키에 존재하지 않습니다."),
