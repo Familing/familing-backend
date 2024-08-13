@@ -1,17 +1,14 @@
 package com.pinu.familing.domain.lovecard.controller;
 
-import com.pinu.familing.domain.lovecard.entity.Lovecard;
 import com.pinu.familing.domain.lovecard.service.LovecardService;
 import com.pinu.familing.domain.snapshot.dto.CustomPage;
-import com.pinu.familing.domain.snapshot.dto.LovecardRequest;
+import com.pinu.familing.domain.lovecard.dto.LovecardRequest;
 import com.pinu.familing.global.oauth.dto.CustomOAuth2User;
 import com.pinu.familing.global.util.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
 
 @RequiredArgsConstructor
 @RestController

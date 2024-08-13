@@ -25,3 +25,28 @@ INSERT INTO snapshot_title (title)
 VALUES ('테스트용9');
 INSERT INTO snapshot_title (title)
 VALUES ('테스트용10');
+
+INSERT INTO lovecard (text, image)
+VALUES ( '카드1', '이미지1');
+INSERT INTO lovecard (text, image)
+VALUES ( '카드2', '이미지2');
+INSERT INTO lovecard (text, image)
+VALUES ( '카드3', '이미지3');
+INSERT INTO lovecard (text, image)
+VALUES ( '카드4', '이미지4');
+INSERT INTO lovecard (text, image)
+VALUES ( '카드5', '이미지5');
+INSERT INTO lovecard (text, image)
+VALUES ( '카드6', '이미지6');
+INSERT INTO lovecard (text, image)
+VALUES ( '카드7', '이미지7');
+INSERT INTO lovecard (text, image)
+VALUES ( '카드8', '이미지8');
+INSERT INTO lovecard (text, image)
+VALUES ( '카드9', '이미지9');
+INSERT INTO lovecard (text, image)
+VALUES ( '카드10', '이미지10');
+INSERT INTO lovecard (text, image)
+VALUES ( '카드11', '이미지11');
+INSERT INTO lovecard (text, image)
+VALUES ( '카드12', '이미지12');
