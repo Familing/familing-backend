@@ -32,7 +32,11 @@ public enum ExceptionCode {
     //스냅샷 관련
     SNAPSHOT_TITLE_NOT_FOUND(HttpStatus.NOT_FOUND, "주제가 존재하지 않습니다."),
     SNAPSHOT_NOT_FOUND(HttpStatus.NOT_FOUND, "스냅샷이 생성되지 않았습니다."),
-    DAY_BAD_REQUEST(HttpStatus.BAD_REQUEST, "DAY 형식이 잘못되었습니다.");
+    DAY_BAD_REQUEST(HttpStatus.BAD_REQUEST, "DAY 형식이 잘못되었습니다."),
+
+    //애정카드 관련
+    LOVECARD_NOT_FOUND(HttpStatus.NOT_FOUND, "애정카드를 찾지 못했습니다."),
+    ;
 
     private final HttpStatus httpStatus;
     private final String message;
