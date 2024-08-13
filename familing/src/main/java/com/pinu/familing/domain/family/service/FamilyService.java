@@ -31,7 +31,6 @@ public class FamilyService {
         String validCode = validFamilyCode(FamilyCodeHandler.createCode(username));
         Family family = new Family(familyName,validCode);
         Family savefamily = familyRepository.save(family);
-        System.out.println(username);
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
         // 가족 등록할 때 가족 채팅방 가동 생성
@@ -39,17 +38,6 @@ public class FamilyService {
         return FamilyDto.fromEntity(savefamily);
     }
 
-    @Transactional
-    public void addFamilyToUser(String username, String code) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
-
-        Family family = familyRepository.findByCode(code)
-                .orElseThrow(()-> new CustomException(INVALID_CODE));
-
-        //내부에 예외 처리 부분 넣어놨습니다.
-        user.registerFamily(family);
-    }
 
     private String validFamilyCode(String code) {
         if (familyRepository.existsByCode(code)) {
