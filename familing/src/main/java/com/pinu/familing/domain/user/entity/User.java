@@ -39,8 +39,6 @@ public class User extends BaseEntity{
     @JoinColumn(name = "family_id")
     private Family family;
 
-    private int age;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
@@ -54,7 +52,6 @@ public class User extends BaseEntity{
         this.realname = realname;
         this.imageUrl = imageUrl;
         this.role = role;
-        this.age = age;
         this.gender = gender;
         this.family = family;
     }
