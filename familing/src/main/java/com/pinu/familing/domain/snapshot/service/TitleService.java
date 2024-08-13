@@ -19,7 +19,5 @@ public class TitleService {
         long dayRemainder = (long) day.getDayOfMonth() % 10 + 1L;
         return snapshotTitleRepository.findById(dayRemainder)
                 .orElseThrow(() -> new CustomException(ExceptionCode.SNAPSHOT_TITLE_NOT_FOUND));
-
-
     }
 }
