@@ -1,12 +1,13 @@
 package com.pinu.familing.domain.gpt.controller;
 
 
+import com.pinu.familing.domain.gpt.dto.ChatGPTResponse;
+import com.pinu.familing.domain.gpt.dto.GptRequestMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,16 +21,17 @@ public class ChatGPTController {
     @Value("${openai.api.url}")
     private String apiURL;
 
-    private final RestTemplate restTemplate;
+    @Autowired
+    @Qualifier("GPTRestTemplate")
+    private RestTemplate gptRestTemplate;
 
 
     @PostMapping("/chat")
-    public String requestGpt(@RequestPart("image") MultipartFile imageFile) {
+    public String requestGpt(@RequestBody String message) {
         String responseContent = null;
         try {
-            String base64Image = ImageUtils.encodeImageToBase64(imageFile);
-            ChatGPTRequest request = new ChatGPTRequest(model, base64Image);
-            ChatGPTResponse chatGPTResponse = restTemplate.postForObject(apiURL, request, ChatGPTResponse.class);
+            GptRequestMessage request = new GptRequestMessage(model, "user", message);
+            ChatGPTResponse chatGPTResponse = gptRestTemplate.postForObject(apiURL, request, ChatGPTResponse.class);
             responseContent = chatGPTResponse.getChoices().get(0).getMessage().getContent().toString();
         }
         catch (Exception e) {
