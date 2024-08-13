@@ -19,8 +19,6 @@ import java.util.concurrent.ScheduledFuture;
 @RequiredArgsConstructor
 public class SnapshotScheduler {
 
-    private final TaskScheduler taskScheduler = new ConcurrentTaskScheduler(); // 스레드 풀 설정
-    private ScheduledFuture<?> scheduledFuture; // `final` 제거
     private final FamilyRepository familyRepository;
     private final SnapshotAlarmService snapshotAlarmService;
     private final SnapshotService snapshotService;
@@ -39,12 +37,12 @@ public class SnapshotScheduler {
 
 
     // 매 분마다 실행
-    @Scheduled(cron = "0 55 1 * * ?")
+    @Scheduled(cron = "0 0 0 * * ?")
     public void createSnapshotAlarmChangeInBatches() {
         snapshotAlarmService.changeAllAlarmChangeRequest();
     }
 
-    // 매 분마다 실행
+    // 알람 보내기: 매 분마다 실행
     @Scheduled(cron = "0 * * * * ?")
     public void sendSnapshotAlarm() {
         // 현재 시간을 분 단위로 자름
@@ -53,6 +51,7 @@ public class SnapshotScheduler {
         // 모든 가족을 가져옴
         List<Family> families = familyRepository.findAllBySnapshotAlarmTime(currentTime);
 
+        //엔티티 생성
         families.forEach((family) -> snapshotService.createFamilySnapshotEntity(family, currentDate));
 
         for (Family family : families) {
@@ -61,32 +60,4 @@ public class SnapshotScheduler {
     }
 
 
-    //동적인 스케줄러 (이후)
-    public void scheduleSnapshotAlarm(String timeString) {
-        // 입력된 시간을 파싱
-        LocalTime targetTime = LocalTime.parse(timeString);
-        LocalDateTime targetDateTime = LocalDateTime.of(LocalDate.now(), targetTime);
-
-        // 현재 시간과 비교하여 이미 지났으면 다음 날로 설정
-        if (targetDateTime.isBefore(LocalDateTime.now())) {
-            targetDateTime = targetDateTime.plusDays(1);
-        }
-
-        // 입력 시간을 UTC로 변환
-        Instant targetInstant = targetDateTime.atZone(ZoneId.systemDefault()).toInstant();
-
-        // 기존 작업 취소
-        if (scheduledFuture != null) {
-            scheduledFuture.cancel(false);
-        }
-
-        // 새로운 작업 등록
-        scheduledFuture = taskScheduler.schedule(
-                () -> {
-                    System.out.println("알림: 설정된 시간입니다!");
-                    scheduleSnapshotAlarm(timeString); // 다음 알람도 등록
-                },
-                targetInstant
-        );
-    }
 }
