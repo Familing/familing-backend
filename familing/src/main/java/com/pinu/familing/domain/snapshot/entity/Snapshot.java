@@ -31,6 +31,7 @@ public class Snapshot extends BaseEntity {
 
     private LocalDate date;
 
+    @Builder.Default
     @OneToMany(orphanRemoval = true, mappedBy = "snapshot", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<SnapshotImage> snapshotImages = new ArrayList<>();
 
