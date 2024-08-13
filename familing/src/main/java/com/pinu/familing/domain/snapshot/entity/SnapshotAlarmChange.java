@@ -16,7 +16,7 @@ public class SnapshotAlarmChange {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "family_id",unique = true)
+    @JoinColumn(name = "family_id", unique = true)
     private Family family;
 
     private LocalTime timeToChange;
@@ -26,7 +26,7 @@ public class SnapshotAlarmChange {
         this.timeToChange = timeToChange;
     }
 
-    public  void updateTime(LocalTime targetTime) {
+    public void updateTime(LocalTime targetTime) {
         this.timeToChange = targetTime;
     }
 }

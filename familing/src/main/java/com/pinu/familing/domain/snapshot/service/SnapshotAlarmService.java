@@ -57,7 +57,7 @@ public class SnapshotAlarmService {
      * 알람을 변경하는 메서드
      */
     private void changeAlarmChangeRequest(SnapshotAlarmChange snapshotAlarmChange) {
-        System.out.println(snapshotAlarmChange.getFamily().getFamilyName() + " : " + snapshotAlarmChange.getTimeToChange() +  " 알림 변경하기");
+        System.out.println(snapshotAlarmChange.getFamily().getFamilyName() + " : " + snapshotAlarmChange.getTimeToChange() + " 알림 변경하기");
         Family targetFamily = snapshotAlarmChange.getFamily();
         targetFamily.changeSnapshotAlarmTime(snapshotAlarmChange.getTimeToChange());
         familyRepository.save(targetFamily);

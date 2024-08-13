@@ -31,12 +31,13 @@ public class Family {
         this.familyName = familyName;
         this.code = code;
         this.membersNum = 0;
-        this.snapshotAlarmTime =  LocalTime.of(12, 0);
+        this.snapshotAlarmTime = LocalTime.of(12, 0);
     }
 
     public void changeSnapshotAlarmTime(LocalTime time) {
         this.snapshotAlarmTime = time;
     }
+
     public void addMember() {
         this.membersNum += 1;
     }

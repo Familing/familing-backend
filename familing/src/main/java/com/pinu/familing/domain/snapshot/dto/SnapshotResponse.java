@@ -11,16 +11,6 @@ public record SnapshotResponse(String Title,
                                LocalDate date,
                                List<IndividualSnapshotImage> individualSnapshotImages) {
 
-    record IndividualSnapshotImage(String username,
-                                   String nickname,
-                                   String profile,
-                                   String image) {
-
-        public IndividualSnapshotImage(SnapshotImage snapshotImage) {
-            this(snapshotImage.getUser().getUsername(), snapshotImage.getUser().getNickname(), snapshotImage.getUser().getImageUrl(), snapshotImage.getImageUrl());
-        }
-    }
-
     public SnapshotResponse(Snapshot snapshot) {
         this(
                 snapshot.getSnapshotTitle().getTitle(),
@@ -31,7 +21,15 @@ public record SnapshotResponse(String Title,
         );
     }
 
+    record IndividualSnapshotImage(String username,
+                                   String nickname,
+                                   String profile,
+                                   String image) {
 
+        public IndividualSnapshotImage(SnapshotImage snapshotImage) {
+            this(snapshotImage.getUser().getUsername(), snapshotImage.getUser().getNickname(), snapshotImage.getUser().getImageUrl(), snapshotImage.getImageUrl());
+        }
+    }
 
 
 }

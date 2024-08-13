@@ -19,11 +19,11 @@ public class SnapshotImage extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "snapshot_id",nullable = false)
+    @JoinColumn(name = "snapshot_id", nullable = false)
     private Snapshot snapshot;
 
     @ManyToOne
-    @JoinColumn(name = "user_id",nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     private LocalDate date;

@@ -8,7 +8,7 @@ import java.util.List;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record CustomPage(int totalPage,
-                  List<?> content) {
+                         List<?> content) {
 
     public CustomPage(Page<?> page) {
         this(page.getTotalPages(), page.getContent());

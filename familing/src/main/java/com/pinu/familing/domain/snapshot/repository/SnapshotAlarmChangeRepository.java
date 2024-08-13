@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface SnapshotAlarmChangeRepository extends JpaRepository<SnapshotAlarmChange, Long> {
     boolean existsByFamily(Family family);
+
     Optional<SnapshotAlarmChange> findByFamily(Family family);
 }

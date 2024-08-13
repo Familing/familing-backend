@@ -1,9 +1,9 @@
 package com.pinu.familing.domain.user.entity;
 
 import com.pinu.familing.domain.BaseEntity;
+import com.pinu.familing.domain.chat.entity.ChatRoom;
 import com.pinu.familing.domain.family.entity.Family;
 import com.pinu.familing.domain.user.Gender;
-import com.pinu.familing.domain.chat.entity.ChatRoom;
 import com.pinu.familing.domain.user.dto.ImageUrl;
 import com.pinu.familing.domain.user.dto.Nickname;
 import com.pinu.familing.domain.user.dto.Realname;
@@ -20,7 +20,7 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor
 @Table(name = "user_tb")
-public class User extends BaseEntity{
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,14 +73,17 @@ public class User extends BaseEntity{
     public void registerChatRoom(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
     }
+
     public void updateNickname(Nickname nickname) {
         this.nickname = nickname.nickname();
     }
+
     public void updateRealname(Realname realname) {
         this.realname = realname.realname();
     }
-    public void updateImageUrl(ImageUrl imageUrl){
-            this.imageUrl = imageUrl.imageUrl();
+
+    public void updateImageUrl(ImageUrl imageUrl) {
+        this.imageUrl = imageUrl.imageUrl();
     }
 
     @Override

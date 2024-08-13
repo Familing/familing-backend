@@ -27,9 +27,9 @@ public class FamilyService {
 
     //가족 만들기
     @Transactional
-    public FamilyDto registerNewFamily(String username,String familyName){
+    public FamilyDto registerNewFamily(String username, String familyName) {
         String validCode = validFamilyCode(FamilyCodeHandler.createCode(username));
-        Family family = new Family(familyName,validCode);
+        Family family = new Family(familyName, validCode);
         Family savefamily = familyRepository.save(family);
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
