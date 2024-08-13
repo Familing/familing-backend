@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -38,7 +39,7 @@ public class SnapshotService {
     public void registerSnapshotImage(LocalDate day, String username, SnapshotImageRequest snapshotImageRequest) {
         User user = getUser(username);
 
-        SnapshotImage snapshotImage = snapshotImageRepository.findByUserAndDate(user,day)
+        SnapshotImage snapshotImage = snapshotImageRepository.findByUserAndDate(user, day)
                 .orElseThrow(() -> new CustomException(ExceptionCode.SNAPSHOT_NOT_FOUND));
 
         snapshotImage.updateImage(snapshotImageRequest.imageUrl());
@@ -51,23 +52,31 @@ public class SnapshotService {
         createSnapshotEntity(family, currentDate);
 
         List<User> familyMembers = userRepository.findAllByFamily(family);
-            familyMembers.forEach(familyMember -> {
-                createSnapshotImageEntity(familyMember, currentDate);});
+        familyMembers.forEach(familyMember -> {
+            createSnapshotImageEntity(familyMember, currentDate);
+        });
     }
 
 
     //스냅샷 엔티티 생성하기 (개인별 스냅샷도 이때 함께 생성됨.)
     private void createSnapshotEntity(Family family, LocalDate currentDate) {
         SnapshotTitle title = titleService.getTitle(currentDate);
-        snapshotRepository.save(new Snapshot(family, title, currentDate));
+
+        snapshotRepository.save(Snapshot.builder().family(family)
+                .snapshotTitle(title)
+                .date(currentDate)
+                .build());
+
+        System.out.println(family.getFamilyName() + ": 스냅샷 엔티티 생성");
     }
 
     private void createSnapshotImageEntity(User user, LocalDate currentDate) {
         Snapshot snapshot = snapshotRepository.findByFamilyAndDate(user.getFamily(), currentDate)
                 .orElseThrow(() -> new CustomException(ExceptionCode.SNAPSHOT_NOT_FOUND));
 
-        SnapshotImage snapshotImage = new SnapshotImage(snapshot,user, currentDate);
+        SnapshotImage snapshotImage = new SnapshotImage(snapshot, user, currentDate);
         snapshotImageRepository.save(snapshotImage);
+        System.out.println(user.getRealname() + ": 스냅샷 이미지 엔티티 생성");
     }
 
     //스냅샷 페이지 조회
@@ -80,6 +89,7 @@ public class SnapshotService {
     //특정 날짜 스냅샷 조회
     public SnapshotResponse provideSnapshot(LocalDate day, String username) {
         Family family = getFamily(username);
+
         Snapshot snapshot = snapshotRepository.findByFamilyAndDate(family, day)
                 .orElseThrow(() -> new CustomException(ExceptionCode.SNAPSHOT_NOT_FOUND));
 
@@ -87,21 +97,25 @@ public class SnapshotService {
     }
 
     //회원가입이나, 가족 등록시에 호출
+    @Transactional
     public void createSnapshotDueToFamilyRegistration(String username) {
         Family family = getFamily(username);
+        System.out.println("family.getFamilyName() = " + family.getFamilyName());
         User user = getUser(username);
         LocalDate currentDate = LocalDate.now();
 
+        if (family.getSnapshotAlarmTime().isAfter(LocalTime.now())) {
+            System.out.println(user.getRealname() + ": 스냅샷 이후에 생성 예정");
+            return;
+        }
         //스냅샷 저장
         if (!snapshotRepository.existsByFamilyAndDate(family, currentDate)) {
-            createSnapshotEntity(family,currentDate);
+            createSnapshotEntity(family, currentDate);
         }
 
         //스냅샷 이미지 생성
         createSnapshotImageEntity(user, currentDate);
-
     }
-
 
     //유저 값 가져오기
     private Family getFamily(String username) {
@@ -122,6 +136,5 @@ public class SnapshotService {
         }
         return user;
     }
-
 }
 
