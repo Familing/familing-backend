@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GptRequestMessage {
-    private String role;
-    private List<Object> content;
+public class Prompt {
+    private String type;
+    private String text;
 }
