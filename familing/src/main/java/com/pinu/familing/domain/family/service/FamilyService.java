@@ -3,6 +3,7 @@ package com.pinu.familing.domain.family.service;
 
 import com.pinu.familing.domain.chat.service.ChatService;
 import com.pinu.familing.domain.family.dto.FamilyDto;
+import com.pinu.familing.domain.family.dto.MyFamilyDto;
 import com.pinu.familing.domain.family.entity.Family;
 import com.pinu.familing.domain.family.handler.FamilyCodeHandler;
 import com.pinu.familing.domain.family.repository.FamilyRepository;
@@ -13,8 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.pinu.familing.global.error.ExceptionCode.INVALID_CODE;
-import static com.pinu.familing.global.error.ExceptionCode.USER_NOT_FOUND;
+import static com.pinu.familing.global.error.ExceptionCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +29,12 @@ public class FamilyService {
     @Transactional
     public FamilyDto registerNewFamily(String username, String familyName) {
         String validCode = validFamilyCode(FamilyCodeHandler.createCode(username));
-        Family family = new Family(familyName, validCode);
+
+        Family family = Family.builder()
+                .familyName(familyName)
+                .code(validCode)
+                .build();
+
         Family savefamily = familyRepository.save(family);
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
@@ -38,6 +43,18 @@ public class FamilyService {
         return FamilyDto.fromEntity(savefamily);
     }
 
+
+    @Transactional(readOnly = true)
+    public MyFamilyDto getMyFamily(String username){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+
+        Family family = user.getFamily();
+        if (family == null) {
+            throw new CustomException(FAMILY_NOT_FOUND);
+        }
+        return MyFamilyDto.toEntity(family);
+    }
 
     private String validFamilyCode(String code) {
         if (familyRepository.existsByCode(code)) {
