@@ -1,23 +1,21 @@
 package com.pinu.familing.domain.chat.service;
 
 
+import com.pinu.familing.domain.chat.dto.ChatResponseDto;
 import com.pinu.familing.domain.chat.dto.ChatRoomInfoDto;
+import com.pinu.familing.domain.chat.dto.ChattingHistoryResponseDto;
+import com.pinu.familing.domain.chat.entity.ChatRoom;
 import com.pinu.familing.domain.chat.entity.Chatting;
 import com.pinu.familing.domain.chat.entity.Message;
 import com.pinu.familing.domain.chat.messaging.MessageSender;
-import com.pinu.familing.domain.chat.repository.MongoChatRepository;
-import com.pinu.familing.domain.chat.dto.ChatResponseDto;
-import com.pinu.familing.domain.chat.dto.ChattingHistoryResponseDto;
-import com.pinu.familing.domain.chat.entity.ChatRoom;
 import com.pinu.familing.domain.chat.repository.ChatRoomRepository;
+import com.pinu.familing.domain.chat.repository.MongoChatRepository;
 import com.pinu.familing.domain.user.entity.User;
 import com.pinu.familing.domain.user.repository.UserRepository;
 import com.pinu.familing.global.error.CustomException;
 import com.pinu.familing.global.util.ConstantUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
-import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +23,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 
 import static com.pinu.familing.global.error.ExceptionCode.CHATROOM_ALREADY_EXISTS;
 import static com.pinu.familing.global.error.ExceptionCode.USER_NOT_FOUND;

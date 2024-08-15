@@ -52,8 +52,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             UserDto userDTO = new UserDto(username, oAuth2Response.getOAuthName(), "ROLE_PENDING_USER");
             System.out.println("userDTO = " + userDTO);
             return new CustomOAuth2User(userDTO);
-        }
-        else { // 기존 유저
+        } else { // 기존 유저
             return new CustomOAuth2User(new UserDto(existUser.get().getUsername(), existUser.get().getNickname(), existUser.get().getRole()));
         }
 
