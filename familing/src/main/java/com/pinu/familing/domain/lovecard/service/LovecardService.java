@@ -1,5 +1,6 @@
 package com.pinu.familing.domain.lovecard.service;
 
+import com.pinu.familing.domain.lovecard.dto.LovecardLogResponse;
 import com.pinu.familing.domain.lovecard.dto.LovecardResponse;
 import com.pinu.familing.domain.lovecard.entity.Lovecard;
 import com.pinu.familing.domain.lovecard.entity.LovecardLog;
@@ -29,8 +30,16 @@ public class LovecardService {
         return lovecardResponsePage;
     }
 
-    public Page<?> getLovecardByFamilyLogPage(String username, String familyUsername, Pageable pageable) {
-        return null;
+    public Page<LovecardLogResponse> getLovecardByFamilyLogPage(String username, String familyUsername, Pageable pageable) {
+        User receiver = userRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
+
+        User sender = userRepository.findByUsername(familyUsername)
+                .orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
+
+        Page<LovecardLogResponse> lovecardLogResponses = lovecardLogRepository.findAllBySenderAndReceiver(sender, receiver, pageable)
+                .map(LovecardLogResponse::new);
+        return lovecardLogResponses;
     }
 
     public void sendLoveCardToFamily(String username, String familyUsername, LovecardRequest lovecardRequest) {
