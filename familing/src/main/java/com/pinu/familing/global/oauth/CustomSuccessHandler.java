@@ -43,12 +43,12 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.addCookie(createCookie("Authorization", token));
         // 로그인 성공 후 Redirect 주소
         if ("ROLE_PENDING_USER".equals(role)) { // Oauth만 인증되고 추가적인 요청 필요
-            response.sendRedirect("http://52.79.205.140:8080/api/v1/user");
+            response.sendRedirect("myapp://auth/login");
         } else if ("ROLE_USER".equals(role)) { // 회원가입 완료
-            response.sendRedirect("http://52.79.205.140:8080/api/v1/user");
+            response.sendRedirect("myapp://callback/register-screen1");
         } else {
             //Role이 없으면 다시 로그인 창으로
-            response.sendRedirect("http://52.79.205.140:8080/oauth2/authorization/kakao");
+            response.sendRedirect("http://13.124.211.43/oauth2/authorization/kakao");
         }
     }
 
