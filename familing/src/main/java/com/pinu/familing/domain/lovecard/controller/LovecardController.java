@@ -24,7 +24,6 @@ public class LovecardController{
     }
 
     //가족구성원별 주고받은 애정 카드 조회
-    //카드 조회(12개)
     @GetMapping("/familys/{family_username}")
     public ApiUtils.ApiResult<?> getLoveCardLogList(@AuthenticationPrincipal CustomOAuth2User customOAuth2User,
                                                     @PathVariable("family_username") String familyUsername,
