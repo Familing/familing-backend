@@ -3,6 +3,8 @@ package com.pinu.familing.domain.subscription.service;
 import com.pinu.familing.domain.subscription.dto.SubscriptionResponse;
 import com.pinu.familing.domain.subscription.entity.Subscription;
 import com.pinu.familing.domain.subscription.repository.SubscriptionRepository;
+import com.pinu.familing.global.error.CustomException;
+import com.pinu.familing.global.error.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -4,6 +4,7 @@ import com.pinu.familing.IntegrationTestSupport;
 import com.pinu.familing.domain.chat.dto.ChatRoomInfoDto;
 import com.pinu.familing.domain.chat.dto.ChattingHistoryResponseDto;
 import com.pinu.familing.domain.chat.entity.ChatRoom;
+import com.pinu.familing.domain.chat.entity.Chatting;
 import com.pinu.familing.domain.chat.entity.Message;
 import com.pinu.familing.domain.chat.repository.ChatRoomRepository;
 import com.pinu.familing.domain.chat.repository.MongoChatRepository;
@@ -11,28 +12,34 @@ import com.pinu.familing.domain.user.entity.User;
 import com.pinu.familing.domain.user.repository.UserRepository;
 import com.pinu.familing.global.error.CustomException;
 import jakarta.transaction.Transactional;
+import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static java.beans.Beans.isInstanceOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 class ChatServiceTest extends IntegrationTestSupport {
 
-    private final String validCode = "validCode123";
     @Autowired
     private ChatService chatService;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private ChatRoomRepository chatRoomRepository;
+
     @Autowired
     private MongoChatRepository mongoChatRepository;
+
     private User testUser;
+    private final String validCode = "validCode123";
 
     @BeforeEach
     void setUp() {
@@ -42,7 +49,6 @@ class ChatServiceTest extends IntegrationTestSupport {
                 .build();
         userRepository.save(testUser);
     }
-
     @AfterEach
     void tearDown() {
         mongoChatRepository.deleteAll();

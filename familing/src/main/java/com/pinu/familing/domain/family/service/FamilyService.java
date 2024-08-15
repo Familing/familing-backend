@@ -6,7 +6,7 @@ import com.pinu.familing.domain.family.dto.FamilyDto;
 import com.pinu.familing.domain.family.dto.MyFamilyDto;
 import com.pinu.familing.domain.family.entity.Family;
 import com.pinu.familing.domain.family.handler.FamilyCodeHandler;
-import com.pinu.familing.domain.family.repository.FamilyRepository;
+import com.pinu.familing.domain.family.repositiry.FamilyRepository;
 import com.pinu.familing.domain.user.entity.User;
 import com.pinu.familing.domain.user.repository.UserRepository;
 import com.pinu.familing.global.error.CustomException;
@@ -27,15 +27,15 @@ public class FamilyService {
 
     //가족 만들기
     @Transactional
-    public FamilyDto registerNewFamily(String username, String familyName) {
+    public FamilyDto registerNewFamily(String username,String familyName){
         String validCode = validFamilyCode(FamilyCodeHandler.createCode(username));
-
         Family family = Family.builder()
                 .familyName(familyName)
                 .code(validCode)
                 .build();
 
         Family savefamily = familyRepository.save(family);
+        System.out.println(username);
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
         // 가족 등록할 때 가족 채팅방 가동 생성
@@ -43,6 +43,17 @@ public class FamilyService {
         return FamilyDto.fromEntity(savefamily);
     }
 
+    @Transactional
+    public void addFamilyToUser(String username, String code) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+
+        Family family = familyRepository.findByCode(code)
+                .orElseThrow(()-> new CustomException(INVALID_CODE));
+
+        //내부에 예외 처리 부분 넣어놨습니다.
+        user.registerFamily(family);
+    }
 
     @Transactional(readOnly = true)
     public MyFamilyDto getMyFamily(String username){

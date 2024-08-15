@@ -1,8 +1,9 @@
 package com.pinu.familing.domain.chat.controller;
 
+import com.pinu.familing.domain.chat.dto.ChatRoomInfoDto;
+import com.pinu.familing.domain.chat.service.ChatService;
 import com.pinu.familing.domain.chat.dto.ChattingHistoryResponseDto;
 import com.pinu.familing.domain.chat.entity.Message;
-import com.pinu.familing.domain.chat.service.ChatService;
 import com.pinu.familing.global.oauth.dto.CustomOAuth2User;
 import com.pinu.familing.global.util.ApiUtils;
 import jakarta.validation.Valid;
@@ -12,9 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 
 @Slf4j
@@ -44,6 +45,7 @@ public class ChatController {
         String username = (String) accessor.getSessionAttributes().get("username");
         chatService.sendMessage(message, username);
     }
+
 
 
 //    // 메시지 전송 후 callback
