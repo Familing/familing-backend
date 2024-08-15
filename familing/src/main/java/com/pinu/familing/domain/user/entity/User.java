@@ -43,7 +43,6 @@ public class User extends BaseEntity {
     @JoinColumn(name = "family_id")
     private Family family;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
