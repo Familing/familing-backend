@@ -1,11 +1,11 @@
-package com.pinu.familing.domain.userstatus.service;
+package com.pinu.familing.domain.status.service;
 
 import com.pinu.familing.domain.user.entity.User;
 import com.pinu.familing.domain.user.repository.UserRepository;
-import com.pinu.familing.domain.userstatus.dto.UserstatusRequest;
-import com.pinu.familing.domain.userstatus.dto.UserstatusResponse;
-import com.pinu.familing.domain.userstatus.entity.Userstatus;
-import com.pinu.familing.domain.userstatus.repository.UserstatusRepository;
+import com.pinu.familing.domain.status.dto.StatusRequest;
+import com.pinu.familing.domain.status.dto.StatusResponse;
+import com.pinu.familing.domain.status.entity.Status;
+import com.pinu.familing.domain.status.repository.StatusRepository;
 import com.pinu.familing.global.error.CustomException;
 import com.pinu.familing.global.error.ExceptionCode;
 import lombok.RequiredArgsConstructor;
@@ -16,23 +16,23 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class UserstatusService {
+public class StatusService {
 
     public final UserRepository userRepository;
-    public final UserstatusRepository userstatusRepository;
+    public final StatusRepository StatusRepository;
 
     //상태 리스트 조회
-    public List<UserstatusResponse> getUserstatusList() {
-        return userstatusRepository.findAll().stream().map(UserstatusResponse::new)
+    public List<StatusResponse> getStatusList() {
+        return StatusRepository.findAll().stream().map(StatusResponse::new)
                 .collect(Collectors.toList());
     }
 
-    public void changeUserstatus(String username, UserstatusRequest userstatusRequest) {
+    public void changeUserStatus(String username, StatusRequest StatusRequest) {
         User user = getUserWithFamily(username);
-        Userstatus userstatus = userstatusRepository.findById(userstatusRequest.id())
-                .orElseThrow(() -> new CustomException(ExceptionCode.USERSTATUS_NOT_FOUND));
+        Status status = StatusRepository.findById(StatusRequest.id())
+                .orElseThrow(() -> new CustomException(ExceptionCode.STATUS_NOT_FOUND));
 
-        user.changeStatus(userstatus);
+        user.changeStatus(status);
 
         userRepository.save(user);
 

@@ -1,4 +1,4 @@
-package com.pinu.familing.domain.userstatus.entity;
+package com.pinu.familing.domain.status.entity;
 
 import com.pinu.familing.domain.BaseEntity;
 import jakarta.persistence.Entity;
@@ -15,12 +15,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Userstatus extends BaseEntity {
+public class Status extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String text;
-    
+
 }

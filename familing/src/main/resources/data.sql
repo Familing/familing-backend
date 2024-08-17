@@ -27,11 +27,11 @@ INSERT INTO snapshot_title (title)
 VALUES ('테스트용10');
 
 
-INSERT INTO userstatus (text)
+INSERT INTO status (text)
 VALUES ('공부 중');
-INSERT INTO userstatus (text)
+INSERT INTO status (text)
 VALUES ('노는 중');
-INSERT INTO userstatus (text)
+INSERT INTO status (text)
 VALUES ('쉬는 중');
-INSERT INTO userstatus (text)
+INSERT INTO status (text)
 VALUES ('일하는 중');

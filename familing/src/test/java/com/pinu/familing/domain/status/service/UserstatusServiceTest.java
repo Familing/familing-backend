@@ -1,13 +1,13 @@
-package com.pinu.familing.domain.userstatus.service;
+package com.pinu.familing.domain.status.service;
     
 import com.pinu.familing.IntegrationTestSupport;
 import com.pinu.familing.domain.family.entity.Family;
 import com.pinu.familing.domain.family.repository.FamilyRepository;
 import com.pinu.familing.domain.user.entity.User;
 import com.pinu.familing.domain.user.repository.UserRepository;
-import com.pinu.familing.domain.userstatus.dto.UserstatusRequest;
-import com.pinu.familing.domain.userstatus.entity.Userstatus;
-import com.pinu.familing.domain.userstatus.repository.UserstatusRepository;
+import com.pinu.familing.domain.status.dto.StatusRequest;
+import com.pinu.familing.domain.status.entity.Status;
+import com.pinu.familing.domain.status.repository.StatusRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,30 +17,30 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UserstatusServiceTest extends IntegrationTestSupport {
+class StatusServiceTest extends IntegrationTestSupport {
 
-    private final UserstatusService userstatusService;
+    private final StatusService StatusService;
     private final UserRepository userRepository;
-    private final UserstatusRepository userstatusRepository;
+    private final StatusRepository StatusRepository;
     private final FamilyRepository familyRepository;
 
     @Autowired
-    UserstatusServiceTest(UserstatusService userstatusService,
+    StatusServiceTest(StatusService StatusService,
                           UserRepository userRepository,
-                          UserstatusRepository userstatusRepository,
+                          StatusRepository StatusRepository,
                           FamilyRepository familyRepository) {
-        this.userstatusService = userstatusService;
+        this.StatusService = StatusService;
         this.userRepository = userRepository;
-        this.userstatusRepository = userstatusRepository;
+        this.StatusRepository = StatusRepository;
         this.familyRepository = familyRepository;
     }
 
     @BeforeEach
     public void setUp() {
-        userstatusRepository.save(Userstatus.builder().text("공부 중").build());
-        userstatusRepository.save(Userstatus.builder().text("노는 중").build());
-        userstatusRepository.save(Userstatus.builder().text("쉬는 중").build());
-        userstatusRepository.save(Userstatus.builder().text("일하는 중").build());
+        StatusRepository.save(Status.builder().text("공부 중").build());
+        StatusRepository.save(Status.builder().text("노는 중").build());
+        StatusRepository.save(Status.builder().text("쉬는 중").build());
+        StatusRepository.save(Status.builder().text("일하는 중").build());
 
         User user1 = userRepository.save(
                 User.builder()
@@ -66,22 +66,22 @@ class UserstatusServiceTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("상태리스트조회 메서드 테스트")
-    public void getUserstatusListTest() {
+    public void getStatusListTest() {
         //give
         //when
-        List<?> userstatusList =userstatusService.getUserstatusList();
+        List<?> StatusList =StatusService.getStatusList();
         //then
-        assertThat(userstatusList.size()).isEqualTo(4);
-        System.out.println("userstatusList = " + userstatusList);
+        assertThat(StatusList.size()).isEqualTo(4);
+        System.out.println("StatusList = " + StatusList);
     }
 
     @Test
     @DisplayName("유저의 상태 변경되는지 테스트")
-    public void changeUserstatusTest() {
+    public void changeStatusTest() {
         //give
-        UserstatusRequest userstatusRequest = new UserstatusRequest(1L);
+        StatusRequest statusRequest = new StatusRequest(1L);
         //when
-        userstatusService.changeUserstatus("user1", userstatusRequest);
+        StatusService.changeUserStatus("user1", statusRequest);
         //then
         assertThat(userRepository.findByUsername("user1").get().getStatus().getText()).isEqualTo("공부 중");
 
