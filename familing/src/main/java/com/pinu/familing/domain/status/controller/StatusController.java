@@ -33,10 +33,10 @@ public class StatusController {
     }
 
 
-    //가족과 유저의 상태 조회
+    //유저와 가족의 상태 조회
     @GetMapping("/family")
     public ApiUtils.ApiResult<?> changeFamilyStatus(@AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
-        statusService.getFamilystatusList(customOAuth2User.getName());
+        statusService.getFamilyStatusList(customOAuth2User.getName());
         return ApiUtils.success("User's status has been successfully changed.");
     }
 }
