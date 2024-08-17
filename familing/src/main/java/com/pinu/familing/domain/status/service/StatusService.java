@@ -29,9 +29,9 @@ public class StatusService {
                 .collect(Collectors.toList());
     }
 
-    public void changeUserStatus(String username, StatusRequest StatusRequest) {
+    public void changeUserStatus(String username, StatusRequest statusRequest) {
         User user = getUserWithFamily(username);
-        Status status = StatusRepository.findById(StatusRequest.id())
+        Status status = StatusRepository.findById(statusRequest.id())
                 .orElseThrow(() -> new CustomException(ExceptionCode.STATUS_NOT_FOUND));
 
         user.changeStatus(status);
