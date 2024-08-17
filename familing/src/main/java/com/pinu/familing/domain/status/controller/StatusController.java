@@ -16,26 +16,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/statuses")
 public class StatusController {
 
-    private final StatusService StatusService;
+    private final StatusService statusService;
 
     //상태조회
     @GetMapping()
     public ApiUtils.ApiResult<?> getStatusList() {
-        return ApiUtils.success(StatusService.getStatusList());
+        return ApiUtils.success(statusService.getStatusList());
     }
 
     //유저의 상태 변경
     @PatchMapping("/users")
-    public ApiUtils.ApiResult<?> changeStatus(@AuthenticationPrincipal CustomOAuth2User customOAuth2User,
+    public ApiUtils.ApiResult<?> changeUserStatus(@AuthenticationPrincipal CustomOAuth2User customOAuth2User,
                                                   StatusRequest statusRequest) {
-        StatusService.changeUserStatus(customOAuth2User.getName(), statusRequest);
+        statusService.changeUserStatus(customOAuth2User.getName(), statusRequest);
         return ApiUtils.success("User's status has been successfully changed.");
     }
 
 
     //가족과 유저의 상태 조회
     @GetMapping("/family")
-    public ApiUtils.ApiResult<?> changeFamilystatus() {
+    public ApiUtils.ApiResult<?> changeFamilyStatus(@AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
+        statusService.getFamilystatusList(customOAuth2User.getName());
         return ApiUtils.success("User's status has been successfully changed.");
     }
 }

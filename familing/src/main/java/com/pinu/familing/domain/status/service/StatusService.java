@@ -1,5 +1,6 @@
 package com.pinu.familing.domain.status.service;
 
+import com.pinu.familing.domain.status.dto.MyFamilyStatusResponse;
 import com.pinu.familing.domain.user.entity.User;
 import com.pinu.familing.domain.user.repository.UserRepository;
 import com.pinu.familing.domain.status.dto.StatusRequest;
@@ -38,6 +39,11 @@ public class StatusService {
 
     }
 
+    public MyFamilyStatusResponse getFamilystatusList(String username) {
+        User user = getUserWithFamily(username);
+        return new MyFamilyStatusResponse(user);
+    }
+
     private User getUserWithFamily(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
@@ -46,4 +52,5 @@ public class StatusService {
         }
         return user;
     }
+
 }
