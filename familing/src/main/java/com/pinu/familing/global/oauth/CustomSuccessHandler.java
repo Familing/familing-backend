@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -17,6 +18,9 @@ import java.util.Iterator;
 
 @Component
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+
+    @Value("${server.address}")
+    private String serverIp;
 
     private final JWTUtil jwtUtil;
 
@@ -43,12 +47,12 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.addCookie(createCookie("Authorization", token));
         // 로그인 성공 후 Redirect 주소
         if ("ROLE_PENDING_USER".equals(role)) { // Oauth만 인증되고 추가적인 요청 필요
-            response.sendRedirect("myapp://auth/login");
+            response.sendRedirect("localhost:8080:api/v1/user");
         } else if ("ROLE_USER".equals(role)) { // 회원가입 완료
             response.sendRedirect("myapp://callback/register-screen1");
         } else {
             //Role이 없으면 다시 로그인 창으로
-            response.sendRedirect("http://13.124.211.43/oauth2/authorization/kakao");
+            response.sendRedirect("http://"+serverIp+"/oauth2/authorization/kakao");
         }
     }
 
