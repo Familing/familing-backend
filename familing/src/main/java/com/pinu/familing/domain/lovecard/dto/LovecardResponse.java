@@ -6,10 +6,9 @@ import com.pinu.familing.domain.lovecard.entity.Lovecard;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record LovecardResponse(Long cardId,
-                               String text,
                                String imageUrl) {
 
     public LovecardResponse(Lovecard lovecard) {
-            this(lovecard.getId(), lovecard.getText(), lovecard.getImage());
+            this(lovecard.getId(),lovecard.getImage());
     }
 }
