@@ -3,6 +3,7 @@ package com.pinu.familing.domain.status.service;
 import com.pinu.familing.IntegrationTestSupport;
 import com.pinu.familing.domain.family.entity.Family;
 import com.pinu.familing.domain.family.repository.FamilyRepository;
+import com.pinu.familing.domain.status.dto.MyFamilyStatusResponse;
 import com.pinu.familing.domain.user.entity.User;
 import com.pinu.familing.domain.user.repository.UserRepository;
 import com.pinu.familing.domain.status.dto.StatusRequest;
@@ -19,9 +20,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class StatusServiceTest extends IntegrationTestSupport {
 
-    private final StatusService StatusService;
+    private final StatusService statusService;
     private final UserRepository userRepository;
-    private final StatusRepository StatusRepository;
+    private final StatusRepository statusRepository;
     private final FamilyRepository familyRepository;
 
     @Autowired
@@ -29,18 +30,18 @@ class StatusServiceTest extends IntegrationTestSupport {
                           UserRepository userRepository,
                           StatusRepository StatusRepository,
                           FamilyRepository familyRepository) {
-        this.StatusService = StatusService;
+        this.statusService = StatusService;
         this.userRepository = userRepository;
-        this.StatusRepository = StatusRepository;
+        this.statusRepository = StatusRepository;
         this.familyRepository = familyRepository;
     }
 
     @BeforeEach
     public void setUp() {
-        StatusRepository.save(Status.builder().text("공부 중").build());
-        StatusRepository.save(Status.builder().text("노는 중").build());
-        StatusRepository.save(Status.builder().text("쉬는 중").build());
-        StatusRepository.save(Status.builder().text("일하는 중").build());
+        statusRepository.save(Status.builder().text("공부 중").build());
+        statusRepository.save(Status.builder().text("노는 중").build());
+        statusRepository.save(Status.builder().text("쉬는 중").build());
+        statusRepository.save(Status.builder().text("일하는 중").build());
 
         User user1 = userRepository.save(
                 User.builder()
@@ -66,10 +67,10 @@ class StatusServiceTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("상태리스트조회 메서드 테스트")
-    public void getStatusListTest() {
+    void getStatusListTest() {
         //give
         //when
-        List<?> StatusList =StatusService.getStatusList();
+        List<?> StatusList =statusService.getStatusList();
         //then
         assertThat(StatusList.size()).isEqualTo(4);
         System.out.println("StatusList = " + StatusList);
@@ -77,13 +78,32 @@ class StatusServiceTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("유저의 상태 변경되는지 테스트")
-    public void changeStatusTest() {
+    void changeStatusTest() {
         //give
         StatusRequest statusRequest = new StatusRequest(1L);
         //when
-        StatusService.changeUserStatus("user1", statusRequest);
+        statusService.changeUserStatus("user1", statusRequest);
         //then
         assertThat(userRepository.findByUsername("user1").get().getStatus().getText()).isEqualTo("공부 중");
+
+    }
+
+    @Test
+    @DisplayName("유저 기준 가족의 상태조회")
+    void getFamilyStatusListTest() {
+        //give
+        Status status = statusRepository.findById(2L).get();
+        User user2 = userRepository.findByUsername("user2").get();
+        user2.changeStatus(status);
+
+        userRepository.save(user2);
+
+        System.out.println("user2 = " + user2.getFamily());
+        //when
+        MyFamilyStatusResponse myFamilyStatusResponse = statusService.getFamilyStatusList("user1");
+
+        //then
+        System.out.println("myFamilyStatusResponse = " + myFamilyStatusResponse);
 
     }
 
