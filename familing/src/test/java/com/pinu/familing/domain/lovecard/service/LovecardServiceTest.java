@@ -14,6 +14,7 @@ import com.pinu.familing.domain.lovecard.repository.LovecardRepository;
 import com.pinu.familing.domain.snapshot.dto.CustomPage;
 import com.pinu.familing.domain.user.entity.User;
 import com.pinu.familing.domain.user.repository.UserRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,6 +36,7 @@ class LovecardServiceTest extends IntegrationTestSupport {
     private UserRepository userRepository;
 
     @Test
+    @DisplayName("애정카드 페이지 보이는지 확인")
     void getLovecardPage() {
         //given
         Pageable pageable = PageRequest.of(0, 12);
@@ -50,6 +52,7 @@ class LovecardServiceTest extends IntegrationTestSupport {
 
 
     @Test
+    @DisplayName("특정 가족과 주고 받은 애정카드 정상 조회 테스트")
     void getLovecardByFamilyLogPage() throws JsonProcessingException {
         //given
         User receiver = userRepository.save(User.builder()
@@ -90,6 +93,7 @@ class LovecardServiceTest extends IntegrationTestSupport {
 
     @Test
     @Transactional
+    @DisplayName("원하는 가족에게 애정카드 보내주는 기능 정상 작동")
     void sendLoveCardToFamily() {
         //given
         User user1 = userRepository.save(User.builder()
