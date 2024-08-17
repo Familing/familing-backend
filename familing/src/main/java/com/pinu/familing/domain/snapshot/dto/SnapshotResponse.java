@@ -12,25 +12,25 @@ import java.util.stream.Collectors;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record SnapshotResponse(String Title,
                                LocalDate date,
-                               List<IndividualSnapshotImage> individualSnapshotImages) {
+                               List<UserSnapshot> SnapshotImageList) {
 
     public SnapshotResponse(Snapshot snapshot) {
         this(
                 snapshot.getSnapshotTitle().getTitle(),
                 snapshot.getDate(),
                 snapshot.getSnapshotImages().stream()
-                        .map(IndividualSnapshotImage::new)
+                        .map(UserSnapshot::new)
                         .collect(Collectors.toList())
         );
     }
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-    record IndividualSnapshotImage(String username,
+    record UserSnapshot(String username,
                                    String nickname,
                                    String userProfile,
                                    String snapshotImage) {
 
-        public IndividualSnapshotImage(SnapshotImage snapshotImage) {
+        public UserSnapshot(SnapshotImage snapshotImage) {
             this(snapshotImage.getUser().getUsername(), snapshotImage.getUser().getNickname(), snapshotImage.getUser().getImageUrl(), snapshotImage.getImageUrl());
         }
     }
