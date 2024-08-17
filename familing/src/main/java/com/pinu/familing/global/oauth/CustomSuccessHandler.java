@@ -19,8 +19,6 @@ import java.util.Iterator;
 @Component
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    @Value("${aws.myip}")
-    private String myIp;
 
     private final JWTUtil jwtUtil;
 
