@@ -35,7 +35,7 @@ public enum ExceptionCode {
     DAY_BAD_REQUEST(HttpStatus.BAD_REQUEST, "DAY 형식이 잘못되었습니다."),
 
     //사용자상태관련
-    USERSTATUS_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 상태값을 찾을 수 없습니다."),
+    STATUS_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 상태값을 찾을 수 없습니다."),
 
     ;
 

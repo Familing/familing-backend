@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -38,6 +39,10 @@ class StatusServiceTest extends IntegrationTestSupport {
 
     @BeforeEach
     public void setUp() {
+        statusRepository.deleteAll();
+        userRepository.deleteAll();
+        familyRepository.deleteAll();
+
         statusRepository.save(Status.builder().text("공부 중").build());
         statusRepository.save(Status.builder().text("노는 중").build());
         statusRepository.save(Status.builder().text("쉬는 중").build());
@@ -61,12 +66,16 @@ class StatusServiceTest extends IntegrationTestSupport {
 
         userRepository.save(user1);
         userRepository.save(user2);
+        familyRepository.save(family);
 
 
     }
 
+
+
     @Test
     @DisplayName("상태리스트조회 메서드 테스트")
+    @Transactional
     void getStatusListTest() {
         //give
         //when
@@ -78,6 +87,7 @@ class StatusServiceTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("유저의 상태 변경되는지 테스트")
+    @Transactional
     void changeStatusTest() {
         //give
         StatusRequest statusRequest = new StatusRequest(1L);
@@ -90,11 +100,20 @@ class StatusServiceTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("유저 기준 가족의 상태조회")
+    @Transactional
     void getFamilyStatusListTest() {
         //give
-        Status status = statusRepository.findById(2L).get();
+        Status status1 = statusRepository.findById(1L).get();
+        User user1 = userRepository.findByUsername("user1").get();
+        user1.changeStatus(status1);
+
+        userRepository.save(user1);
+
+
+
+        Status status2 = statusRepository.findById(2L).get();
         User user2 = userRepository.findByUsername("user2").get();
-        user2.changeStatus(status);
+        user2.changeStatus(status2);
 
         userRepository.save(user2);
 
