@@ -11,6 +11,7 @@ import com.pinu.familing.global.error.CustomException;
 import com.pinu.familing.global.error.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,7 +40,8 @@ public class StatusService {
 
     }
 
-    public MyFamilyStatusResponse getFamilystatusList(String username) {
+    @Transactional(readOnly = true)
+    public MyFamilyStatusResponse getFamilyStatusList(String username) {
         User user = getUserWithFamily(username);
         return new MyFamilyStatusResponse(user);
     }
