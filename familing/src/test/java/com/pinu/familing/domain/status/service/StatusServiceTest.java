@@ -9,6 +9,7 @@ import com.pinu.familing.domain.user.repository.UserRepository;
 import com.pinu.familing.domain.status.dto.StatusRequest;
 import com.pinu.familing.domain.status.entity.Status;
 import com.pinu.familing.domain.status.repository.StatusRepository;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,16 +26,19 @@ class StatusServiceTest extends IntegrationTestSupport {
     private final UserRepository userRepository;
     private final StatusRepository statusRepository;
     private final FamilyRepository familyRepository;
+    private final EntityManager entityManager;
 
     @Autowired
     StatusServiceTest(StatusService StatusService,
-                          UserRepository userRepository,
-                          StatusRepository StatusRepository,
-                          FamilyRepository familyRepository) {
+                      UserRepository userRepository,
+                      StatusRepository StatusRepository,
+                      FamilyRepository familyRepository,
+                      EntityManager entityManager) {
         this.statusService = StatusService;
         this.userRepository = userRepository;
         this.statusRepository = StatusRepository;
         this.familyRepository = familyRepository;
+        this.entityManager = entityManager;
     }
 
     @BeforeEach
@@ -64,10 +68,8 @@ class StatusServiceTest extends IntegrationTestSupport {
         user1.registerFamily(family);
         user2.registerFamily(family);
 
-        userRepository.save(user1);
-        userRepository.save(user2);
-        familyRepository.save(family);
-
+        entityManager.flush();
+        entityManager.clear();
 
     }
 
@@ -109,7 +111,7 @@ class StatusServiceTest extends IntegrationTestSupport {
 
         userRepository.save(user1);
 
-
+        System.out.println("user1.getFamily().getUsers() = " + user1.getFamily().getUsers());
 
         Status status2 = statusRepository.findById(2L).get();
         User user2 = userRepository.findByUsername("user2").get();
