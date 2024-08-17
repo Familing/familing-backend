@@ -1,44 +1,29 @@
 package com.pinu.familing.domain.snapshot.service;
 
+import com.pinu.familing.IntegrationTestSupport;
 import com.pinu.familing.domain.family.entity.Family;
 import com.pinu.familing.domain.family.handler.FamilyCodeHandler;
 import com.pinu.familing.domain.family.repository.FamilyRepository;
-import com.pinu.familing.domain.snapshot.repository.SnapshotImageRepository;
-import com.pinu.familing.domain.snapshot.repository.SnapshotRepository;
 import com.pinu.familing.domain.user.entity.User;
 import com.pinu.familing.domain.user.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
-class SnapshotServiceTest {
+class SnapshotServiceTest extends IntegrationTestSupport {
 
-    private final SnapshotImageRepository snapshotImageRepository;
-    private final SnapshotRepository snapshotRepository;
     private final UserRepository userRepository;
-    private final TitleService titleService;
     private final FamilyRepository familyRepository;
-    private final SnapshotService snapshotService;
     private final EntityManager entityManager;
 
     @Autowired
-    public SnapshotServiceTest(SnapshotImageRepository snapshotImageRepository,
-                               SnapshotRepository snapshotRepository,
-                               UserRepository userRepository,
-                               TitleService titleService,
+    public SnapshotServiceTest(UserRepository userRepository,
                                FamilyRepository familyRepository,
-                               SnapshotService snapshotService,
                                EntityManager entityManager1) {
 
-        this.snapshotImageRepository = snapshotImageRepository;
-        this.snapshotRepository = snapshotRepository;
         this.userRepository = userRepository;
-        this.titleService = titleService;
         this.familyRepository = familyRepository;
-        this.snapshotService = snapshotService;
         this.entityManager = entityManager1;
     }
 
