@@ -48,9 +48,6 @@ public class UserService {
 
         //내부에 예외 처리 부분 넣어놨습니다.
         user.registerFamily(family);
-
-        snapshotService.createSnapshotDueToFamilyRegistration(user.getUsername());
-
     }
 
     @Transactional
