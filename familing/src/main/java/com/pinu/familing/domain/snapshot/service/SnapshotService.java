@@ -82,7 +82,7 @@ public class SnapshotService {
     //스냅샷 페이지 조회
     public Page<SnapshotResponse> provideSnapshotPage(LocalDate day, Pageable pageable, String username) {
         Family family = getFamily(username);
-        return snapshotRepository.findAllByFamilyAndDateBefore(family, day, pageable)
+        return snapshotRepository.findAllByFamilyAndDateLessThanEqual(family, day, pageable)
                 .map(SnapshotResponse::new);
     }
 
