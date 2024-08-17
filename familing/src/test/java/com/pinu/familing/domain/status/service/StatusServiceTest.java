@@ -43,10 +43,6 @@ class StatusServiceTest extends IntegrationTestSupport {
 
     @BeforeEach
     public void setUp() {
-        statusRepository.deleteAll();
-        userRepository.deleteAll();
-        familyRepository.deleteAll();
-
         statusRepository.save(Status.builder().text("공부 중").build());
         statusRepository.save(Status.builder().text("노는 중").build());
         statusRepository.save(Status.builder().text("쉬는 중").build());
@@ -91,12 +87,13 @@ class StatusServiceTest extends IntegrationTestSupport {
     @DisplayName("유저의 상태 변경되는지 테스트")
     @Transactional
     void changeStatusTest() {
+        entityManager.clear();
         //give
-        StatusRequest statusRequest = new StatusRequest(1L);
+        StatusRequest statusRequest = new StatusRequest(statusRepository.findByText("쉬는 중").get().getId());
         //when
         statusService.changeUserStatus("user1", statusRequest);
         //then
-        assertThat(userRepository.findByUsername("user1").get().getStatus().getText()).isEqualTo("공부 중");
+        assertThat(userRepository.findByUsername("user1").get().getStatus().getText()).isEqualTo("쉬는 중");
 
     }
 
@@ -105,7 +102,7 @@ class StatusServiceTest extends IntegrationTestSupport {
     @Transactional
     void getFamilyStatusListTest() {
         //give
-        Status status1 = statusRepository.findById(1L).get();
+        Status status1 = statusRepository.findByText("공부 중").get();
         User user1 = userRepository.findByUsername("user1").get();
         user1.changeStatus(status1);
 
@@ -113,7 +110,7 @@ class StatusServiceTest extends IntegrationTestSupport {
 
         System.out.println("user1.getFamily().getUsers() = " + user1.getFamily().getUsers());
 
-        Status status2 = statusRepository.findById(2L).get();
+        Status status2 = statusRepository.findByText("노는 중").get();
         User user2 = userRepository.findByUsername("user2").get();
         user2.changeStatus(status2);
 
