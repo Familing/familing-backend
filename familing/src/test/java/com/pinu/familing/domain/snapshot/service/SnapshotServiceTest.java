@@ -29,6 +29,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -100,7 +101,7 @@ class SnapshotServiceTest extends IntegrationTestSupport {
                 .nickname("언니")
                 .build());
 
-        Family family = familyRepository.save(new Family("우리가족", FamilyCodeHandler.createCode(user1.getUsername())));
+        Family family = familyRepository.save(new Family("우리가족", "code"));
 
         user1.registerFamily(family);
         user2.registerFamily(family);
@@ -150,9 +151,6 @@ class SnapshotServiceTest extends IntegrationTestSupport {
     @Transactional
     void getSnapshotPage() {
         //given
-        User user1 = userRepository.findByUsername("user1").get();
-        User user2 = userRepository.findByUsername("user2").get();
-
         LocalDate today = LocalDate.now();
 
         snapshotService.registerSnapshotImage(today, "user1", new SnapshotImageRequest("테스트용 이미지"));
@@ -185,6 +183,34 @@ class SnapshotServiceTest extends IntegrationTestSupport {
             e.printStackTrace();
         }
     }
+
+
+    @Test
+    @DisplayName("스냅샷 알람 시간 요청")
+    @Transactional
+    void getSnapshotAlarmTimeTest() {
+        //given
+        //when
+        //then
+        assertThat(snapshotService.getSnapshotAlarmTime("user1")).isNotNull();
+        System.out.println("snapshotAlarmTime(user1) = " + snapshotService.getSnapshotAlarmTime("user1"));
+    }
+
+    @Test
+    @DisplayName("스냅샷 알람 시간 변경")
+    @Transactional
+    void changeAlarmTimeTest() {
+        //given
+        LocalTime localTime = LocalTime.MIDNIGHT;
+
+        //when
+        snapshotService.changeAlarmTime("user1", localTime);
+
+        //then
+        assertThat(familyRepository.findByCode("code").get().getSnapshotAlarmTime()).isEqualTo(localTime);
+    }
+
+
 
 
 
