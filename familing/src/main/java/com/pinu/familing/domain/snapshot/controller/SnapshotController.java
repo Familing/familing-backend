@@ -69,7 +69,8 @@ public class SnapshotController {
     // 스냅샷 알람 조회
     @GetMapping("/alarm")
     public ApiUtils.ApiResult<?> getSnapshotAlarmTime(@AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
-        return ApiUtils.success(snapshotService.getSnapshotAlarmTime(customOAuth2User.getName()));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        return ApiUtils.success(snapshotService.getSnapshotAlarmTime(customOAuth2User.getName()).format(formatter));
     }
 
 
