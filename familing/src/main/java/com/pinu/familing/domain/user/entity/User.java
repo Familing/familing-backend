@@ -4,7 +4,6 @@ import com.pinu.familing.domain.BaseEntity;
 import com.pinu.familing.domain.chat.entity.ChatRoom;
 import com.pinu.familing.domain.family.entity.Family;
 import com.pinu.familing.domain.user.Gender;
-import com.pinu.familing.domain.user.dto.ImageUrl;
 import com.pinu.familing.domain.user.dto.Nickname;
 import com.pinu.familing.domain.user.dto.Realname;
 import com.pinu.familing.global.error.CustomException;
@@ -34,7 +33,7 @@ public class User extends BaseEntity {
     // 유저의 실제 이흠
     private String realname;
     //프로필
-    private String imageUrl;
+    private String profileImg;
 
     @Enumerated(value = EnumType.STRING)
     private Gender gender;
@@ -50,11 +49,11 @@ public class User extends BaseEntity {
     private String role;
 
     @Builder
-    private User(String username, String nickname, String realname, String imageUrl, String role, Gender gender, Family family) {
+    private User(String username, String nickname, String realname, String profileImg, String role, Gender gender, Family family) {
         this.username = username;
         this.nickname = nickname;
         this.realname = realname;
-        this.imageUrl = imageUrl;
+        this.profileImg = profileImg;
         this.role = role;
         this.gender = gender;
         this.family = family;
@@ -81,8 +80,8 @@ public class User extends BaseEntity {
         this.realname = realname.realname();
     }
 
-    public void updateImageUrl(ImageUrl imageUrl) {
-        this.imageUrl = imageUrl.imageUrl();
+    public void updateImageUrl(String profileImg) {
+        this.profileImg = profileImg;
     }
 
     @Override
