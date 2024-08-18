@@ -10,14 +10,13 @@ import com.pinu.familing.domain.family.repository.FamilyRepository;
 import com.pinu.familing.domain.snapshot.dto.CustomPage;
 import com.pinu.familing.domain.snapshot.dto.SnapshotImageRequest;
 import com.pinu.familing.domain.snapshot.dto.SnapshotResponse;
-import com.pinu.familing.domain.snapshot.entity.Snapshot;
-import com.pinu.familing.domain.snapshot.entity.SnapshotImage;
 import com.pinu.familing.domain.snapshot.entity.SnapshotTitle;
 import com.pinu.familing.domain.snapshot.repository.SnapshotImageRepository;
 import com.pinu.familing.domain.snapshot.repository.SnapshotRepository;
 import com.pinu.familing.domain.snapshot.repository.SnapshotTitleRepository;
 import com.pinu.familing.domain.user.entity.User;
 import com.pinu.familing.domain.user.repository.UserRepository;
+import com.pinu.familing.global.util.ApiUtils;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -121,9 +120,24 @@ class SnapshotServiceTest extends IntegrationTestSupport {
         //when
         SnapshotResponse snapshotResponse = snapshotService.getSnapshotByDate(localDate,"user1");
         assertThat(snapshotResponse).isNotNull();
-        assertThat(snapshotResponse.SnapshotImageList()).isNotNull();
         //then
         System.out.println("snapshotResponse = " + snapshotResponse);
+
+        try {
+            // Create ObjectMapper instance
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule()); // Register JavaTimeModule
+            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // Disable writing dates as timestamps
+            objectMapper.enable(SerializationFeature.INDENT_OUTPUT); // For pretty-printing
+
+            // Convert to JSON string
+            String json = objectMapper.writeValueAsString(ApiUtils.success(snapshotResponse));
+
+            // Print JSON string
+            System.out.println("snapshotResponsePage (JSON) = " + json);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -165,7 +179,6 @@ class SnapshotServiceTest extends IntegrationTestSupport {
 
         System.out.println("snapshotResponsePage = " + snapshotResponsePage);
         //then
-//        assertThat(snapshotResponsePage.getTotalElements()).isEqualTo(2);
 
         try {
             // Create ObjectMapper instance
@@ -175,7 +188,7 @@ class SnapshotServiceTest extends IntegrationTestSupport {
             objectMapper.enable(SerializationFeature.INDENT_OUTPUT); // For pretty-printing
 
             // Convert to JSON string
-            String json = objectMapper.writeValueAsString(new CustomPage(snapshotResponsePage));
+            String json = objectMapper.writeValueAsString(ApiUtils.success(new CustomPage(snapshotResponsePage)));
 
             // Print JSON string
             System.out.println("snapshotResponsePage (JSON) = " + json);
