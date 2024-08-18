@@ -49,7 +49,7 @@ public class SnapshotService {
     public Page<SnapshotResponse> getSnapshotPage(LocalDate day, Pageable pageable, String username) {
         Family family = getFamily(username);
         return snapshotRepository.findAllByFamilyAndDateLessThanEqual(family, day, pageable)
-                .map(SnapshotResponse::new);
+                .map(snapshot -> new SnapshotResponse(username,snapshot));
     }
 
     // 특정 날짜 스냅샷 조회 (스냅샷이 없으면 생성하고, 가족 구성원 모두의 스냅샷 이미지 생성)
@@ -58,7 +58,7 @@ public class SnapshotService {
         Family family = getFamily(username);
         Snapshot snapshot = snapshotRepository.findByFamilyAndDate(family, date)
                 .orElseGet(() -> createSnapshotFamily(family, date));
-        return new SnapshotResponse(snapshot);
+        return new SnapshotResponse(username,snapshot);
     }
 
     // 스냅샷 엔티티 생성하기
