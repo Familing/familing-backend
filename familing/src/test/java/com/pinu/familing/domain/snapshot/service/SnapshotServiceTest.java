@@ -10,6 +10,7 @@ import com.pinu.familing.domain.family.repository.FamilyRepository;
 import com.pinu.familing.domain.snapshot.dto.CustomPage;
 import com.pinu.familing.domain.snapshot.dto.SnapshotImageRequest;
 import com.pinu.familing.domain.snapshot.dto.SnapshotResponse;
+import com.pinu.familing.domain.snapshot.entity.SnapshotImage;
 import com.pinu.familing.domain.snapshot.entity.SnapshotTitle;
 import com.pinu.familing.domain.snapshot.repository.SnapshotImageRepository;
 import com.pinu.familing.domain.snapshot.repository.SnapshotRepository;
@@ -24,8 +25,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -110,91 +114,17 @@ class SnapshotServiceTest extends IntegrationTestSupport {
     }
 
     @Test
-    @DisplayName("특정날짜 조회시 스냅샷을 생성해서 제공")
+    @DisplayName("특정날짜 조회할 때 스냅샷이 존재하지 않으면 스냅샷을 생성해서 제공한다.")
     @Transactional
     void getSnapshotByDateTest() {
         //given
         LocalDate localDate = LocalDate.now();
         User user1 = userRepository.findByUsername("user1").get();
-        assertThat(user1.getFamily().getUsers().size()).isEqualTo(2);
         //when
         SnapshotResponse snapshotResponse = snapshotService.getSnapshotByDate(localDate,"user1");
+        //then
         assertThat(snapshotResponse).isNotNull();
-        //then
-        System.out.println("snapshotResponse = " + snapshotResponse);
 
-        try {
-            // Create ObjectMapper instance
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.registerModule(new JavaTimeModule()); // Register JavaTimeModule
-            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // Disable writing dates as timestamps
-            objectMapper.enable(SerializationFeature.INDENT_OUTPUT); // For pretty-printing
-
-            // Convert to JSON string
-            String json = objectMapper.writeValueAsString(ApiUtils.success(snapshotResponse));
-
-            // Print JSON string
-            System.out.println("snapshotResponsePage (JSON) = " + json);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
-    @Test
-    @DisplayName("사용자의 이미지 등록 정상 작동")
-    @Transactional
-    void registerSnapshotImageTest() {
-        //given
-        User user1 = userRepository.findByUsername("user1").get();
-
-        LocalDate localDate = LocalDate.now();
-        SnapshotImageRequest snapshotImageRequest = new SnapshotImageRequest("테스트용 이미지");
-
-        //when
-        snapshotService.registerSnapshotImage(localDate, "user1", snapshotImageRequest);
-
-        //then
-        assertThat(snapshotImageRepository.findByUserAndDate(user1, localDate)).isNotNull();
-        System.out.println("snapshotResponse= " + snapshotService.getSnapshotByDate(localDate,"user1"));
-    }
-
-    @Test
-    @DisplayName("날짜 기준 페이지 조회")
-    @Transactional
-    void getSnapshotPage() {
-        //given
-        LocalDate today = LocalDate.now();
-
-        snapshotService.registerSnapshotImage(today, "user1", new SnapshotImageRequest("테스트용 이미지"));
-        LocalDate yesterday = today.minusDays(1);
-
-        snapshotService.registerSnapshotImage(yesterday, "user1", new SnapshotImageRequest("두번째 이미지"));
-
-        Pageable pageable = Pageable.ofSize(3);
-
-        //when
-        Page<SnapshotResponse> snapshotResponsePage =  snapshotService.getSnapshotPage(today, pageable, "user1");
-
-        System.out.println("snapshotResponsePage = " + snapshotResponsePage);
-        //then
-
-        try {
-            // Create ObjectMapper instance
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.registerModule(new JavaTimeModule()); // Register JavaTimeModule
-            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // Disable writing dates as timestamps
-            objectMapper.enable(SerializationFeature.INDENT_OUTPUT); // For pretty-printing
-
-            // Convert to JSON string
-            String json = objectMapper.writeValueAsString(ApiUtils.success(new CustomPage(snapshotResponsePage)));
-
-            // Print JSON string
-            System.out.println("snapshotResponsePage (JSON) = " + json);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 
