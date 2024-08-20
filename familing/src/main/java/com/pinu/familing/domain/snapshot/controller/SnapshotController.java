@@ -15,12 +15,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.beans.PropertyEditorSupport;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+
+import static com.pinu.familing.global.error.ExceptionCode.REQUIRE_IMG;
 
 @RestController
 @RequestMapping("/api/v1/snapshots")
@@ -50,8 +53,11 @@ public class SnapshotController {
     @PostMapping("/{day}/users")
     public ApiUtils.ApiResult<?> registerSnapshotImage(@PathVariable("day") LocalDate day,
                                                        @AuthenticationPrincipal CustomOAuth2User customOAuth2User,
-                                                       @Valid @RequestBody SnapshotImageRequest snapshotImageRequest) {
-        snapshotService.registerSnapshotImage(day, customOAuth2User.getName(), snapshotImageRequest);
+                                                       @RequestPart("snapshot_img") MultipartFile snapshotImage) {
+        if (snapshotImage.isEmpty()) {
+            throw new CustomException(REQUIRE_IMG);
+        }
+        snapshotService.registerSnapshotImage(day, customOAuth2User.getName(), snapshotImage);
         return ApiUtils.success("Image has been registered successfully.");
     }
 
