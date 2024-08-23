@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Builder
 @Entity
 @Getter
 @NoArgsConstructor
@@ -31,7 +30,6 @@ public class SnapshotImage extends BaseEntity {
 
     private LocalDate date;
 
-    @Builder.Default
     @Column(nullable = false)
     private String snapshotImg;
 

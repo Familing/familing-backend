@@ -31,7 +31,7 @@ public record MyFamilyStatusResponse(UserStatusResponse me,
             this(
                     user.getUsername(),
                     user.getNickname(),
-                    user.getImageUrl(),
+                    user.getProfileImg(),
                     user.getStatus().getText()// status가 null인 경우 "EMPTY"로 설정
             );
         }

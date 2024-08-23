@@ -5,7 +5,6 @@ import com.pinu.familing.domain.family.repository.FamilyRepository;
 import com.pinu.familing.domain.snapshot.service.SnapshotService;
 import com.pinu.familing.domain.status.entity.Status;
 import com.pinu.familing.domain.status.repository.StatusRepository;
-import com.pinu.familing.domain.user.dto.ImageUrl;
 import com.pinu.familing.domain.user.dto.Nickname;
 import com.pinu.familing.domain.user.dto.Realname;
 import com.pinu.familing.domain.user.dto.UserResponse;
@@ -52,7 +51,6 @@ public class UserService {
 
         user.registerFamily(family);
         setDefaultStatusValue(user);
-        snapshotService.createSnapshotDueToFamilyRegistration(user.getUsername());
     }
 
     private void setDefaultStatusValue(User user) {
