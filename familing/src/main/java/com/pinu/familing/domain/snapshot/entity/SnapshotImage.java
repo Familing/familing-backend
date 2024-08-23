@@ -33,10 +33,19 @@ public class SnapshotImage extends BaseEntity {
 
     @Builder.Default
     @Column(nullable = false)
-    private String imageUrl = "EMPTY";
+    private String snapshotImg;
 
-    public void updateImage(String imageUrl) {
-        this.imageUrl = imageUrl;
+
+    @Builder
+    public SnapshotImage(Snapshot snapshot, User user, String snapshotImg,LocalDate date) {
+        this.snapshot = snapshot;
+        this.user = user;
+        this.snapshotImg = snapshotImg;
+        this.date = date;
+    }
+
+    public void updateImage(String snapshotImg) {
+        this.snapshotImg = snapshotImg;
     }
 
     @Override
@@ -46,7 +55,7 @@ public class SnapshotImage extends BaseEntity {
                 ", snapshot=" + snapshot +
                 ", user=" + user +
                 ", date=" + date +
-                ", imageUrl='" + imageUrl + '\'' +
+                ", imageUrl='" + snapshotImg + '\'' +
                 '}';
     }
 

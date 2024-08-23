@@ -10,6 +10,7 @@ import com.pinu.familing.domain.family.repository.FamilyRepository;
 import com.pinu.familing.domain.snapshot.dto.CustomPage;
 import com.pinu.familing.domain.snapshot.dto.SnapshotImageRequest;
 import com.pinu.familing.domain.snapshot.dto.SnapshotResponse;
+import com.pinu.familing.domain.snapshot.entity.SnapshotImage;
 import com.pinu.familing.domain.snapshot.entity.SnapshotTitle;
 import com.pinu.familing.domain.snapshot.repository.SnapshotImageRepository;
 import com.pinu.familing.domain.snapshot.repository.SnapshotRepository;
@@ -24,8 +25,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -110,12 +121,18 @@ class SnapshotServiceTest extends IntegrationTestSupport {
     }
 
     @Test
+    @DisplayName("특정날짜 조회할 때 스냅샷이 존재하지 않으면 스냅샷을 생성해서 제공한다.")
     @DisplayName("특정날짜 조회시 스냅샷을 생성해서 제공")
     @Transactional
     void getSnapshotByDateTest() {
         //given
         LocalDate localDate = LocalDate.now();
         User user1 = userRepository.findByUsername("user1").get();
+        //when
+        SnapshotResponse snapshotResponse = snapshotService.getSnapshotByDate(localDate,"user1");
+        //then
+        assertThat(snapshotResponse).isNotNull();
+
         assertThat(user1.getFamily().getUsers().size()).isEqualTo(2);
         //when
         SnapshotResponse snapshotResponse = snapshotService.getSnapshotByDate(localDate,"user1");

@@ -38,7 +38,7 @@ public record SnapshotResponse(String Title,
                         String snapshotImg) {
 
         public UserSnapshot(SnapshotImage snapshotImage) {
-            this(snapshotImage.getUser().getUsername(), snapshotImage.getUser().getNickname(), snapshotImage.getUser().getImageUrl(), snapshotImage.getImageUrl());
+            this(snapshotImage.getUser().getUsername(), snapshotImage.getUser().getNickname(), snapshotImage.getUser().getProfileImg(), snapshotImage.getSnapshotImg());
         }
     }
 

@@ -12,11 +12,14 @@ import com.pinu.familing.domain.user.entity.User;
 import com.pinu.familing.domain.user.repository.UserRepository;
 import com.pinu.familing.global.error.CustomException;
 import com.pinu.familing.global.error.ExceptionCode;
+import com.pinu.familing.global.s3.AwsS3Service;
+import com.pinu.familing.global.s3.S3ImgDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -29,19 +32,21 @@ public class SnapshotService {
     private final SnapshotRepository snapshotRepository;
     private final UserRepository userRepository;
     private final TitleService titleService;
+    private final AwsS3Service awsS3Service;
 
 
     // 스냅샷에 이미지 등록하기 (스냅샷 이미지가 없으면 생성)
     @Transactional
-    public void registerSnapshotImage(LocalDate day, String username, SnapshotImageRequest snapshotImageRequest) {
+    public void registerSnapshotImage(LocalDate day, String username, MultipartFile requestSnapshotImg) {
         User user = getUser(username);
         Snapshot snapshot = snapshotRepository.findByFamilyAndDate(user.getFamily(), day)
                 .orElseGet(() -> createSnapshotFamily(user.getFamily(), day));
 
+        S3ImgDto s3ImgDto = awsS3Service.uploadFiles(requestSnapshotImg);
         SnapshotImage snapshotImage = snapshotImageRepository.findByUserAndDate(user, day)
                 .orElseGet(() -> createSnapshotImage(snapshot, user, day));
 
-        snapshotImage.updateImage(snapshotImageRequest.imageUrl());
+        snapshotImage.updateImage(s3ImgDto.getUploadFileUrl());
     }
 
     // 스냅샷 페이지 조회
@@ -84,7 +89,7 @@ public class SnapshotService {
                                 .user(user)
                                 .snapshot(snapshot)
                                 .date(date)
-                                .imageUrl("EMPTY")
+                                .snapshotImg("EMPTY")
                                 .build())
                 );
 

@@ -19,8 +19,6 @@ import java.util.Iterator;
 @Component
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    @Value("${server.address}")
-    private String serverIp;
 
     private final JWTUtil jwtUtil;
 
@@ -47,12 +45,12 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.addCookie(createCookie("Authorization", token));
         // 로그인 성공 후 Redirect 주소
         if ("ROLE_PENDING_USER".equals(role)) { // Oauth만 인증되고 추가적인 요청 필요
-            response.sendRedirect("localhost:8080:api/v1/user");
+            response.sendRedirect("http://127.0.0.1:8080/api/v1/user");
         } else if ("ROLE_USER".equals(role)) { // 회원가입 완료
             response.sendRedirect("myapp://callback/register-screen1");
         } else {
             //Role이 없으면 다시 로그인 창으로
-            response.sendRedirect("http://"+serverIp+"/oauth2/authorization/kakao");
+            response.sendRedirect("http://localhost:8080/oauth2/authorization/kakao");
         }
     }
 
