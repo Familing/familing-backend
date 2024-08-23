@@ -3,6 +3,8 @@ package com.pinu.familing.domain.user.service;
 import com.pinu.familing.domain.family.entity.Family;
 import com.pinu.familing.domain.family.repository.FamilyRepository;
 import com.pinu.familing.domain.snapshot.service.SnapshotService;
+import com.pinu.familing.domain.status.entity.Status;
+import com.pinu.familing.domain.status.repository.StatusRepository;
 import com.pinu.familing.domain.user.dto.ImageUrl;
 import com.pinu.familing.domain.user.dto.Nickname;
 import com.pinu.familing.domain.user.dto.Realname;
@@ -25,6 +27,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final FamilyRepository familyRepository;
     private final SnapshotService snapshotService;
+    private final StatusRepository statusRepository;
 
 
     public UserResponse giveUserInformation(CustomOAuth2User customOAuth2User) {
@@ -43,8 +46,15 @@ public class UserService {
         Family family = familyRepository.findByCode(code)
                 .orElseThrow(() -> new CustomException(ExceptionCode.INVALID_CODE));
 
-        //내부에 예외 처리 부분 넣어놨습니다.
         user.registerFamily(family);
+        setDefaultStatusValue(user);
+        snapshotService.createSnapshotDueToFamilyRegistration(user.getUsername());
+    }
+
+    private void setDefaultStatusValue(User user) {
+        Status status = statusRepository.findByText("쉬는 중")
+                .orElseThrow(() -> new CustomException(ExceptionCode.STATUS_NOT_FOUND));
+        user.changeStatus(status);
     }
 
     @Transactional
