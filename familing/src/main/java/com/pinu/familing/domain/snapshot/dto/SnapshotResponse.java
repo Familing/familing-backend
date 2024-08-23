@@ -42,6 +42,5 @@ public record SnapshotResponse(String Title,
         }
     }
 
-
 }
 

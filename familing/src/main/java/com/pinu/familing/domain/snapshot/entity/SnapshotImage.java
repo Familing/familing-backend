@@ -3,15 +3,18 @@ package com.pinu.familing.domain.snapshot.entity;
 import com.pinu.familing.domain.BaseEntity;
 import com.pinu.familing.domain.user.entity.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+@Builder
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class SnapshotImage extends BaseEntity {
 
     @Id
@@ -28,6 +31,7 @@ public class SnapshotImage extends BaseEntity {
 
     private LocalDate date;
 
+    @Builder.Default
     @Column(nullable = false)
     private String snapshotImg;
 
@@ -54,4 +58,5 @@ public class SnapshotImage extends BaseEntity {
                 ", imageUrl='" + snapshotImg + '\'' +
                 '}';
     }
+
 }

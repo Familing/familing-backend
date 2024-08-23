@@ -6,6 +6,7 @@ import com.pinu.familing.domain.family.entity.Family;
 import com.pinu.familing.domain.user.Gender;
 import com.pinu.familing.domain.user.dto.Nickname;
 import com.pinu.familing.domain.user.dto.Realname;
+import com.pinu.familing.domain.status.entity.Status;
 import com.pinu.familing.global.error.CustomException;
 import com.pinu.familing.global.error.ExceptionCode;
 import jakarta.persistence.*;
@@ -41,6 +42,10 @@ public class User extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "family_id")
     private Family family;
+
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    private Status status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_room_id")
@@ -82,6 +87,10 @@ public class User extends BaseEntity {
 
     public void updateImageUrl(String profileImg) {
         this.profileImg = profileImg;
+    }
+
+    public void changeStatus(Status status) {
+        this.status = status;
     }
 
     @Override
