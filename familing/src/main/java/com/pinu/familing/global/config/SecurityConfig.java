@@ -79,7 +79,7 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/h2-console/**", "/main.html", "/ws").permitAll()
+                        .requestMatchers("/", "/h2-console/**", "/main.html", "/ws", "/oauth2/authorization/kakao").permitAll()
                         .anyRequest().authenticated());
 
         //세션 설정 : STATELESS
