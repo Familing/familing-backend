@@ -50,7 +50,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             response.sendRedirect("myapp://callback/register-screen1");
         } else {
             //Role이 없으면 다시 로그인 창으로
-            response.sendRedirect("http://localhost:8080/oauth2/authorization/kakao");
+            response.sendRedirect("http://3.39.254.198:8080/oauth2/authorization/kakao");
         }
     }
 
