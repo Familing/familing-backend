@@ -41,9 +41,9 @@ public class UserService {
 
 
     @Transactional
-    public void addFamilyToUser(CustomOAuth2User customOAuth2User, String code) {
+    public void addFamilyToUser(String username, String code) {
         //유저 찾기
-        User user = userRepository.findByUsername(customOAuth2User.getName())
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
 
         Family family = familyRepository.findByCode(code)
@@ -60,22 +60,22 @@ public class UserService {
     }
 
     @Transactional
-    public void changeNickname(CustomOAuth2User customOAuth2User, Nickname nickname) {
-        User user = userRepository.findByUsername(customOAuth2User.getName())
+    public void changeNickname(String username, Nickname nickname) {
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
         user.updateNickname(nickname);
     }
 
     @Transactional
-    public void changeRealname(CustomOAuth2User customOAuth2User, Realname realname) {
-        User user = userRepository.findByUsername(customOAuth2User.getName())
+    public void changeRealname(String username, Realname realname) {
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
         user.updateRealname(realname);
     }
 
     @Transactional
-    public S3ImgDto changeProfileImg(CustomOAuth2User customOAuth2User, MultipartFile profileImg) {
-        User user = userRepository.findByUsername(customOAuth2User.getName())
+    public S3ImgDto changeProfileImg(String username, MultipartFile profileImg) {
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
 
         String beforeProfile = user.getProfileImg();
