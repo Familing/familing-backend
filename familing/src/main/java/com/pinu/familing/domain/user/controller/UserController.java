@@ -6,6 +6,7 @@ import com.pinu.familing.domain.user.dto.UserResponse;
 import com.pinu.familing.domain.user.service.UserService;
 import com.pinu.familing.global.oauth.dto.CustomOAuth2User;
 import com.pinu.familing.global.s3.S3ImgDto;
+import com.pinu.familing.global.oauth.dto.PrincipalDetails;
 import com.pinu.familing.global.util.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,8 +21,8 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/user")
-    public ApiUtils.ApiResult<UserResponse> giveUserInformation(@AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
-        return ApiUtils.success(userService.giveUserInformation(customOAuth2User));
+    public ApiUtils.ApiResult<UserResponse> giveUserInformation(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return ApiUtils.success(userService.giveUserInformation(principalDetails.getUsername()));
     }
 
     //닉네임 변경
