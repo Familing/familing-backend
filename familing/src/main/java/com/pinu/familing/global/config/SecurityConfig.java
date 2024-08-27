@@ -2,8 +2,7 @@ package com.pinu.familing.global.config;
 
 import com.pinu.familing.global.jwt.JWTFilter;
 import com.pinu.familing.global.jwt.JWTUtil;
-import com.pinu.familing.global.oauth.CustomSuccessHandler;
-import com.pinu.familing.global.oauth.service.CustomOAuth2UserService;
+import com.pinu.familing.global.oauth.service.PrincipalService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -11,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -23,9 +22,8 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final CustomOAuth2UserService customOAuth2UserService;
-    private final CustomSuccessHandler customSuccessHandler;
     private final JWTUtil jwtUtil;
+    private final PrincipalService principalService;
 
 
     @Bean
@@ -33,7 +31,6 @@ public class SecurityConfig {
 
 
         //cors
-
         http
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
 
@@ -68,18 +65,19 @@ public class SecurityConfig {
                 .httpBasic((auth) -> auth.disable());
         //JWTFilter 추가
         http
-                .addFilterAfter(new JWTFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
-        //oauth2
-        http
-                .oauth2Login((oauth2) -> oauth2
-                        .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
-                                .userService(customOAuth2UserService)).
-                        successHandler(customSuccessHandler));
+                .addFilterBefore(new JWTFilter(jwtUtil, principalService), SecurityContextPersistenceFilter.class);
+
+        //oauth2을 더이상 사용하지 않으므로 삭제
+//        http
+//                .oauth2Login((oauth2) -> oauth2
+//                        .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
+//                                .userService(customOAuth2UserService)).
+//                        successHandler(customSuccessHandler));
 
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/h2-console/**", "/main.html", "/ws", "/oauth2/authorization/kakao").permitAll()
+                        .requestMatchers("/", "/h2-console/**", "/main.html", "/test", "/api/v1/login/oauth/kakao", "/api/v1/login/oauth/kakao/**").permitAll()
                         .anyRequest().authenticated());
 
         //세션 설정 : STATELESS

@@ -7,6 +7,7 @@ import com.pinu.familing.domain.snapshot.service.SnapshotService;
 import com.pinu.familing.global.error.CustomException;
 import com.pinu.familing.global.error.ExceptionCode;
 import com.pinu.familing.global.oauth.dto.CustomOAuth2User;
+import com.pinu.familing.global.oauth.dto.PrincipalDetails;
 import com.pinu.familing.global.util.ApiUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,47 +37,47 @@ public class SnapshotController {
     // 특정 날짜 스냅샷 조회
     @GetMapping("/{day}")
     public ApiUtils.ApiResult<?> getSnapshotByDate(@PathVariable("day") LocalDate day,
-                                                 @AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
-        SnapshotResponse snapshot = snapshotService.getSnapshotByDate(day, customOAuth2User.getName());
+                                                 @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        SnapshotResponse snapshot = snapshotService.getSnapshotByDate(day, principalDetails.getUsername());
         return ApiUtils.success(snapshot);
     }
 
     //스냅샷 페이지 조회
     @GetMapping(value = "/{day}", params = "page")
     public ApiUtils.ApiResult<?> getSnapshotPage(@PathVariable("day") LocalDate day, Pageable pageable,
-                                                @AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
-        Page<SnapshotResponse> snapshotPage = snapshotService.getSnapshotPage(day, pageable, customOAuth2User.getName());
+                                                @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Page<SnapshotResponse> snapshotPage = snapshotService.getSnapshotPage(day, pageable, principalDetails.getUsername());
         return ApiUtils.success(new CustomPage(snapshotPage));
     }
 
     //스냅샷 이미지 등록
     @PostMapping("/{day}/users")
     public ApiUtils.ApiResult<?> registerSnapshotImage(@PathVariable("day") LocalDate day,
-                                                       @AuthenticationPrincipal CustomOAuth2User customOAuth2User,
+                                                       @AuthenticationPrincipal PrincipalDetails principalDetails,
                                                        @RequestPart("snapshot_img") MultipartFile snapshotImage) {
         if (snapshotImage.isEmpty()) {
             throw new CustomException(REQUIRE_IMG);
         }
-        snapshotService.registerSnapshotImage(day, customOAuth2User.getName(), snapshotImage);
+        snapshotService.registerSnapshotImage(day, principalDetails.getUsername(), snapshotImage);
         return ApiUtils.success("Image has been registered successfully.");
     }
 
 
     // 스냅샷 알람 변경 요청 저장하기
     @PostMapping("/alarm")
-    public ApiUtils.ApiResult<?> setSnapshotAlarmTime(@AuthenticationPrincipal CustomOAuth2User customOAuth2User,
+    public ApiUtils.ApiResult<?> setSnapshotAlarmTime(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                       @RequestParam(name = "time") String time) {
         LocalTime targetTime = LocalTime.parse(time);
-        snapshotService.changeAlarmTime(customOAuth2User.getName(), targetTime);
+        snapshotService.changeAlarmTime(principalDetails.getUsername(), targetTime);
         return ApiUtils.success("Snapshot alarm has been converted successfully.");
     }
 
 
     // 스냅샷 알람 조회
     @GetMapping("/alarm")
-    public ApiUtils.ApiResult<?> getSnapshotAlarmTime(@AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
+    public ApiUtils.ApiResult<?> getSnapshotAlarmTime(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        return ApiUtils.success(snapshotService.getSnapshotAlarmTime(customOAuth2User.getName()).format(formatter));
+        return ApiUtils.success(snapshotService.getSnapshotAlarmTime(principalDetails.getUsername()).format(formatter));
     }
 
 
