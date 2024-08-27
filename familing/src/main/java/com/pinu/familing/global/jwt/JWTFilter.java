@@ -1,7 +1,7 @@
 package com.pinu.familing.global.jwt;
 
-import com.pinu.familing.domain.user.dto.UserDto;
-import com.pinu.familing.global.oauth.dto.CustomOAuth2User;
+import com.pinu.familing.global.oauth.dto.PrincipalDetails;
+import com.pinu.familing.global.oauth.service.PrincipalService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -17,10 +18,11 @@ import java.io.IOException;
 public class JWTFilter extends OncePerRequestFilter {
 
     private final JWTUtil jwtUtil;
+    private final PrincipalService principalService;
 
-    public JWTFilter(JWTUtil jwtUtil) {
-
+    public JWTFilter(JWTUtil jwtUtil, PrincipalService principalService) {
         this.jwtUtil = jwtUtil;
+        this.principalService = principalService;
     }
 
     @Override
@@ -71,14 +73,12 @@ public class JWTFilter extends OncePerRequestFilter {
         String username = jwtUtil.getUsername(token);
         String role = jwtUtil.getRole(token);
 
-        //userDTO를 생성하여 값 set
-        UserDto userDto = new UserDto(username, null, role);
-
         //UserDetails에 회원 정보 객체 담기
-        CustomOAuth2User customOAuth2User = new CustomOAuth2User(userDto);
+        PrincipalDetails userDetail = (PrincipalDetails) principalService.loadUserByUsername(username);
 
         //스프링 시큐리티 인증 토큰 생성
-        Authentication authToken = new UsernamePasswordAuthenticationToken(customOAuth2User, null, customOAuth2User.getAuthorities());
+        Authentication authToken = new UsernamePasswordAuthenticationToken(userDetail, null, userDetail.getAuthorities());
+
         //세션에 사용자 등록
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
