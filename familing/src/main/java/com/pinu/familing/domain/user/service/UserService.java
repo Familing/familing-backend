@@ -33,8 +33,8 @@ public class UserService {
     private final StatusRepository statusRepository;
 
 
-    public UserResponse giveUserInformation(CustomOAuth2User customOAuth2User) {
-        User user = userRepository.findByUsername(customOAuth2User.getName())
+    public UserResponse giveUserInformation(String username) {
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
         return UserResponse.fromEntity(user);
     }
