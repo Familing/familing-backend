@@ -19,19 +19,13 @@ public class KakaoController {
 
     //0. 카카오 로그인 화면/api/v1/login/oauth/kakao 보여주기
     @GetMapping("/api/v1/login/oauth/kakao")
-    public void requestKakaoLoginScreen(HttpServletResponse response) throws IOException, IOException {
-        System.out.println(" ================================  ");
-        String url = "https://kauth.kakao.com/oauth/authorize" +
-                "?client_id=" + "a14905b8341b367a459e237b63b373b1" +
-                "&redirect_uri=" + "http://localhost:8080/api/v1/login/oauth/kakao/code" +
-                "&response_type=code";
-        response.sendRedirect(url);
+    public void requestKakaoLoginScreen(HttpServletResponse response) throws IOException {
+        response.sendRedirect(kakaoService.getKakaoLoginUrl());
     }
 
 
     @GetMapping("/api/v1/login/oauth/kakao/code")
     public ApiUtils.ApiResult<?> requestKakaoLoginScreen(@RequestParam(value = "code") String code){
-        System.out.println("!!!!!!!!!!!!!!!!!!!!");
         String accessToken = kakaoService.getKakaoAccessToken(code).accessToken();
         return ApiUtils.success("AccessToken: "+ accessToken);
     }

@@ -43,6 +43,13 @@ public class KakaoService {
     }
 
 
+    public String getKakaoLoginUrl() {
+        return  kakaoProperties.codeRequestUri() +
+                "?client_id=" + kakaoProperties.clientId()+
+                "&redirect_uri=" + kakaoProperties.redirectUri() +
+                "&response_type=code";
+    }
+
     public AccessToken getKakaoAccessToken(String code) {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("grant_type", kakaoProperties.authorizationCode());
@@ -82,15 +89,9 @@ public class KakaoService {
                     return userRepository.save(newUser);
                 });
 
-        //강제로 세션에 넣기
-        PrincipalDetails userDetail = (PrincipalDetails) principalService.loadUserByUsername(user.getUsername());
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetail, userDetail.getPassword(), userDetail.getAuthorities());
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        securityContext.setAuthentication(authentication);
-        session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
 
         //jwt 토큰 발급하기
-        String token = jwtUtil.createJwt(userDetail.getUsername(), user.getRole(), 60 * 60 * 60 * 60L);
+        String token = jwtUtil.createJwt(user.getUsername(), user.getRole(), 60 * 60 * 60 * 60L);
         return token;
     }
 
