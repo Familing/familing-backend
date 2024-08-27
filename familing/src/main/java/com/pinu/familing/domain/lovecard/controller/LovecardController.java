@@ -4,6 +4,7 @@ import com.pinu.familing.domain.lovecard.service.LovecardService;
 import com.pinu.familing.domain.snapshot.dto.CustomPage;
 import com.pinu.familing.domain.lovecard.dto.LovecardRequest;
 import com.pinu.familing.global.oauth.dto.CustomOAuth2User;
+import com.pinu.familing.global.oauth.dto.PrincipalDetails;
 import com.pinu.familing.global.util.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -25,18 +26,18 @@ public class LovecardController{
 
     //가족구성원별 주고받은 애정 카드 조회
     @GetMapping("/familys/{family_username}")
-    public ApiUtils.ApiResult<?> getLoveCardLogList(@AuthenticationPrincipal CustomOAuth2User customOAuth2User,
+    public ApiUtils.ApiResult<?> getLoveCardLogList(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                     @PathVariable("family_username") String familyUsername,
                                                     Pageable pageable) {
-        return ApiUtils.success(new CustomPage(lovecardService.getLovecardByFamilyLogPage(customOAuth2User.getName(), familyUsername,pageable)));
+        return ApiUtils.success(new CustomPage(lovecardService.getLovecardByFamilyLogPage(principalDetails.getUsername(), familyUsername,pageable)));
     }
 
     //원하는 가족에게 카드보내기
     @PostMapping("/familys/{familys_username}")
-    public ApiUtils.ApiResult<?> getLoveCardLogList(@AuthenticationPrincipal CustomOAuth2User customOAuth2User,
+    public ApiUtils.ApiResult<?> getLoveCardLogList(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                     @PathVariable("family_username") String familyUsername,
                                                     @RequestBody LovecardRequest lovecardRequest) {
-        lovecardService.sendLoveCardToFamily(customOAuth2User.getName(), familyUsername, lovecardRequest);
+        lovecardService.sendLoveCardToFamily(principalDetails.getUsername(), familyUsername, lovecardRequest);
         return ApiUtils.success("Lovecard has been sent successfully.");
     }
 

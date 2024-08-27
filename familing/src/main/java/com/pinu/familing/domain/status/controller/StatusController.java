@@ -3,6 +3,7 @@ package com.pinu.familing.domain.status.controller;
 import com.pinu.familing.domain.status.dto.StatusRequest;
 import com.pinu.familing.domain.status.service.StatusService;
 import com.pinu.familing.global.oauth.dto.CustomOAuth2User;
+import com.pinu.familing.global.oauth.dto.PrincipalDetails;
 import com.pinu.familing.global.util.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,17 +27,17 @@ public class StatusController {
 
     //유저의 상태 변경
     @PatchMapping("/users")
-    public ApiUtils.ApiResult<?> changeUserStatus(@AuthenticationPrincipal CustomOAuth2User customOAuth2User,
+    public ApiUtils.ApiResult<?> changeUserStatus(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                   StatusRequest statusRequest) {
-        statusService.changeUserStatus(customOAuth2User.getName(), statusRequest);
+        statusService.changeUserStatus(principalDetails.getUsername(), statusRequest);
         return ApiUtils.success("User's status has been successfully changed.");
     }
 
 
     //유저와 가족의 상태 조회
     @GetMapping("/family")
-    public ApiUtils.ApiResult<?> changeFamilyStatus(@AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
-        statusService.getFamilyStatusList(customOAuth2User.getName());
+    public ApiUtils.ApiResult<?> changeFamilyStatus(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        statusService.getFamilyStatusList(principalDetails.getUsername());
         return ApiUtils.success("User's status has been successfully changed.");
     }
 }

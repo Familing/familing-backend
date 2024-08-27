@@ -19,6 +19,8 @@ import java.util.Iterator;
 @Component
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
+//    @Value("${server.address}")
+    private String serverIp;
 
     private final JWTUtil jwtUtil;
 
