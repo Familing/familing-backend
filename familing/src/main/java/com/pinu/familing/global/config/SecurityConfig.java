@@ -78,6 +78,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/", "/h2-console/**", "/main.html", "/test", "/api/v1/login/oauth/kakao", "/api/v1/login/oauth/kakao/**").permitAll()
+
                         .anyRequest().authenticated());
 
         //세션 설정 : STATELESS
