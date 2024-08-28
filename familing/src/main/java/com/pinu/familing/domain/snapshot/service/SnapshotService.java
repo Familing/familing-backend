@@ -1,5 +1,7 @@
 package com.pinu.familing.domain.snapshot.service;
 
+import com.pinu.familing.domain.alarm.AlarmType;
+import com.pinu.familing.domain.alarm.service.AlarmService;
 import com.pinu.familing.domain.family.entity.Family;
 import com.pinu.familing.domain.family.repository.FamilyRepository;
 import com.pinu.familing.domain.snapshot.dto.SnapshotImageRequest;
@@ -33,6 +35,7 @@ public class SnapshotService {
     private final UserRepository userRepository;
     private final TitleService titleService;
     private final AwsS3Service awsS3Service;
+    private final AlarmService alarmService;
 
 
     // 스냅샷에 이미지 등록하기 (스냅샷 이미지가 없으면 생성)
@@ -47,6 +50,9 @@ public class SnapshotService {
                 .orElseGet(() -> createSnapshotImage(snapshot, user, day));
 
         snapshotImage.updateImage(s3ImgDto.getUploadFileUrl());
+        user.getFamily().getUsers().stream()
+                .filter(familyMember -> !familyMember.equals(user)) // 본인을 제외하고 알람을 보내고 싶다면 이 필터를 추가합니다.
+                .forEach(familyMember -> alarmService.sendAlarm(user, familyMember, AlarmType.SNAPSHOT_REGISTER));
     }
 
     // 스냅샷 페이지 조회
