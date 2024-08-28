@@ -4,6 +4,7 @@ import com.pinu.familing.domain.chat.dto.ChattingHistoryResponseDto;
 import com.pinu.familing.domain.chat.entity.Message;
 import com.pinu.familing.domain.chat.service.ChatService;
 import com.pinu.familing.global.oauth.dto.CustomOAuth2User;
+import com.pinu.familing.global.oauth.dto.PrincipalDetails;
 import com.pinu.familing.global.util.ApiUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,15 +28,15 @@ public class ChatController {
 
     // 자기 단톡방 채팅내역 조회
     @GetMapping("/chatroom/message")
-    public ResponseEntity<ChattingHistoryResponseDto> chattingList(@AuthenticationPrincipal CustomOAuth2User principal) {
-        ChattingHistoryResponseDto chattingList = chatService.getChattingList(principal.getName());
+    public ResponseEntity<ChattingHistoryResponseDto> chattingList(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        ChattingHistoryResponseDto chattingList = chatService.getChattingList(principalDetails.getUsername());
         return ResponseEntity.ok(chattingList);
     }
 
     // 자신의 채팅방 정보 조회
     @GetMapping("/chatroom/user")
-    public ApiUtils.ApiResult<?> chatRoomInfo(@AuthenticationPrincipal CustomOAuth2User principal) {
-        return ApiUtils.success(chatService.getChatRoomInfo(principal.getName()));
+    public ApiUtils.ApiResult<?> chatRoomInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return ApiUtils.success(chatService.getChatRoomInfo(principalDetails.getUsername()));
     }
 
     // ws.send("/pub/message", {}, JSON.stringify("메시지"); 로들어오는 요청을 처리한다.

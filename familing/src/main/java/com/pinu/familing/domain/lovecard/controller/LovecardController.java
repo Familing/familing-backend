@@ -33,8 +33,8 @@ public class LovecardController{
     }
 
     //원하는 가족에게 카드보내기
-    @PostMapping("/familys/{familys_username}")
-    public ApiUtils.ApiResult<?> getLoveCardLogList(@AuthenticationPrincipal PrincipalDetails principalDetails,
+    @PostMapping("/familys/{family_username}")
+    public ApiUtils.ApiResult<?> sendLoveCard(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                     @PathVariable("family_username") String familyUsername,
                                                     @RequestBody LovecardRequest lovecardRequest) {
         lovecardService.sendLoveCardToFamily(principalDetails.getUsername(), familyUsername, lovecardRequest);
