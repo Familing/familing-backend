@@ -54,7 +54,7 @@ public class AlarmService {
                 .build());
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public AlarmResponseDto loadAlarm(String username){
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
