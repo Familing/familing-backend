@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,12 +61,30 @@ public class AlarmService {
                 .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
         List<Alarm> byReceiverAndIsReadFalse = alarmRepository.findByReceiverAndIsReadFalse(user);
         List<Alarm> byReceiverAndIsReadTrue = alarmRepository.findByReceiverAndIsReadTrue(user);
+        // 현재 시간
+        LocalDateTime now = LocalDateTime.now();
+
+        // 24시간 전의 시간 계산
+        LocalDateTime oneDayAgo = now.minusHours(24);
+        // 7일 전 시간 계산
+        LocalDateTime sevenDaysAgo = now.minusDays(7);
+
+        List<Alarm> alarmsWithin24Hours = alarmRepository.findReadAlarmsWithin24Hours(user, oneDayAgo);
+
+        // 메서드 호출하여 24시간 이상 7일 이내의 알람 조회
+        List<Alarm> alarmsBetween24HoursAnd7Days = alarmRepository.findReadAlarmsBetween24HoursAnd7Days(user, sevenDaysAgo, oneDayAgo);
 
         AlarmResponseDto alarmResponseDto = AlarmResponseDto.builder()
                 .read(byReceiverAndIsReadTrue.stream()
                         .map(AlarmDto::fromEntity)
                         .collect(Collectors.toList()))
                 .unread(byReceiverAndIsReadFalse.stream()
+                        .map(AlarmDto::fromEntity)
+                        .collect(Collectors.toList()))
+                .yesterday(alarmsWithin24Hours.stream()
+                        .map(AlarmDto::fromEntity)
+                        .collect(Collectors.toList()))
+                .sevenday(alarmsBetween24HoursAnd7Days.stream()
                         .map(AlarmDto::fromEntity)
                         .collect(Collectors.toList()))
                 .build();
