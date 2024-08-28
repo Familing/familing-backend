@@ -61,8 +61,7 @@ public class AlarmService {
         List<Alarm> byReceiverAndIsReadFalse = alarmRepository.findByReceiverAndIsReadFalse(user);
         List<Alarm> byReceiverAndIsReadTrue = alarmRepository.findByReceiverAndIsReadTrue(user);
 
-
-        return AlarmResponseDto.builder()
+        AlarmResponseDto alarmResponseDto = AlarmResponseDto.builder()
                 .read(byReceiverAndIsReadTrue.stream()
                         .map(AlarmDto::fromEntity)
                         .collect(Collectors.toList()))
@@ -70,5 +69,11 @@ public class AlarmService {
                         .map(AlarmDto::fromEntity)
                         .collect(Collectors.toList()))
                 .build();
+        // 조회한 알림 읽음으로 처리
+        byReceiverAndIsReadFalse.forEach(alarm -> {
+            alarm.readAlarm();
+            alarmRepository.save(alarm);  // 변경된 상태를 저장하기 위해 필요
+        });
+        return alarmResponseDto;
     }
 }

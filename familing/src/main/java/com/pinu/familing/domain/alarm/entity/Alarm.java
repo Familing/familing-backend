@@ -44,4 +44,8 @@ public class Alarm extends BaseEntity {
         this.isRead = isRead != null ? isRead : false; // null일 경우 기본값으로 false 설정
         this.AlarmImg = alarmImg;
     }
+
+    public void readAlarm() {
+        this.isRead = true;
+    }
 }
