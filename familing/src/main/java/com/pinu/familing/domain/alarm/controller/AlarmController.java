@@ -3,6 +3,7 @@ package com.pinu.familing.domain.alarm.controller;
 
 import com.pinu.familing.domain.alarm.service.AlarmService;
 import com.pinu.familing.global.oauth.dto.CustomOAuth2User;
+import com.pinu.familing.global.oauth.dto.PrincipalDetails;
 import com.pinu.familing.global.util.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,10 +19,10 @@ public class AlarmController {
     private final AlarmService alarmService;
 
     //나의 알람을 불러온다.
-    @GetMapping("alarm")
-    public ApiUtils.ApiResult<?> getAlarm(@AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
+    @GetMapping("alarms")
+    public ApiUtils.ApiResult<?> getAlarm(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        return ApiUtils.success(alarmService.loadAlarm(customOAuth2User.getName()));
+        return ApiUtils.success(alarmService.loadAlarm(principalDetails.getUsername()));
     }
 
 }
