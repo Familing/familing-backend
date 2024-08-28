@@ -1,5 +1,7 @@
 package com.pinu.familing.domain.lovecard.service;
 
+import com.pinu.familing.domain.alarm.AlarmType;
+import com.pinu.familing.domain.alarm.service.AlarmService;
 import com.pinu.familing.domain.lovecard.dto.LovecardLogResponse;
 import com.pinu.familing.domain.lovecard.dto.LovecardResponse;
 import com.pinu.familing.domain.lovecard.entity.Lovecard;
@@ -15,14 +17,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
+@Transactional(readOnly = true)
 public class LovecardService {
 
     private final LovecardLogRepository lovecardLogRepository;
     private final LovecardRepository lovecardRepository;
     private final UserRepository userRepository;
+    private final AlarmService alarmService;
 
     public Page<?> getLovecardPage(Pageable pageable) {
         Page<LovecardResponse> lovecardResponsePage= lovecardRepository.findAll(pageable)
@@ -42,6 +47,7 @@ public class LovecardService {
         return lovecardLogResponses;
     }
 
+    @Transactional
     public void sendLoveCardToFamily(String username, String familyUsername, LovecardRequest lovecardRequest) {
         User sender = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
@@ -51,7 +57,7 @@ public class LovecardService {
 
         Lovecard lovecard = lovecardRepository.findById(lovecardRequest.cardId())
                 .orElseThrow(()-> new CustomException(ExceptionCode.LOVECARD_NOT_FOUND));
-
+        alarmService.sendAlarm(sender, receiver, AlarmType.LOVECARD_RECEIVE);
         lovecardLogRepository.save(LovecardLog.builder().lovecard(lovecard).receiver(receiver).sender(sender).build());
     }
 }
