@@ -1,6 +1,8 @@
 package com.pinu.familing.domain.alarm.service;
 
 import com.pinu.familing.domain.alarm.AlarmType;
+import com.pinu.familing.domain.alarm.dto.AlarmDto;
+import com.pinu.familing.domain.alarm.dto.AlarmResponseDto;
 import com.pinu.familing.domain.alarm.entity.Alarm;
 import com.pinu.familing.domain.alarm.repository.AlarmRepository;
 import com.pinu.familing.domain.user.entity.User;
@@ -11,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.pinu.familing.global.error.ExceptionCode.USER_NOT_FOUND;
 
@@ -49,9 +54,21 @@ public class AlarmService {
                 .build());
     }
 
-//    @Transactional(readOnly = true)
-//    public void loadAlarm(String username){
-//        User user = userRepository.findByUsername(username).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
-//        alarmRepository.findAllByUn
-//    }
+    @Transactional(readOnly = true)
+    public AlarmResponseDto loadAlarm(String username){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+        List<Alarm> byReceiverAndIsReadFalse = alarmRepository.findByReceiverAndIsReadFalse(user);
+        List<Alarm> byReceiverAndIsReadTrue = alarmRepository.findByReceiverAndIsReadTrue(user);
+
+
+        return AlarmResponseDto.builder()
+                .read(byReceiverAndIsReadTrue.stream()
+                        .map(AlarmDto::fromEntity)
+                        .collect(Collectors.toList()))
+                .unread(byReceiverAndIsReadFalse.stream()
+                        .map(AlarmDto::fromEntity)
+                        .collect(Collectors.toList()))
+                .build();
+    }
 }
