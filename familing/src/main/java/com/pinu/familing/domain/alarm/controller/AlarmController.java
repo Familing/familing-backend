@@ -17,14 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AlarmController {
     private final AlarmService alarmService;
 
+    //나의 알람을 불러온다.
     @GetMapping("alarm")
     public ApiUtils.ApiResult<?> getAlarm(@AuthenticationPrincipal CustomOAuth2User customOAuth2User) {
 
         return ApiUtils.success(alarmService.loadAlarm(customOAuth2User.getName()));
     }
 
-//    @PostMapping("alamr")
-//    public ApiUtils.ApiResult<?> sendAlarmTest() {
-//        alarmService.sendAlarm();
-//    }
 }
