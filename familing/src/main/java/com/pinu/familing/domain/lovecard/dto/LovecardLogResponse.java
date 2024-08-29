@@ -11,7 +11,7 @@ public record LovecardLogResponse(Long id,
                                   LovecardResponse lovecardResponse,
                                   LocalDate localDate
                                   ) {
-    private record LovecardUser(String usernaem,
+    private record LovecardUser(String username,
                         String nickname) {
 
         public LovecardUser(User user) {
