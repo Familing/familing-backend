@@ -73,6 +73,10 @@ public class User extends BaseEntity {
         family.addMember();
     }
 
+    public boolean hasFamily() {
+        return this.family != null;
+    }
+
     public void registerChatRoom(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
     }

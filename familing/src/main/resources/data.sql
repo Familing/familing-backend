@@ -5,6 +5,13 @@ VALUES ('일반형', 2900, '일반형, 기본 기능이고 상태보기 기능 �
 INSERT INTO subscription (name, price, explanation)
 VALUES ('프리미엄형', 3900, '프리미엄 구독입니다. 모든 기능을 무제한으로 제공합니다.');
 
+INSERT INTO status (text)
+VALUES ('공부 중');
+INSERT INTO status (text)
+VALUES ('노는 중');
+INSERT INTO status (text)
+VALUES ('쉬는 중');
+
 INSERT INTO snapshot_title (title)
 VALUES ('테스트용1');
 INSERT INTO snapshot_title (title)
