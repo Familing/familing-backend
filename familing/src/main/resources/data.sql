@@ -5,26 +5,34 @@ VALUES ('일반형', 2900, '일반형, 기본 기능이고 상태보기 기능 �
 INSERT INTO subscription (name, price, explanation)
 VALUES ('프리미엄형', 3900, '프리미엄 구독입니다. 모든 기능을 무제한으로 제공합니다.');
 
+INSERT INTO status (text)
+VALUES ('공부 중');
+INSERT INTO status (text)
+VALUES ('노는 중');
+INSERT INTO status (text)
+VALUES ('쉬는 중');
+
 INSERT INTO snapshot_title (title)
-VALUES ('테스트용1');
+VALUES ('가장 잘나왔다고 생각하는 셀카');
 INSERT INTO snapshot_title (title)
-VALUES ('테스트용2');
+VALUES ('오늘의 점심메뉴');
 INSERT INTO snapshot_title (title)
-VALUES ('테스트용3');
+VALUES ('내 갤러리의 4번째 사진');
 INSERT INTO snapshot_title (title)
-VALUES ('테스트용4');
+VALUES ('지금 내가 앉아있는 곳');
 INSERT INTO snapshot_title (title)
-VALUES ('테스트용5');
+VALUES ('지금 보이는 파란색 물건');
 INSERT INTO snapshot_title (title)
-VALUES ('테스트용6');
+VALUES ('오늘의 출근길/퇴근길');
 INSERT INTO snapshot_title (title)
-VALUES ('테스트용7');
+VALUES ('내가 지내는 장소');
 INSERT INTO snapshot_title (title)
-VALUES ('테스트용8');
+VALUES ('내가 좋아하는 간식');
 INSERT INTO snapshot_title (title)
-VALUES ('테스트용9');
+VALUES ('좋아하는 음악');
 INSERT INTO snapshot_title (title)
-VALUES ('테스트용10');
+VALUES ('나의 휴식 공간');
+
 
 INSERT INTO lovecard (image)
 VALUES ('이미지1');
