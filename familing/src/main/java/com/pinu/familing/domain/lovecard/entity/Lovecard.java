@@ -15,4 +15,8 @@ public class Lovecard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String image;
+
+    public Lovecard(String image) {
+        this.image = image;
+    }
 }
