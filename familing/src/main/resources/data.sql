@@ -35,26 +35,26 @@ VALUES ('나의 휴식 공간');
 
 
 INSERT INTO lovecard (image)
-VALUES ('이미지1');
+VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard1.png');
 INSERT INTO lovecard (image)
-VALUES ('이미지2');
+VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard2.png');
 INSERT INTO lovecard (image)
-VALUES ('이미지3');
+VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard3.png');
 INSERT INTO lovecard (image)
-VALUES ('이미지4');
+VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard4.png');
 INSERT INTO lovecard (image)
-VALUES ('이미지5');
+VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard5.png');
 INSERT INTO lovecard (image)
-VALUES ('이미지6');
+VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard6.png');
 INSERT INTO lovecard (image)
-VALUES ('이미지7');
+VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard7.png');
 INSERT INTO lovecard (image)
-VALUES ('이미지8');
+VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard8.png');
 INSERT INTO lovecard (image)
-VALUES ('이미지9');
+VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard9.png');
 INSERT INTO lovecard (image)
-VALUES ('이미지10');
+VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard10.png');
 INSERT INTO lovecard (image)
-VALUES ('이미지11');
+VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard11.png');
 INSERT INTO lovecard (image)
-VALUES ('이미지12');
+VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard12.png');
