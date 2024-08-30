@@ -13,7 +13,7 @@ INSERT INTO status (text)
 VALUES ('쉬는 중');
 
 INSERT INTO snapshot_title (title)
-VALUES ('가장 잘나왔다고 생각하는 셀카');
+VALUES ('가장 잘나온 셀카');
 INSERT INTO snapshot_title (title)
 VALUES ('오늘의 점심메뉴');
 INSERT INTO snapshot_title (title)

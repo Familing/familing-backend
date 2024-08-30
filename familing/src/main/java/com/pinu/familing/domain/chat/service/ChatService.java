@@ -39,7 +39,7 @@ public class ChatService {
     private final UserRepository userRepository;
 
     @Transactional
-    public boolean makeChatRoom(User user, String validCode) {
+    public boolean makeChatRoom(String validCode) {
         if (chatRoomRepository.findByValidCode(validCode).isPresent()) {
             throw new CustomException(CHATROOM_ALREADY_EXISTS);
         }
@@ -49,8 +49,6 @@ public class ChatService {
                 .validCode(validCode)
                 .users(new ArrayList<>())
                 .build();
-        // ChatRoom 객체에 User 추가
-        chatRoom.addUser(user);
         chatRoomRepository.save(chatRoom);
         return true;
     }

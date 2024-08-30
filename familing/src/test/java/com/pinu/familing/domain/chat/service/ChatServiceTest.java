@@ -17,6 +17,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -49,29 +51,24 @@ class ChatServiceTest extends IntegrationTestSupport {
     }
 
     @Test
-    @DisplayName("가족 채팅방을 만들고 초기 user로 들어간다.")
+    @DisplayName("가족 채팅방을 만들 수 있다.")
     void testMakeChatRoom() {
-        boolean result = chatService.makeChatRoom(testUser, validCode);
+        boolean result = chatService.makeChatRoom(validCode);
 
         assertThat(result).isTrue();
         ChatRoom chatRoom = chatRoomRepository.findByValidCode(validCode)
                 .orElseThrow(() -> new IllegalStateException("ChatRoom not found"));
-        assertThat(chatRoom.getUsers()).contains(testUser);
+        assertThat(chatRoom).isNotNull();
     }
 
     @DisplayName("중복된 validCode로 채팅방을 만드려고 할 때 예외가 발생한다.")
     @Test
     void createChatRoomWithDuplicateValidCode() {
         // given
-        chatService.makeChatRoom(testUser, validCode);
-
-        User otherUser = User.builder()
-                .nickname("testNickname")
-                .username("kakao 23451")
-                .build();
+        chatService.makeChatRoom(validCode);
 
         // when & then
-        assertThatThrownBy(() -> chatService.makeChatRoom(otherUser, validCode))
+        assertThatThrownBy(() -> chatService.makeChatRoom(validCode))
                 .isInstanceOf(CustomException.class)
                 .hasMessageContaining("채팅방 생성시 중복된 코드를 사용할 수 없습니다."); // 메시지는 필요에 따라 검증
     }
@@ -80,7 +77,9 @@ class ChatServiceTest extends IntegrationTestSupport {
     @DisplayName("채팅을 전송하고 mongo 데이터베이스에서 조회할 수 있다.")
     void testGetChattingList() {
         // given
-        chatService.makeChatRoom(testUser, validCode);
+        chatService.makeChatRoom(validCode);
+        Optional<ChatRoom> byValidCode = chatRoomRepository.findByValidCode(validCode);
+        byValidCode.get().addUser(testUser);
         Message message = Message.builder()
                 .content("Hello, World!")
                 .build();
@@ -101,7 +100,9 @@ class ChatServiceTest extends IntegrationTestSupport {
     @DisplayName("사용자의 가족 채팅방의 정보를 조회한다.")
     void testGetChatRoomInfo() {
         // given
-        chatService.makeChatRoom(testUser, validCode);
+        chatService.makeChatRoom(validCode);
+        Optional<ChatRoom> byValidCode = chatRoomRepository.findByValidCode(validCode);
+        byValidCode.get().addUser(testUser);
 
         // when
         ChatRoomInfoDto chatRoomInfo = chatService.getChatRoomInfo(testUser.getUsername());
