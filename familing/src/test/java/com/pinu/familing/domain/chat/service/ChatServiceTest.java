@@ -41,6 +41,7 @@ class ChatServiceTest extends IntegrationTestSupport {
         testUser = User.builder()
                 .nickname("testNickname")
                 .username("kakao 12345")
+                .profileImg("profile")
                 .build();
         userRepository.save(testUser);
     }
@@ -93,6 +94,7 @@ class ChatServiceTest extends IntegrationTestSupport {
         assertThat(response.nickName()).isEqualTo(testUser.getNickname());
         assertThat(response.chatList()).hasSize(1);
         assertThat(response.chatList().get(0).content()).isEqualTo("Hello, World!");
+        assertThat(response.chatList().get(0).senderProfileImg()).isEqualTo("profile");
     }
 
 

@@ -22,7 +22,6 @@ public class Message implements Serializable {
     @NotNull
     private Long chatRoomId;
 
-    @NotNull
     private Long chatId;
 
     @NotNull
