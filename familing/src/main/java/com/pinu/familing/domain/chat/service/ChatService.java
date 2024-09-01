@@ -70,7 +70,7 @@ public class ChatService {
     //메시지 전송
     public void sendMessage(Message message, String username) {
 
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findByUsernameWithChatRoom(username)
                 .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
 
         // message 객체에 보낸시간, 보낸사람 memberNo, 닉네임을 셋팅해준다.
