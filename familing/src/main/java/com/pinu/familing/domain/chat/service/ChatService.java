@@ -77,6 +77,7 @@ public class ChatService {
         message.setSendTimeAndSenderAndRoomId(LocalDateTime.now(), user);
 
         Chatting chatting = message.convertEntity();
+        chatting.setSenderProfileImg(user.getProfileImg());
         // 채팅 내용을 저장한다.
         Chatting savedChat = mongoChatRepository.save(chatting);
         // 저장된 고유 ID를 반환한다.
