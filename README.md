@@ -10,10 +10,10 @@
 
 
 ### 예시 
-<img src= "https://github.com/user-attachments/assets/e417b455-4add-42f7-9c50-3b4fd4018b28" width = 700>
-<img src= "https://github.com/user-attachments/assets/a3c3b16c-fb71-468a-80ef-78693da80938" width = 700>
-<img src= "https://github.com/user-attachments/assets/da33e88e-f835-47dc-a794-5061aa214600" width = 700>
-<img src= "https://github.com/user-attachments/assets/9325a00d-fa67-437f-9a86-bad473c4d440" width = 700>
+<img src= "https://github.com/user-attachments/assets/e417b455-4add-42f7-9c50-3b4fd4018b28" width = 500>
+<img src= "https://github.com/user-attachments/assets/a3c3b16c-fb71-468a-80ef-78693da80938" width = 500>
+<img src= "https://github.com/user-attachments/assets/da33e88e-f835-47dc-a794-5061aa214600" width = 500>
+<img src= "https://github.com/user-attachments/assets/9325a00d-fa67-437f-9a86-bad473c4d440" width = 500>
 
 # familing-backend
 
