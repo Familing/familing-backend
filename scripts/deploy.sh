@@ -1,4 +1,6 @@
 #!/bin/bash
+
+echo "> 스크립트 시작" >> /home/ubuntu/action/deploy.log
 BUILD_JAR=$(ls /home/ubuntu/action/familing/build/libs/familing-0.0.1-SNAPSHOT.jar)
 JAR_NAME=$(basename $BUILD_JAR)
 
