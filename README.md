@@ -1,4 +1,5 @@
-![image](https://github.com/user-attachments/assets/ed89b382-0379-4d7d-8483-a13bd352e4a4)
+<img src= "https://github.com/user-attachments/assets/76b8582e-bd51-4304-b74d-f3fd15f35c3c" width = 700>
+
 
 
 # familing-backend
