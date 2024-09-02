@@ -1,6 +1,10 @@
 ![image](https://github.com/user-attachments/assets/7a31de08-ff3a-4726-b00f-031d1b5c3a95)
 <br> <br><br>
-<img src= "https://github.com/user-attachments/assets/9325a00d-fa67-437f-9a86-bad473c4d440" width = 600>
+: 너비가 800
+<img src= "https://github.com/user-attachments/assets/9325a00d-fa67-437f-9a86-bad473c4d440" width = 800>
+<br> <br><br>
+: 너비가 700
+<img src= "https://github.com/user-attachments/assets/9325a00d-fa67-437f-9a86-bad473c4d440" width = 700>
 <br> <br><br>
 <img src= "https://github.com/user-attachments/assets/76b8582e-bd51-4304-b74d-f3fd15f35c3c" width = 700>
 
