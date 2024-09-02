@@ -24,7 +24,7 @@ public class ChatGptRequest {
         this.frequency_penalty = 0.0;
         this.presence_penalty = 0.0;
 
-        List<Object> list = List.of(new Prompt("text",message), new Prompt("text", " 위 메시지를 가족끼리 사용하는 애정 표현 하나만 만들어서 반환해줘 설명은 필요없어"));
+        List<Object> list = List.of(new Prompt("text",message), new Prompt("text", " 위 메시지를 애정을 담아 리팩터링해 줘 응답은 문자열로 해줘"));
         this.messages.add(new GptRequestMessage("user", list));
 
     }
