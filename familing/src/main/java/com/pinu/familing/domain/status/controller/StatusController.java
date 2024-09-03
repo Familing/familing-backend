@@ -37,7 +37,6 @@ public class StatusController {
     //유저와 가족의 상태 조회
     @GetMapping("/family")
     public ApiUtils.ApiResult<?> changeFamilyStatus(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        statusService.getFamilyStatusList(principalDetails.getUsername());
-        return ApiUtils.success("User's status has been successfully changed.");
+        return ApiUtils.success(statusService.getFamilyStatusList(principalDetails.getUsername()));
     }
 }
