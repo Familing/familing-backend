@@ -67,7 +67,7 @@ public class FamilyService {
         if (family == null) {
             throw new CustomException(FAMILY_NOT_FOUND);
         }
-        return MyFamilyDto.toEntity(family);
+        return MyFamilyDto.toEntity(user, family);
     }
 
     private String validFamilyCode(String code) {
