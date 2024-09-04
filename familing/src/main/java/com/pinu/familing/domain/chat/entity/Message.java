@@ -18,8 +18,7 @@ import java.time.ZoneId;
 public class Message implements Serializable {
 
     private String id;
-
-    @NotNull
+    
     private Long chatRoomId;
 
     private Long chatId;
