@@ -4,6 +4,7 @@ import com.pinu.familing.domain.family.dto.FamilyCode;
 import com.pinu.familing.domain.family.dto.FamilyDto;
 import com.pinu.familing.domain.family.dto.FamilyName;
 import com.pinu.familing.domain.family.service.FamilyService;
+import com.pinu.familing.domain.snapshot.service.SnapshotService;
 import com.pinu.familing.domain.user.service.UserService;
 import com.pinu.familing.global.oauth.dto.CustomOAuth2User;
 import com.pinu.familing.global.oauth.dto.PrincipalDetails;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +24,7 @@ public class FamilyController {
 
     private final FamilyService familyService;
     private final UserService userService;
+    private final SnapshotService snapshotService;
 
     /**
      * <가족 생성 로직>
@@ -50,6 +53,7 @@ public class FamilyController {
     public ApiUtils.ApiResult<String> registerFamily(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody FamilyCode familyCode) {
         //유저에 가족을 넣기
         userService.addFamilyToUser(principalDetails.getUsername(), familyCode.code());
+        snapshotService.registerSnapshotImageForBeginner(LocalDate.now(), principalDetails.getUsername());
         return ApiUtils.success("Successful addition of family");
     }
 

@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -53,6 +54,24 @@ public class SnapshotService {
         user.getFamily().getUsers().stream()
                 .filter(familyMember -> !familyMember.equals(user)) // 본인을 제외하고 알람을 보내고 싶다면 이 필터를 추가합니다.
                 .forEach(familyMember -> alarmService.sendAlarm(user, familyMember, AlarmType.SNAPSHOT_REGISTER));
+    }
+
+    //늦게 들어온 가족 유저의 스냅샷 생성
+    @Transactional
+    public void registerSnapshotImageForBeginner(LocalDate day, String username) {
+        User user = getUser(username);
+        Optional<Snapshot> snapshot = snapshotRepository.findByFamilyAndDate(user.getFamily(), day);
+        if(snapshot.isPresent()) {
+            SnapshotImage snapshotImage = snapshotImageRepository.save(
+                    SnapshotImage.builder()
+                            .user(user)
+                            .snapshot(snapshot.get())
+                            .date(day)
+                            .snapshotImg("EMPTY")
+                            .build());
+            snapshot.get().addSnapshotImage(snapshotImage);
+
+        }
     }
 
     // 스냅샷 페이지 조회
