@@ -10,7 +10,7 @@ permissions:
   contents: read
   
 env:
-  S3_BUCKET_NAME: familing-bucket
+  S3_BUCKET_NAME: sursim-img
 
 jobs:
   build:
