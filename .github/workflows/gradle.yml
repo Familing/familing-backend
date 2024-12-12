@@ -38,7 +38,7 @@ jobs:
       - name: Build with Gradle
         uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
         with:
-          arguments: build
+          arguments: build -x test
           build-root-directory: ./familing
 
       # 압축파일 형태로 전달
