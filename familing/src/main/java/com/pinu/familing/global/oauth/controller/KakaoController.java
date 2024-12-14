@@ -48,7 +48,7 @@ public class KakaoController {
         // js가 쿠키를 가져가지 못하게
         cookie.setHttpOnly(true);
 
-        cookie.setDomain("3.39.254.198");
+        cookie.setDomain("43.203.180.185");
 
         return cookie;
     }
