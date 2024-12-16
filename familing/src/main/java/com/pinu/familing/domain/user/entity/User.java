@@ -36,6 +36,8 @@ public class User extends BaseEntity {
     //프로필
     private String profileImg;
 
+    private String fcmToken;
+
     @Enumerated(value = EnumType.STRING)
     private Gender gender;
 
@@ -108,5 +110,14 @@ public class User extends BaseEntity {
     @Override
     public int hashCode() {
         return Objects.hash(username);
+    }
+
+    public void registerFCMToken(String token) {
+        this.fcmToken = token;
+    }
+
+
+    public String getFCMToken() {
+        return this.fcmToken;
     }
 }

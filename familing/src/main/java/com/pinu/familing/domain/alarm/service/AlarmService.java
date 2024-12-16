@@ -8,55 +8,65 @@ import com.pinu.familing.domain.alarm.repository.AlarmRepository;
 import com.pinu.familing.domain.user.entity.User;
 import com.pinu.familing.domain.user.repository.UserRepository;
 import com.pinu.familing.global.error.CustomException;
-import com.pinu.familing.global.error.ExceptionCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.pinu.familing.global.error.ExceptionCode.USER_NOT_FOUND;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AlarmService {
 
     private final AlarmRepository alarmRepository;
     private final UserRepository userRepository;
+    private final FCMService fcmService;
+
+    @Transactional
+    public void updateFCMToken(String username, String token) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+        user.registerFCMToken(token);
+    }
 
     @Transactional
     public void sendAlarm(User sender, User receiver, AlarmType alarmType) {
-
         String message = "";
         String alarmImg = "";
 
         if (alarmType == AlarmType.LOVECARD_RECEIVE) {
             message = sender.getNickname() + "님이 애정카드를 보냈어요.";
             alarmImg = sender.getProfileImg();
-        }
-        else if (alarmType == AlarmType.SNAPSHOT_REGISTER) {
+        } else if (alarmType == AlarmType.SNAPSHOT_REGISTER) {
             message = sender.getNickname() + "님이 SnapShot에 사진을 등록했어요.";
             alarmImg = sender.getProfileImg();
-        }
-        else if (alarmType == AlarmType.SNAPSHOT_SUBJECT) {
+        } else if (alarmType == AlarmType.SNAPSHOT_SUBJECT) {
             message = "Snap Shot의 주제 등록되었어요.";
             alarmImg = "";
         }
 
-        alarmRepository.save(Alarm.builder()
+        Alarm alarm = alarmRepository.save(Alarm.builder()
                 .sender(sender)
                 .message(message)
                 .receiver(receiver)
                 .alarmType(alarmType)
                 .alarmImg(alarmImg)
                 .build());
+
+        if (receiver.getFCMToken() == null) {
+            return;
+        }
+
+        fcmService.sendFCMAlarm(receiver.getFCMToken(), alarm);
     }
 
     @Transactional
-    public AlarmResponseDto loadAlarm(String username){
+    public AlarmResponseDto loadAlarm(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
         List<Alarm> byReceiverAndIsReadFalse = alarmRepository.findByReceiverAndIsReadFalse(user);
@@ -77,16 +87,16 @@ public class AlarmService {
         AlarmResponseDto alarmResponseDto = AlarmResponseDto.builder()
                 .read(byReceiverAndIsReadTrue.stream()
                         .map(AlarmDto::fromEntity)
-                        .collect(Collectors.toList()))
+                        .toList())
                 .unread(byReceiverAndIsReadFalse.stream()
                         .map(AlarmDto::fromEntity)
-                        .collect(Collectors.toList()))
+                        .toList())
                 .yesterday(alarmsWithin24Hours.stream()
                         .map(AlarmDto::fromEntity)
-                        .collect(Collectors.toList()))
+                        .toList())
                 .sevenday(alarmsBetween24HoursAnd7Days.stream()
                         .map(AlarmDto::fromEntity)
-                        .collect(Collectors.toList()))
+                        .toList())
                 .build();
         // 조회한 알림 읽음으로 처리
         byReceiverAndIsReadFalse.forEach(alarm -> {
@@ -95,4 +105,6 @@ public class AlarmService {
         });
         return alarmResponseDto;
     }
+
+
 }

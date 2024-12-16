@@ -4,7 +4,6 @@ import com.pinu.familing.domain.BaseEntity;
 import com.pinu.familing.domain.alarm.AlarmType;
 import com.pinu.familing.domain.user.entity.User;
 import jakarta.persistence.*;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
