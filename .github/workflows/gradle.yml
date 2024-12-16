@@ -28,7 +28,7 @@ jobs:
   
       - run: touch ./familing/src/main/resources/application.yml
       - run: echo "${{ secrets.APPLICATION }}" > ./familing/src/main/resources/application.yml
-      - run: echo "${{ secrets.firebase_service_key}}" > ./familing/src/main/resources/firebase_service_key.json
+      - run: echo "${{ secrets.FIREBASE_SERVICE_KEY}}" > ./familing/src/main/resources/firebase_service_key.json
       - run: cat ./familing/src/main/resources/application.yml
  
       # gradlew에 권한 부여
