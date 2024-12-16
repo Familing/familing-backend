@@ -7,6 +7,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -17,9 +18,13 @@ public class KakaoController {
 
     private final KakaoService kakaoService;
 
+    @Value("${server.ip}")
+    private String serverIp;
+
     //0. 카카오 로그인 화면/api/v1/login/oauth/kakao 보여주기
     @GetMapping("/api/v1/login/oauth/kakao")
     public void requestKakaoLoginScreen(HttpServletResponse response) throws IOException {
+
         response.sendRedirect(kakaoService.getKakaoLoginUrl());
     }
 
@@ -48,7 +53,7 @@ public class KakaoController {
         // js가 쿠키를 가져가지 못하게
         cookie.setHttpOnly(true);
 
-        cookie.setDomain("43.203.180.185");
+        cookie.setDomain(serverIp);
 
         return cookie;
     }

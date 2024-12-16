@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.pinu.familing.domain.chat.entity.Message;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -18,6 +19,9 @@ import java.util.Map;
 @Configuration
 @EnableKafka
 public class ListenerConfiguration {
+
+    @Value("${kafka.server}")
+    private String kafkaServer;
 
     // KafkaListener 컨테이너 팩토리를 생성하는 Bean 메서드
     @Bean
@@ -38,7 +42,7 @@ public class ListenerConfiguration {
         Map<String, Object> consumerConfigurations =
                 ImmutableMap.<String, Object>builder()
                         //Kafka 클러스터의 주소를 설정합니다.
-                        .put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "43.203.180.185:9092")
+                        .put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer)
                         //이 그룹 ID는 Consumer가 동일한 그룹 내에서 협력하여 메시지를 처리하도록 합니다.
                         .put(ConsumerConfig.GROUP_ID_CONFIG, "familing")
                         //afka에서 수신한 메시지의 키를 역직렬화하는 데 사용됩니다.

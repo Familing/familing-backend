@@ -19,7 +19,7 @@ import java.util.Iterator;
 @Component
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-//    @Value("${server.address}")
+    @Value("${server.ip}")
     private String serverIp;
 
     private final JWTUtil jwtUtil;
@@ -52,7 +52,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             response.sendRedirect("myapp://callback/register-screen1");
         } else {
             //Role이 없으면 다시 로그인 창으로
-            response.sendRedirect("http://43.203.180.185:8080/oauth2/authorization/kakao");
+            response.sendRedirect("http://"+serverIp+":8080/oauth2/authorization/kakao");
         }
     }
 

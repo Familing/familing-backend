@@ -37,26 +37,26 @@ VALUES ('나의 휴식 공간');
 
 
 INSERT INTO lovecard (image)
-VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard1.png');
+VALUES ('https://sursim-img.s3.ap-northeast-2.amazonaws.com/lovecard1.png');
 INSERT INTO lovecard (image)
-VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard2.png');
+VALUES ('https://sursim-img.s3.ap-northeast-2.amazonaws.com/lovecard2.png');
 INSERT INTO lovecard (image)
-VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard3.png');
+VALUES ('https://sursim-img.s3.ap-northeast-2.amazonaws.com/lovecard3.png');
 INSERT INTO lovecard (image)
-VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard4.png');
+VALUES ('https://sursim-img.s3.ap-northeast-2.amazonaws.com/lovecard4.png');
 INSERT INTO lovecard (image)
-VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard5.png');
+VALUES ('https://sursim-img.s3.ap-northeast-2.amazonaws.com/lovecard5.png');
 INSERT INTO lovecard (image)
-VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard6.png');
+VALUES ('https://sursim-img.s3.ap-northeast-2.amazonaws.com/lovecard6.png');
 INSERT INTO lovecard (image)
-VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard7.png');
+VALUES ('https://sursim-img.s3.ap-northeast-2.amazonaws.com/lovecard7.png');
 INSERT INTO lovecard (image)
-VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard8.png');
+VALUES ('https://sursim-img.s3.ap-northeast-2.amazonaws.com/lovecard8.png');
 INSERT INTO lovecard (image)
-VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard9.png');
+VALUES ('https://sursim-img.s3.ap-northeast-2.amazonaws.com/lovecard9.png');
 INSERT INTO lovecard (image)
-VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard10.png');
+VALUES ('https://sursim-img.s3.ap-northeast-2.amazonaws.com/lovecard10.png');
 INSERT INTO lovecard (image)
-VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard11.png');
+VALUES ('https://sursim-img.s3.ap-northeast-2.amazonaws.com/lovecard11.png');
 INSERT INTO lovecard (image)
-VALUES ('https://familing-bucket.s3.ap-northeast-2.amazonaws.com/lovecard12.png');
+VALUES ('https://sursim-img.s3.ap-northeast-2.amazonaws.com/lovecard12.png');
