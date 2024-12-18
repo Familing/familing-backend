@@ -1,73 +1,74 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.3.1'
-	id 'io.spring.dependency-management' version '1.1.5'
+    id 'java'
+    id 'org.springframework.boot' version '3.3.1'
+    id 'io.spring.dependency-management' version '1.1.5'
 }
 
 group = 'com.pinu'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.testng:testng:7.1.0'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.mysql:mysql-connector-j'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.testng:testng:7.1.0'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-	//h2
-	runtimeOnly 'com.h2database:h2'
+    //h2
+    runtimeOnly 'com.h2database:h2'
 
-	//test jUnit, assertJ 포함 됨
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    //test jUnit, assertJ 포함 됨
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	//OAuth client 의존성
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    //OAuth client 의존성
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
-	//jwt
-	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
-	implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
-	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
+    //jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
 
-	// 웹소켓
-	implementation 'org.springframework.boot:spring-boot-starter-websocket'
-	//카프카
-	implementation 'org.springframework.kafka:spring-kafka:3.0.10'
-	//mongodb
-	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-	//ImmutableMap
-	implementation 'com.google.guava:guava:32.0.0-android'
-	//validation
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	//s3
-	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.453' // 최신 버전으로 대체 가능
+    // 웹소켓
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    //카프카
+    implementation 'org.springframework.kafka:spring-kafka:3.0.10'
+    //mongodb
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    //ImmutableMap
+    implementation 'com.google.guava:guava:32.0.0-android'
+    //validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    //s3
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.453' // 최신 버전으로 대체 가능
 
-	//fcm
-	implementation 'com.google.firebase:firebase-admin:6.8.1'
-	implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
+    //fcm
+    implementation 'com.google.firebase:firebase-admin:6.8.1'
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
 
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
