@@ -1,71 +1,92 @@
 package com.pinu.familing.global.log.controller;
 
-import com.pinu.familing.global.log.dto.LogResponse;
 import com.pinu.familing.global.log.service.LogService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/log")
-@Slf4j
 public class LogController {
     private final LogService logService;
     private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
-    private static final Long TIMEOUT = Long.MAX_VALUE;
+    private static final Long TIMEOUT = 60L * 1000 * 60; // 60 minutes
 
-//    // 기본 로그 조회 API - 향후 필터링 기능 추가를 위해 유지
-//    @GetMapping
-//    public LogResponse getLogs(
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "100") int size
-//    ) {
-//        return logService.getLogsByPage(page, size);
-//    }
-
-    @GetMapping("/stream")
+    @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter streamLogs() {
         SseEmitter emitter = new SseEmitter(TIMEOUT);
         emitters.add(emitter);
 
-        emitter.onCompletion(() -> emitters.remove(emitter));
-        emitter.onTimeout(() -> emitters.remove(emitter));
+        // 클라이언트 연결이 끊어졌을 때 처리
+        emitter.onCompletion(() -> {
+            log.debug("SSE 연결 완료");
+            emitters.remove(emitter);
+        });
 
-        // Send initial data
-        try {
-            List<String> initialLogs = logService.getNewLogs();
-            emitter.send(SseEmitter.event().data(initialLogs));
-        } catch (IOException e) {
-            log.error("Failed to send initial logs", e);
+        emitter.onTimeout(() -> {
+            log.debug("SSE 연결 타임아웃");
             emitter.complete();
+            emitters.remove(emitter);
+        });
+
+        // 에러 발생 시 처리
+        emitter.onError(ex -> {
+            log.error("SSE 에러 발생", ex);
+            emitter.complete();
+            emitters.remove(emitter);
+        });
+
+        try {
+            // 초기 데이터 전송
+            List<String> initialLogs = logService.getNewLogs();
+            if (!initialLogs.isEmpty()) {
+                emitter.send(SseEmitter.event()
+                        .name("logs")
+                        .data(initialLogs, MediaType.APPLICATION_JSON));
+            }
+        } catch (IOException e) {
+            log.error("초기 로그 전송 실패", e);
+            emitters.remove(emitter);
+            emitter.completeWithError(e);
         }
 
         return emitter;
     }
 
-    @Scheduled(fixedDelay = 1000)
+    // 주기적으로 새로운 로그 확인 및 전송
+    //@Scheduled(fixedDelay = 1000)
     public void checkNewLogs() {
-        if (emitters.isEmpty()) return;
+        if (emitters.isEmpty()) {
+            return;
+        }
 
         List<String> newLogs = logService.getNewLogs();
         if (!newLogs.isEmpty()) {
+            List<SseEmitter> deadEmitters = new ArrayList<>();
+
             emitters.forEach(emitter -> {
                 try {
-                    emitter.send(SseEmitter.event().data(newLogs));
+                    emitter.send(SseEmitter.event()
+                            .name("logs")
+                            .data(newLogs, MediaType.APPLICATION_JSON));
                 } catch (IOException e) {
-                    emitters.remove(emitter);
+                    deadEmitters.add(emitter);
+                    log.error("로그 전송 실패", e);
                 }
             });
+
+            emitters.removeAll(deadEmitters);
         }
     }
 }
