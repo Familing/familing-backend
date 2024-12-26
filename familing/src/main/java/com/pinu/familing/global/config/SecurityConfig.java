@@ -71,7 +71,8 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/","/manager/log","/api/v1/log/**", "/h2-console/**", "/main.html", "/test", "/api/v1/login/oauth/kakao", "/api/v1/login/oauth/kakao/**").permitAll()
+                        .requestMatchers("/","/api/v1/admin/pages/login","/api/v1/admin/login/oauth/kakao","/api/v1/admin/login/oauth/kakao/code","/api/v1/log/**", "/h2-console/**", "/main.html", "/test", "/api/v1/login/oauth/kakao", "/api/v1/login/oauth/kakao/**").permitAll()
+                        .requestMatchers("/images/**").permitAll()
                         .anyRequest().authenticated());
 
         //세션 설정 : STATELESS

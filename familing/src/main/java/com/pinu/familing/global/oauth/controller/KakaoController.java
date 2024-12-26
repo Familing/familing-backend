@@ -22,22 +22,23 @@ public class KakaoController {
     private String serverIp;
 
     //0. 카카오 로그인 화면/api/v1/login/oauth/kakao 보여주기
-    @GetMapping("/api/v1/login/oauth/kakao")
+    @GetMapping("/api/v1/admin/login/oauth/kakao")
     public void requestKakaoLoginScreen(HttpServletResponse response) throws IOException {
-
         response.sendRedirect(kakaoService.getKakaoLoginUrl());
     }
 
 
-    @GetMapping("/api/v1/login/oauth/kakao/code")
-    public ApiUtils.ApiResult<?> requestKakaoLoginScreen(@RequestParam(value = "code") String code){
+    @GetMapping("/api/v1/admin/login/oauth/kakao/code")
+    public void requestKakaoLoginScreen(@RequestParam(value = "code") String code, HttpSession session, HttpServletResponse response) throws IOException {
         String accessToken = kakaoService.getKakaoAccessToken(code).accessToken();
-        return ApiUtils.success("AccessToken: "+ accessToken);
+        String token = kakaoService.saveKakaoLoginUser(accessToken,session);
+        response.addCookie(createCookie("Authorization", token));
+        response.sendRedirect("/api/v1/admin/pages/log");
     }
 
     @PostMapping("/api/v1/login/oauth/kakao/callback")
     public ApiUtils.ApiResult<?> saveKakaoLoginUser(@RequestBody AccessToken accessToken, HttpSession session, HttpServletResponse response) {
-        String token = kakaoService.saveKakaoLoginUser(accessToken,session);
+        String token = kakaoService.saveKakaoLoginUser(accessToken.accessToken(),session);
         response.addCookie(createCookie("Authorization", token));
         return ApiUtils.success("Login completed successfully");
     }

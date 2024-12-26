@@ -66,13 +66,13 @@ public class KakaoService {
                 .getBody();
     }
 
-    public String saveKakaoLoginUser(AccessToken accessToken, HttpSession session) {
+    public String saveKakaoLoginUser(String accessToken, HttpSession session) {
 
         //엑세스 토큰으로 유저 정보 가져오기
         KakaoProfileRequest kakaoProfile = restClient.post()
                 .uri(kakaoProperties.userInfoUri())
                 .contentType(FORM_URLENCODED)
-                .header(AUTHORIZATION, BEARER + accessToken.accessToken())
+                .header(AUTHORIZATION, BEARER + accessToken)
                 .retrieve()
                 .toEntity(KakaoProfileRequest.class)
                 .getBody();

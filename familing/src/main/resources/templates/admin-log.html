@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>로그 뷰어</title>
+    <style>
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #f8f9fa;
+        }
+        .button-group {
+            margin-bottom: 20px;
+        }
+        .button-group button {
+            padding: 10px 20px;
+            margin-right: 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+        .button-group button.active {
+            background-color: #007bff;
+            color: white;
+        }
+        .refresh-button {
+            padding: 5px 10px;
+            margin-bottom: 10px;
+        }
+        .log-container {
+            border: 1px solid #ccc;
+            padding: 15px;
+            min-height: 300px;
+            background-color: #1e1e1e;
+            font-family: 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            color: #d4d4d4;
+        }
+        .log-entry {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        .log-info {
+            color: #569cd6;
+        }
+        .log-hibernate {
+            color: #4ec9b0;
+        }
+        .log-time {
+            color: #ce9178;
+        }
+        .log-query {
+            color: #dcdcaa;
+            margin-left: 20px;
+        }
+        .log-error {
+            color: #f44336;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="button-group">
+        <button onclick="selectLogType('all')" id="allBtn">모두보기</button>
+        <button onclick="selectLogType('error')" id="errorBtn">에러만 보기</button>
+        <button onclick="selectLogType('sql')" id="sqlBtn">SQL만 보기</button>
+    </div>
+    <button class="refresh-button" onclick="refreshLog()">새로 고침버튼</button>
+    <div class="log-container" id="logArea">
+    </div>
+</div>
+
+<script>
+    let currentLogType = null;
+    const API_ENDPOINTS = {
+        all: '/api/v1/log/all',
+        error: '/api/v1/log/error',
+        sql: '/api/v1/log/sql'
+    };
+
+    function formatLog(logText) {
+        const lines = logText.split('\n');
+        let formattedHtml = '';
+
+        lines.forEach(line => {
+            if (line.trim() === '') return;
+
+            if (line.includes('ERROR') || line.includes('WARN')) {
+                formattedHtml += `<div class="log-entry log-error">${line}</div>`;
+            } else if (line.startsWith('Hibernate:')) {
+                formattedHtml += `<div class="log-entry log-hibernate">Hibernate:</div>`;
+            } else if (line.trim().startsWith('select') ||
+                line.trim().startsWith('insert') ||
+                line.trim().startsWith('update') ||
+                line.trim().startsWith('delete')) {
+                formattedHtml += `<div class="log-entry log-query">${line}</div>`;
+            } else {
+                const timeMatch = line.match(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/);
+                if (timeMatch) {
+                    const time = timeMatch[0];
+                    const rest = line.substring(timeMatch[0].length);
+                    formattedHtml += `<div class="log-entry">
+                            <span class="log-time">${time}</span>
+                            <span class="log-info">${rest}</span>
+                        </div>`;
+                } else {
+                    formattedHtml += `<div class="log-entry">${line}</div>`;
+                }
+            }
+        });
+
+        return formattedHtml;
+    }
+
+    function selectLogType(type) {
+        document.querySelectorAll('.button-group button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.getElementById(type + 'Btn').classList.add('active');
+        currentLogType = type;
+        fetchLogs(type);
+    }
+
+    function refreshLog() {
+        if (currentLogType) {
+            fetchLogs(currentLogType);
+        }
+    }
+
+    function fetchLogs(type) {
+        fetch(API_ENDPOINTS[type])
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('logArea').innerHTML = formatLog(data);
+            })
+            .catch(error => {
+                document.getElementById('logArea').innerHTML =
+                    '<div class="log-entry" style="color: #f44336;">로그를 불러오는 중 오류가 발생했습니다.</div>';
+                console.error('Error:', error);
+            });
+    }
+
+    window.onload = function() {
+        selectLogType('all');
+    };
+</script>
+</body>
+</html>

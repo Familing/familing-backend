@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class LogPageController {
     @GetMapping
     public String logView() {
-        return "log";  // View 이름만 반환
+        return "admin-log";  // View 이름만 반환
     }
 }
