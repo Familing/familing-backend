@@ -44,6 +44,8 @@ public class UserService {
         return UserResponse.fromEntity(user);
     }
 
+    public User getUserBy
+
 
     @Transactional
     public void addFamilyToUser(String username, String code) {

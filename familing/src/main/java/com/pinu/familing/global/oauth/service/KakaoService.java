@@ -66,7 +66,7 @@ public class KakaoService {
                 .getBody();
     }
 
-    public String saveKakaoLoginUser(String accessToken, HttpSession session) {
+    public User saveKakaoLoginUser(String accessToken, HttpSession session) {
 
         //엑세스 토큰으로 유저 정보 가져오기
         KakaoProfileRequest kakaoProfile = restClient.post()
@@ -90,9 +90,9 @@ public class KakaoService {
                 });
 
 
-        //jwt 토큰 발급하기
-        String token = jwtUtil.createJwt(user.getUsername(), user.getRole(), 60 * 60 * 60 * 60L);
-        return token;
+        return user;
     }
+
+
 
 }

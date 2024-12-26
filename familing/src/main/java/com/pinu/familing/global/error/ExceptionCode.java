@@ -40,6 +40,10 @@ public enum ExceptionCode {
     STATUS_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 상태값을 찾을 수 없습니다."),
     //애정카드 관련
     LOVECARD_NOT_FOUND(HttpStatus.NOT_FOUND, "애정카드를 찾지 못했습니다."),
+
+
+    //관리자에러
+    NO_ADMINISTRATOR_RIGHTS(HttpStatus.FORBIDDEN,"관리자권한이 없습니다.")
     ;
 
     private final HttpStatus httpStatus;
