@@ -14,15 +14,12 @@ import com.pinu.familing.domain.user.entity.User;
 import com.pinu.familing.domain.user.repository.UserRepository;
 import com.pinu.familing.global.error.CustomException;
 import com.pinu.familing.global.error.ExceptionCode;
-import com.pinu.familing.global.oauth.dto.CustomOAuth2User;
 import com.pinu.familing.global.s3.AwsS3Service;
 import com.pinu.familing.global.s3.S3ImgDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Optional;
 
 import static com.pinu.familing.global.error.ExceptionCode.USER_NOT_FOUND;
 
@@ -43,7 +40,6 @@ public class UserService {
                 .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
         return UserResponse.fromEntity(user);
     }
-
 
     @Transactional
     public void addFamilyToUser(String username, String code) {

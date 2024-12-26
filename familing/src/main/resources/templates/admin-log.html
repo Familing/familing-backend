@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>로그 뷰어</title>
+    <style>
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #f8f9fa;
+        }
+        .log-container {
+            border: 1px solid #ccc;
+            padding: 15px;
+            min-height: 300px;
+            max-height: 800px;
+            background-color: #1e1e1e;
+            font-family: 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-y: auto;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            color: #d4d4d4;
+        }
+        .log-entry {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        .log-time {
+            color: #ce9178;
+        }
+        .log-info {
+            color: #569cd6;
+        }
+        .log-error {
+            color: #f44336;
+        }
+        .status-bar {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-sm bg-light">
+    <div class="container-fluid">
+        <span>패밀링</span>
+        <span id="admin-name"></span>
+    </div>
+</nav>
+<div class="container">
+    <h2>로그 보기</h2>
+    <div class="log-container" id="logArea"></div>
+    <div class="status-bar">
+        <span id="connectionStatus">연결 중...</span>
+        <span id="logCount">로그 수: 0</span>
+    </div>
+</div>
+
+<script>
+    let eventSource = null;
+    let logCount = 0;
+
+    // 사용자 정보 요청
+    fetch('/api/v1/user')
+        .then(response => response.json())
+        .then(data => {
+            if(data.success) {
+                document.getElementById('admin-name').textContent = `관리자이름: ${data.result.realname}`;
+            }
+        })
+        .catch(error => console.error('Error:', error));
+
+    function formatLog(logs) {
+        if (!Array.isArray(logs)) {
+            return '';
+        }
+
+        let formattedHtml = '';
+        logs.forEach(line => {
+            if (!line || line.trim() === '') return;
+
+            if (line.includes('ERROR') || line.includes('WARN')) {
+                formattedHtml += `<div class="log-entry log-error">${line}</div>`;
+            } else {
+                const timeMatch = line.match(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/);
+                if (timeMatch) {
+                    const time = timeMatch[0];
+                    const rest = line.substring(timeMatch[0].length);
+                    formattedHtml += `<div class="log-entry">
+                            <span class="log-time">${time}</span>
+                            <span class="log-info">${rest}</span>
+                        </div>`;
+                } else {
+                    formattedHtml += `<div class="log-entry">${line}</div>`;
+                }
+            }
+            logCount++;
+        });
+
+        document.getElementById('logCount').textContent = `로그 수: ${logCount}`;
+        return formattedHtml;
+    }
+
+    function connectSSE() {
+        if (eventSource) {
+            eventSource.close();
+        }
+
+        const logArea = document.getElementById('logArea');
+        const statusElement = document.getElementById('connectionStatus');
+
+        eventSource = new EventSource('/api/v1/log/stream');
+
+        eventSource.onopen = function() {
+            statusElement.textContent = '연결됨';
+            logArea.innerHTML = ''; // 연결 시 로그 영역 초기화
+            logCount = 0;
+        };
+
+        eventSource.onmessage = function(event) {
+            try {
+                const logs = JSON.parse(event.data);
+                const formattedLogs = formatLog(logs);
+                if (formattedLogs) {
+                    logArea.innerHTML += formattedLogs;
+                    logArea.scrollTop = logArea.scrollHeight;
+                }
+            } catch (error) {
+                console.error('Error processing log:', error);
+            }
+        };
+
+        eventSource.onerror = function(error) {
+            console.error('SSE Error:', error);
+            statusElement.textContent = '재연결 중...';
+            setTimeout(connectSSE, 3000);
+        };
+    }
+
+    // 초기 연결
+    connectSSE();
+
+    // 페이지 언로드 시 SSE 연결 종료
+    window.onbeforeunload = function() {
+        if (eventSource) {
+            eventSource.close();
+        }
+    };
+</script>
+</body>
+</html>

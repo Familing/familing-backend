@@ -1,72 +1,71 @@
 package com.pinu.familing.global.log.controller;
 
+import com.pinu.familing.global.log.dto.LogResponse;
+import com.pinu.familing.global.log.service.LogService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/log")
+@Slf4j
 public class LogController {
-    private final Path logPath = Path.of("/home/ubuntu/deploy.log");
-    private final int LINES_TO_READ = 30;
+    private final LogService logService;
+    private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
+    private static final Long TIMEOUT = Long.MAX_VALUE;
 
-    private List<String> readLastNLines(int n) throws IOException {
-        List<String> result = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(logPath.toFile()))) {
-            LinkedList<String> lastNLines = new LinkedList<>();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                lastNLines.add(line);
-                if (lastNLines.size() > n) {
-                    lastNLines.removeFirst();
+//    // 기본 로그 조회 API - 향후 필터링 기능 추가를 위해 유지
+//    @GetMapping
+//    public LogResponse getLogs(
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "100") int size
+//    ) {
+//        return logService.getLogsByPage(page, size);
+//    }
+
+    @GetMapping("/stream")
+    public SseEmitter streamLogs() {
+        SseEmitter emitter = new SseEmitter(TIMEOUT);
+        emitters.add(emitter);
+
+        emitter.onCompletion(() -> emitters.remove(emitter));
+        emitter.onTimeout(() -> emitters.remove(emitter));
+
+        // Send initial data
+        try {
+            List<String> initialLogs = logService.getNewLogs();
+            emitter.send(SseEmitter.event().data(initialLogs));
+        } catch (IOException e) {
+            log.error("Failed to send initial logs", e);
+            emitter.complete();
+        }
+
+        return emitter;
+    }
+
+    @Scheduled(fixedDelay = 1000)
+    public void checkNewLogs() {
+        if (emitters.isEmpty()) return;
+
+        List<String> newLogs = logService.getNewLogs();
+        if (!newLogs.isEmpty()) {
+            emitters.forEach(emitter -> {
+                try {
+                    emitter.send(SseEmitter.event().data(newLogs));
+                } catch (IOException e) {
+                    emitters.remove(emitter);
                 }
-            }
-            return new ArrayList<>(lastNLines);
-        }
-    }
-
-    @GetMapping("/all")
-    public String getAllLogs() {
-        try {
-            return String.join("\n", readLastNLines(LINES_TO_READ));
-        } catch (IOException e) {
-            throw new RuntimeException("로그 파일을 읽을 수 없습니다.", e);
-        }
-    }
-
-    @GetMapping("/error")
-    public String getErrorLogs() {
-        try {
-            return readLastNLines(LINES_TO_READ).stream()
-                    .filter(line -> line.contains("ERROR") || line.contains("WARN"))
-                    .collect(Collectors.joining("\n"));
-        } catch (IOException e) {
-            throw new RuntimeException("로그 파일을 읽을 수 없습니다.", e);
-        }
-    }
-
-    @GetMapping("/sql")
-    public String getSqlLogs() {
-        try {
-            return readLastNLines(LINES_TO_READ).stream()
-                    .filter(line -> line.contains("Hibernate:") ||
-                            line.trim().startsWith("select") ||
-                            line.trim().startsWith("insert") ||
-                            line.trim().startsWith("update") ||
-                            line.trim().startsWith("delete"))
-                    .collect(Collectors.joining("\n"));
-        } catch (IOException e) {
-            throw new RuntimeException("로그 파일을 읽을 수 없습니다.", e);
+            });
         }
     }
 }

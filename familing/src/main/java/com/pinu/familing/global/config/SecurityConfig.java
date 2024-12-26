@@ -67,18 +67,12 @@ public class SecurityConfig {
         http
                 .addFilterBefore(new JWTFilter(jwtUtil, principalService), SecurityContextPersistenceFilter.class);
 
-        //oauth2을 더이상 사용하지 않으므로 삭제
-//        http
-//                .oauth2Login((oauth2) -> oauth2
-//                        .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
-//                                .userService(customOAuth2UserService)).
-//                        successHandler(customSuccessHandler));
 
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/","/log","/api/v1/log/**", "/h2-console/**", "/main.html", "/test", "/api/v1/login/oauth/kakao", "/api/v1/login/oauth/kakao/**").permitAll()
-
+                        .requestMatchers("/","/api/v1/admin/pages/login","/api/v1/admin/login/oauth/kakao","/api/v1/admin/login/oauth/kakao/code","/api/v1/log/**", "/h2-console/**", "/main.html", "/test", "/api/v1/login/oauth/kakao", "/api/v1/login/oauth/kakao/**").permitAll()
+                        .requestMatchers("/images/**").permitAll()
                         .anyRequest().authenticated());
 
         //세션 설정 : STATELESS
