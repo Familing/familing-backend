@@ -21,27 +21,21 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Slf4j
 public class LogController {
     private final LogService logService;
-    private final SseEmitter.SseEventBuilder eventBuilder = SseEmitter.event();
     private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
+    private static final Long TIMEOUT = Long.MAX_VALUE;
 
-    @GetMapping
-    public LogResponse getLogs(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "100") int size,
-            @RequestParam(defaultValue = "true") boolean includeErrors,
-            @RequestParam(defaultValue = "true") boolean includeSQL,
-            @RequestParam(defaultValue = "true") boolean includeInfo
-    ) {
-        return logService.getLogsByPage(page, size, includeErrors, includeSQL, includeInfo);
-    }
+//    // 기본 로그 조회 API - 향후 필터링 기능 추가를 위해 유지
+//    @GetMapping
+//    public LogResponse getLogs(
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "100") int size
+//    ) {
+//        return logService.getLogsByPage(page, size);
+//    }
 
     @GetMapping("/stream")
-    public SseEmitter streamLogs(
-            @RequestParam(defaultValue = "true") boolean includeErrors,
-            @RequestParam(defaultValue = "true") boolean includeSQL,
-            @RequestParam(defaultValue = "true") boolean includeInfo
-    ) {
-        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
+    public SseEmitter streamLogs() {
+        SseEmitter emitter = new SseEmitter(TIMEOUT);
         emitters.add(emitter);
 
         emitter.onCompletion(() -> emitters.remove(emitter));
@@ -49,10 +43,11 @@ public class LogController {
 
         // Send initial data
         try {
-            List<String> initialLogs = logService.getNewLogs(includeErrors, includeSQL, includeInfo);
-            emitter.send(eventBuilder.data(initialLogs));
+            List<String> initialLogs = logService.getNewLogs();
+            emitter.send(SseEmitter.event().data(initialLogs));
         } catch (IOException e) {
             log.error("Failed to send initial logs", e);
+            emitter.complete();
         }
 
         return emitter;
@@ -62,11 +57,11 @@ public class LogController {
     public void checkNewLogs() {
         if (emitters.isEmpty()) return;
 
-        List<String> newLogs = logService.getNewLogs(true, true, true);
+        List<String> newLogs = logService.getNewLogs();
         if (!newLogs.isEmpty()) {
             emitters.forEach(emitter -> {
                 try {
-                    emitter.send(eventBuilder.data(newLogs));
+                    emitter.send(SseEmitter.event().data(newLogs));
                 } catch (IOException e) {
                     emitters.remove(emitter);
                 }

@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -13,32 +12,16 @@
             border: 1px solid #ccc;
             background-color: #f8f9fa;
         }
-        .button-group {
-            margin-bottom: 20px;
-        }
-        .button-group button {
-            padding: 10px 20px;
-            margin-right: 10px;
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-            cursor: pointer;
-        }
-        .button-group button.active {
-            background-color: #007bff;
-            color: white;
-        }
-        .refresh-button {
-            padding: 5px 10px;
-            margin-bottom: 10px;
-        }
         .log-container {
             border: 1px solid #ccc;
             padding: 15px;
             min-height: 300px;
+            max-height: 800px;
             background-color: #1e1e1e;
             font-family: 'Consolas', monospace;
             font-size: 14px;
             line-height: 1.5;
+            overflow-y: auto;
             overflow-x: auto;
             white-space: pre-wrap;
             color: #d4d4d4;
@@ -48,60 +31,65 @@
             padding: 5px;
             border-radius: 3px;
         }
-        .log-info {
-            color: #569cd6;
-        }
-        .log-hibernate {
-            color: #4ec9b0;
-        }
         .log-time {
             color: #ce9178;
         }
-        .log-query {
-            color: #dcdcaa;
-            margin-left: 20px;
+        .log-info {
+            color: #569cd6;
         }
         .log-error {
             color: #f44336;
         }
+        .status-bar {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="button-group">
-        <button onclick="selectLogType('all')" id="allBtn">모두보기</button>
-        <button onclick="selectLogType('error')" id="errorBtn">에러만 보기</button>
-        <button onclick="selectLogType('sql')" id="sqlBtn">SQL만 보기</button>
+<nav class="navbar navbar-expand-sm bg-light">
+    <div class="container-fluid">
+        <span>패밀링</span>
+        <span id="admin-name"></span>
     </div>
-    <button class="refresh-button" onclick="refreshLog()">새로 고침버튼</button>
-    <div class="log-container" id="logArea">
+</nav>
+<div class="container">
+    <h2>로그 보기</h2>
+    <div class="log-container" id="logArea"></div>
+    <div class="status-bar">
+        <span id="connectionStatus">연결 중...</span>
+        <span id="logCount">로그 수: 0</span>
     </div>
 </div>
 
 <script>
-    let currentLogType = null;
-    const API_ENDPOINTS = {
-        all: '/api/v1/log/all',
-        error: '/api/v1/log/error',
-        sql: '/api/v1/log/sql'
-    };
+    let eventSource = null;
+    let logCount = 0;
 
-    function formatLog(logText) {
-        const lines = logText.split('\n');
+    // 사용자 정보 요청
+    fetch('/api/v1/user')
+        .then(response => response.json())
+        .then(data => {
+            if(data.success) {
+                document.getElementById('admin-name').textContent = `관리자이름: ${data.result.realname}`;
+            }
+        })
+        .catch(error => console.error('Error:', error));
+
+    function formatLog(logs) {
+        if (!Array.isArray(logs)) {
+            return '';
+        }
+
         let formattedHtml = '';
-
-        lines.forEach(line => {
-            if (line.trim() === '') return;
+        logs.forEach(line => {
+            if (!line || line.trim() === '') return;
 
             if (line.includes('ERROR') || line.includes('WARN')) {
                 formattedHtml += `<div class="log-entry log-error">${line}</div>`;
-            } else if (line.startsWith('Hibernate:')) {
-                formattedHtml += `<div class="log-entry log-hibernate">Hibernate:</div>`;
-            } else if (line.trim().startsWith('select') ||
-                line.trim().startsWith('insert') ||
-                line.trim().startsWith('update') ||
-                line.trim().startsWith('delete')) {
-                formattedHtml += `<div class="log-entry log-query">${line}</div>`;
             } else {
                 const timeMatch = line.match(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/);
                 if (timeMatch) {
@@ -115,41 +103,57 @@
                     formattedHtml += `<div class="log-entry">${line}</div>`;
                 }
             }
+            logCount++;
         });
 
+        document.getElementById('logCount').textContent = `로그 수: ${logCount}`;
         return formattedHtml;
     }
 
-    function selectLogType(type) {
-        document.querySelectorAll('.button-group button').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        document.getElementById(type + 'Btn').classList.add('active');
-        currentLogType = type;
-        fetchLogs(type);
-    }
-
-    function refreshLog() {
-        if (currentLogType) {
-            fetchLogs(currentLogType);
+    function connectSSE() {
+        if (eventSource) {
+            eventSource.close();
         }
+
+        const logArea = document.getElementById('logArea');
+        const statusElement = document.getElementById('connectionStatus');
+
+        eventSource = new EventSource('/api/v1/log/stream');
+
+        eventSource.onopen = function() {
+            statusElement.textContent = '연결됨';
+            logArea.innerHTML = ''; // 연결 시 로그 영역 초기화
+            logCount = 0;
+        };
+
+        eventSource.onmessage = function(event) {
+            try {
+                const logs = JSON.parse(event.data);
+                const formattedLogs = formatLog(logs);
+                if (formattedLogs) {
+                    logArea.innerHTML += formattedLogs;
+                    logArea.scrollTop = logArea.scrollHeight;
+                }
+            } catch (error) {
+                console.error('Error processing log:', error);
+            }
+        };
+
+        eventSource.onerror = function(error) {
+            console.error('SSE Error:', error);
+            statusElement.textContent = '재연결 중...';
+            setTimeout(connectSSE, 3000);
+        };
     }
 
-    function fetchLogs(type) {
-        fetch(API_ENDPOINTS[type])
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('logArea').innerHTML = formatLog(data);
-            })
-            .catch(error => {
-                document.getElementById('logArea').innerHTML =
-                    '<div class="log-entry" style="color: #f44336;">로그를 불러오는 중 오류가 발생했습니다.</div>';
-                console.error('Error:', error);
-            });
-    }
+    // 초기 연결
+    connectSSE();
 
-    window.onload = function() {
-        selectLogType('all');
+    // 페이지 언로드 시 SSE 연결 종료
+    window.onbeforeunload = function() {
+        if (eventSource) {
+            eventSource.close();
+        }
     };
 </script>
 </body>
