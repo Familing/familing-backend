@@ -15,10 +15,19 @@ public class LogService {
     @Value("${log.file.path}")
     private String logFilePath;
 
-    public List<String> getNewLogs() {
+    private long lastFilePointer = 0;
+    private final Object fileLock = new Object();
 
-        try (RandomAccessFile file = new RandomAccessFile(logFilePath, "r")) {
-            long fileLength = file.length();
+    public List<String> getNewLogs() {
+        synchronized (fileLock) {  
+            try (RandomAccessFile file = new RandomAccessFile(logFilePath, "r")) {
+                long currentLength = file.length();
+                
+                if (lastFilePointer > currentLength) {
+                    lastFilePointer = 0;
+                }
+                
+                file.seek(lastFilePointer);
 
             List<String> logs = new ArrayList<>();
             String line;
@@ -41,12 +50,14 @@ public class LogService {
                 }
             }
 
-            log.debug("읽은 로그 수: {}", logs.size());
-            return logs;
+                lastFilePointer = file.getFilePointer();
 
-        } catch (IOException e) {
-            log.error("로그 파일 읽기 실패: {}", e.getMessage(), e);
-            return new ArrayList<>();
+                log.debug("읽은 로그 수: {}, 파일 포인터: {}", logs.size(), lastFilePointer);
+                return logs;
+            } catch (IOException e) {
+                log.error("로그 파일 읽기 실패: {}", e.getMessage(), e);
+                return new ArrayList<>();
+            }
         }
     }
 }
